@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>HUB</title>
+    <link rel="stylesheet" href="style.css" type="text/css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script type="text/javascript" src="./script.js"></script>
+  </head>
+  <body>
+
+    <table>
+      <tr>
+        <td>
+          <div class="wrap_content">
+
+            <!-- Input -->
+            <fieldset id="authForm" class="form">
+              <legend>Authorization</legend>
+
+              <input id="authorization"  value="">
+
+            </fieldset>
+
+            <fieldset id="cmdForm" class="form">
+              <legend>Command Input</legend>
+
+              <input id="commandData"  value="help"> <!--value="wake 192.168.1.3 D4:3D:7E:37:A8:E7"-->
+
+              <br><br>
+
+              <!-- Submit -->
+              <button id="commandSubmit">Submit</button>
+
+            </fieldset>
+
+            <!-- Response -->
+            <fieldset class="content" >
+              <legend>Command Output</legend>
+              <pre id="commandResponse"></pre>
+            </fieldset>
+          
+
+          </div>
+        </td>
+      </tr>
+    </table>
+
+
+    
+
+    
+  </body>
+</html>
