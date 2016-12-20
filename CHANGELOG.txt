@@ -1,0 +1,28 @@
+Ver 1.0.0 ALPHA 2016-12-20
+-HUB is not yet initial-feature-complete
+
+*[CHANGE] hub_server spawns its own hub_client process in local mode (does not try to register or listen for commands)
+*[CHANGE] device_control.py routes commands addressed to HUB to the local instance of hub_client
+
+*[ADD] HUB loads modules from /modules/*.py
+*[ADD] Commands are loaded from modules
+*[ADD] hub_server.py handles incoming connections and routes them to the appropriate module and command
+*[ADD] Incoming requests are authenticated using a simple hash
+*[ADD] Incoming requests have an authentication level to determine which commands they can access
+*[ADD] hub_server.py has a few of its own commands that should not live in a module (help, reloadhub)
+*[ADD] hub_client.py runs on local slave machines. They attempt to make contact (register) with the HUB until connection is stablished
+*[ADD] hub_client.py When client makes connection to HUB, it sits idle awaiting commands, which it routes to its own functions
+
+
+
+
+Ver #.#.# CHANNEL YYYY-MM-DD
+-This is a note
+
+*[BUGFIX] This is a bugfix
+
+*[CHANGE] This is a change
+
+*[ADD] This is an addition
+
+*[DEL] This is a deletion

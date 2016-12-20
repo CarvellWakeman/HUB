@@ -28,18 +28,18 @@ $(document).ready(function(){
 				success: function (response) {
 					console.log(response)
 					output.innerHTML = replaceAll(replaceAll(response, "<", "&lt"), ">", "&gt")
-			     },
-			     error: function (err) {
-	    			console.log("ERROR:")
-	    			console.log(err)
-	    			//alert("ERROR:" + err)
-	    			output.innerHTML = "Error sending data"
-	    		},
-			    failure: function (response) {
-			    	console.log("FAIL" + response)
-			        //alert("FAIL" + response);
-			        output.innerHTML = "Failed to send data"
-			    },
+				},
+				error: function (err) {
+					console.log("ERROR:")
+					console.log(err)
+					//alert("ERROR:" + err)
+					output.innerHTML = "Error sending data"
+				},
+				failure: function (response) {
+					console.log("FAIL" + response)
+					//alert("FAIL" + response);
+					output.innerHTML = "Failed to send data"
+				},
 			});
     	}
     });

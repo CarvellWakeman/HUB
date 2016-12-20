@@ -37,8 +37,8 @@
 import requests
 import sys
 
-HOST = "192.168.1.3" # Set destination URL here
-PORT = "5000"
+HOST = "192.168.1.72" # Set destination URL here
+PORT = "5001"
 data = {}     # Set POST fields here
 
 

@@ -4,5 +4,5 @@
 
 cd /
 cd home/cooper/hub
-sudo python3 base.py
+sudo python3 hub_server.py
 cd /

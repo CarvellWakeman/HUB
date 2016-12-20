@@ -1,0 +1,25 @@
+[21:22:32]Contacting HUB to register
+[21:24:14]Connection to HUB lost. Retrying connection in 10 seconds...
+[21:24:24]Connection restored.
+[21:49:58]Contacting HUB to register
+[21:50:20] Contacting HUB to register
+[21:50:57] Contacting HUB to register
+[22:24:29] Contacting HUB to register
+[22:24:42] Contacting HUB to register
+[22:25:31] Connection to HUB lost. Retrying connection in 12 seconds...
+[22:25:31] Connection restored.
+[22:26:06] Contacting HUB to register
+[22:26:19] Contacting HUB to register
+[22:26:55] Connection to HUB lost.
+[22:26:55] Connection restored.
+[22:29:32] Connection to HUB lost.
+[22:29:32] Connection restored.
+[22:30:20] Connection to HUB lost.
+[22:30:20] Connection restored.
+[22:31:06] Connection to HUB lost.
+[22:31:06] Connection restored.
+[22:32:55] Connection to HUB lost.
+[22:32:55] Connection restored.
+[22:34:35] Connection to HUB lost.
+[22:34:35] Connection restored.
+[22:38:37] Contacting HUB to register
