@@ -1,92 +1,46 @@
 ### IMPORTING ###
-import requests
-import struct
-import socket
 import sys
 import os
-from uuid import getnode
+
+#HUB LIB
+from hub_lib import *
 
 #Hub self control
 import hub_client
 
 
 ### Load abstract default module ###
-sys.path.append('/home/cooper/hub/modules')
+sys.path.append(str(os.path.dirname(os.path.realpath(__file__)))) #Append modules path so we know where to find default_module
 from default_module import default_module
 
-#Network
-CLIENT_PORT = "5001"
-HUB_IP = ""
-HUB_MAC = ""
-
-
-#Taken device names
+#HUB device control
 device_hub = "hub"
 
 
-### HELPERS ###
-def try_int(s):
-    try:
-        return int(s)
-    except ValueError:
-        return -1
 
-VALIDMACCHARS = "0123456789abcdefABCDEF"
-def valid_mac(MAC):
-	split = MAC.split(MAC[2])
-	if len(MAC) == 17: #D3:38:9F... > D3389F...
-		MAC = "".join(split)
-	if len(MAC) == 12:
-			if all(C in VALIDMACCHARS for C in MAC): #Valid characters in each section
-				return True
-	return False
-def clean_mac(MAC):
-	if len(MAC)==17:
-		return MAC.replace(MAC[2], "").upper()
-	else:
-		return MAC.upper()
-
-def valid_ip(IP):
-	SPIP = IP.split(".")
-	return IP.count(".")==3 and all(True if (try_int(N) >= 0 and try_int(N) <= 255) else False for N in SPIP)
-
-
-## NETWORK ##
-def get_ip_address():
-	s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-	s.connect(("8.8.8.8", 80))
-	return s.getsockname()[0]
-def get_mac_address():
-	return clean_mac("".join(c + ":" if i % 2 else c for i, c in enumerate(hex( getnode() )[2:].zfill(12)))[:-1])
 
 class device_control(default_module):
 
 	def __init__(self, *args):
 		super().__init__()
 
-		#Get HUB address info
-		HUB_IP = get_ip_address()
-		HUB_MAC = get_mac_address()
+		#Self control
+		hub_client.main("name=hub", "local_mode", "mute")
 
-		#from multiprocessing import Pool
-		#pool = Pool(processes=1)
-		#pool.apply_async(func=hub_client.main, args=["name=hub"])
-		#log_msg(BOOT_SELFCONTROL, log=False)
-		hub_client.main("name=hub", "local_mode", "mute")#, "mute", "registered"])
-		
 
 		## Devices ##
 		self.devices = {}
-		self.devices[device_hub] = (HUB_IP, HUB_MAC)
+		self.devices[device_hub] = (get_ip(), get_mac())
 
 		## Bind Functions ##
 		self.commands["wake"] = self.wake
 		self.arguments["wake"] = "<ip address> <mac address>, <device name>"
 		self.description["wake"] = "Wake a LAN computer by address or by name. Only works for WIRED computers."
 
-		self.commands["shutdown"] = self.shutdown
-		self.arguments["shutdown"] = "<device name>"
-		self.description["shutdown"] = "Shutdown a LAN computer (Cannot be woken using 'wake')"
+		#Temporary disable
+		#self.commands["shutdown"] = self.shutdown
+		#self.arguments["shutdown"] = "<device name>"
+		#self.description["shutdown"] = "Shutdown a LAN computer (Cannot be woken using 'wake')"
 
 		self.commands["hibernate"] = self.hibernate
 		self.arguments["hibernate"] = "<device name>"
@@ -112,12 +66,12 @@ class device_control(default_module):
 
 
 		self.commands["register"] = self.register_device
-		self.restriction["register"] = 1
+		self.restriction["register"] = 0
 		self.arguments["register"] = "<device name> <ip address> <mac address>"
 		self.description["register"] = "Register device as a client to the HUB"
 
 		self.commands["unregister"] = self.unregister_device
-		self.restriction["unregister"] = 1
+		self.restriction["unregister"] = 0
 		self.arguments["unregister"] = "<device name>"
 		self.description["unregister"] = "Un-register device from the HUB"
 
@@ -132,9 +86,9 @@ class device_control(default_module):
 
 
 
-	### COMMAND FUNCTIONS ###
+	### COMMANDS ###
 
-	### POWER OPTIONS ###
+	## POWER OPTIONS ##
 	def wake(self, *args):
 		if len(args) == 1: #Wake by device name
 			name = str(args[0])
@@ -164,11 +118,11 @@ class device_control(default_module):
 						send_data = b''.join([send_data, struct.pack('B', int(data[i: i + 2], 16))])
 
 					#Broadcast WOL
-					#sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-					#sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
-					#sock.sendto(send_data, (IP, 9)) #Port 9
+					sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+					sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+					sock.sendto(send_data, (IP, 9)) #Port 9
 
-					return (1,"Sending magic packet to " + args[0] + "(MAC:" + args[1] + ")")
+					return (1,"Sending magic packet to " + IP + " (MAC:" + MAC + ")")
 				else:
 					return(0,"Invalid MAC address " + MAC)
 			else:
@@ -178,7 +132,6 @@ class device_control(default_module):
 
 
 	def shutdown(self, *args):
-		#print "shutdown:", args 
 		if len(args) > 0:
 			target = str(args[0]).lower()
 			return self.send_cmd(target, "shutdown")
@@ -193,7 +146,6 @@ class device_control(default_module):
 			return (0,"Missing Arguments")
 
 	def restart(self, *args):
-		#print "restart:", args
 		if len(args) > 0:
 			target = str(args[0]).lower()
 			return self.send_cmd(target, "restart")
@@ -221,9 +173,18 @@ class device_control(default_module):
 		if len(args) > 0:
 			target = str(args[0]).lower()
 			status = self.send_cmd(target, "status")
-			return (0,"Offline" if status[0]==0 else status)
+			return (0,"Offline" if status[0]==0 else status[1])
 		else:
 			return (0,"Missing Arguments")
+
+	def get_devices(self, *args):
+			s = "NAME" + " "*7 + "IP" + " "*14 + "MAC" + " "*12 + "STATUS" + "\n"
+			for n,a in self.devices.items():
+				ip = a[0]
+				mac = a[1]
+				status = self.device_status(n)[1]
+				s += n[0:10] + " "*(11-len(n)) + str(ip) + " "*(16-len(ip)) + str(mac) + " "*3 + str(status) + "\n"
+			return (1,s)
 
 
 
@@ -257,14 +218,6 @@ class device_control(default_module):
 			return self.devices[name]
 		else:
 			return None
-
-	def get_devices(self, *args):
-		s = "Name" + " "*6 + "IP" + " "*13 + "MAC" + "\n"
-		for n,a in self.devices.items():
-			ip = a[0]
-			mac = a[1]
-			s += n[0:10] + " "*(10-len(n)) + str(ip) + " "*(15-len(ip)) + str(mac) + "\n"
-		return (1,s)
 
 	def register_device(self, *args):
 		if len(args) > 2:
@@ -301,25 +254,8 @@ class device_control(default_module):
 		if target == device_hub:
 			return hub_client.cmd_handle(cmd)
 		else:
-			device = self.get_device(str(target))
-			cmd = str(cmd)
+			device = self.get_device(target)
 			if device != None:
 				ip = device[0]
-
-				#Send command
-				try:
-					r = requests.post("http://"+ ip + ":" + CLIENT_PORT, data={"command": cmd}, timeout=10) #"auth": "startrekDS9", "level": 1
-					if r.status_code < 400:
-						return (1, r.text)
-					else:
-						if r.status_code == 500:
-							return (0, "The server encountered an error processing the request")
-						else:
-							return (0, "Something went wrong, status code " + str(r.status_code))
-				except requests.exceptions.ConnectTimeout as e:
-					return (0,"Could not reach " + target + ": Connection timeout")
-				except requests.exceptions.ConnectionError as e:
-					return (0,"Cound not reach " + target + ": Target machine actively refused connection")
-				except Exception as e:
-					return (0,"Cound not reach " + target + " due to general error: " + repr(e))
+				return send_cmd(cmd, ip, PORT, "startrekDS9")
 	### END COMMAND FUNCTIONS ###

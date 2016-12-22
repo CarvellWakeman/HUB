@@ -3,76 +3,19 @@
 #Imports
 import os
 import sys
+import time
 import logging
-import datetime
 from importlib import import_module
+from subprocess import Popen
 
 
-#Python version
-if sys.version_info[0] < 3:
-	print("This program requires python version 3.5.2+. You have version " + str(sys.version_info) + "\nPlease download the latest version.")
-	download = raw_input("Would you like to open the python  download page? Y/N:")
-	if download.lower()=="y":
-		import webbrowser
-		webbrowser.open("http://www.python.org/downloads", new=0, autoraise=True)
-	sys.exit()
-
-#Flask
-try: 
-	from flask import Flask, request, Response
-except ImportError as e:
-	print("Flask library not found. It is necessary for this program to work.")
-	install = input("Would you like to install it using 'pip install flask'? Y/N:")
-	if install.lower() == "y":
-		os.system("pip install flask")
-		print("\nRestarting script...\n")
-		os.system("python" + ("3 " if os.name=="posix" else " ") + __file__)
-	else:
-		sys.exit()
+#Hub LIB
+from hub_lib import *
 
 
-
-#Message string constants
-TITLE = "HUB"
-LOG = "LOG"
-
-CMD = "Command"
-CMD_RECV = "Command received "
-CMD_RUN = "Running"
-CMD_NOTFOUND = "not Found"
-CMD_EXISTS = " duplicate command"
-CMD_ADD = "Add"
-CMD_LVL = "level"
-
-MODULE = "Module"
-MODULE_INIT = "Initialized"
-MODULE_OK = "[ OK ]"
-MODULE_FAIL = "[FAIL]"
-
-BOOT_SUCCESS = "LOAD SUCCESS"
-BOOT_FAILURE = "LOAD FAILURE"
-BOOT_SELFCONTROL = "STARTED SELF CONTROL MODULE"
-
-AUTH_FAIL = "Authorization invalid"
-
-LOADING = "LOADING"
-ERROR = "Error:"
-
-#OS
-OS_WIN = os.name == "nt"
-OS_LINUX = os.name == "posix"
-
-PYTHON_CMD = "python" + ("3 " if OS_LINUX else " ")
-
-#Authorization
-auth_hash = 5990 #startrekDS9
-
-#Network
-SERVER_PORT = "5000"
 
 #Module commands
 commands = {}
-hub_commands = {}
 command_restrict = {}
 command_args = {}
 command_desc = {}
@@ -83,11 +26,10 @@ listener = Flask(__name__)
 @listener.route('/', methods=["POST"])
 def cmd_post():
 	if request.method == "POST":
-		
+
 		#Get Variables
 		command = str(request.form["command"]) if "command" in request.form else ""
-		auth = str(request.form["auth"]) if "auth" in request.form else ""
-		level = int(request.form["level"]) if "level" in request.form else 0
+		auth_key = str(request.form["auth"]) if "auth" in request.form else ""
 		ip = str(request.remote_addr)
 		status_code = 200
 		
@@ -96,8 +38,10 @@ def cmd_post():
 
 
 		#Check authorization
-		if authorized(auth):
-			result = cmd_handle(command, auth, level, ip)
+		auth = authorize(auth_key)
+
+		if auth[0]:
+			result = cmd_handle(command, auth_key, auth[1], ip)
 		else:
 			result = AUTH_FAIL
 			status_code = 401
@@ -107,16 +51,6 @@ def cmd_post():
 		resp.headers["Access-Control-Allow-Origin"] = "*"
 		return resp, status_code
 
-
-### AUTHORIZATION ###
-def authorized(key):
-	return bhash(key) == auth_hash
-
-def bhash(tohash):
-	r = 0
-	for i in range(0,len(tohash)):
-		r += (i+1) * ord(tohash[i])
-	return r;
 
 
 ### COMMAND HANDLING ###
@@ -135,7 +69,7 @@ def cmd_handle(cmdargs, auth, level, ip):
 
 	#Command received
 	if get_cmd_restriction(command) >= 0:
-		log_msg(CMD_RECV, str(cmdargs), "from", ip, "auth '" + str(auth) + "' level", str(level), log=True)
+		log_msg(CMD_RECV, "'" + str(cmdargs) + "'", "from", ip, "auth '" + str(auth) + "' level", str(level), header=TITLE_SERVER, log=SERVER_LOG)
 
 	#Check if command exists in any module
 	if command in commands:
@@ -152,34 +86,14 @@ def cmd_handle(cmdargs, auth, level, ip):
 			
 		#Print result
 		if get_cmd_restriction(command) >= 0:
-			status_msg(" "*len(MODULE_OK), result[1]) #log_msg ?
+			log_msg(result[1])
 
 		return result[1]
 	else: #Command not found
 		if get_cmd_restriction(command) >= 0:
-			log_msg(CMD, command, CMD_NOTFOUND)
+			log_msg(CMD, command, CMD_NOTFOUND, header=TITLE_SERVER, log=SERVER_LOG)
 		return CMD + " " + command + " " + CMD_NOTFOUND
 
-
-
-### PRINTING STATUS ###
-def msg(*messages, header=True):
-	comp = " ".join([str(m) for m in messages])
-	print (TITLE + ":" if header else "", comp)
-def status_msg(*messages):
-	comp = " ".join([str(m) for m in messages])
-	print (comp)
-def log_msg(*messages, display=True, log=True, showheader=True):
-	m = " ".join([str(m) for m in messages])
-	if display: msg(m, header=showheader)
-
-	if log:
-		lm = "["+str(datetime.datetime.now().strftime("%H:%M:%S"))+"] "   +   m
-		try:
-			with open("server_log.txt", "a+") as f:
-				f.write(str(lm) + "\n")
-		except Exception as e:
-			print ("Error: Could not write to log.txt\n" + repr(e))
 
 
 ### MODULES ###
@@ -207,7 +121,7 @@ def load_modules():
 				modcomms = module.get_commands()
 
 				#Call module init
-				log_msg(MODULE_OK, MODULE, file, MODULE_INIT, log=False)
+				log_msg(MODULE_OK, MODULE, file, MODULE_INIT, header=TITLE_SERVER)
 
 				#Load module commands
 				for c,f in modcomms.items():
@@ -223,26 +137,21 @@ def load_modules():
 						if args != "": command_args[cmd] = args
 						if desc != "": command_desc[cmd] = desc
 
-						log_msg(" "*len(MODULE_OK), CMD_ADD, CMD_LVL, str(restriction), CMD.lower(), cmd, log=False, showheader=False)
+						log_msg(" "*len(MODULE_OK), CMD_ADD, CMD.lower(), cmd)
 					else: #Command already exists
-						log_msg(" "*len(MODULE_OK), ERROR, CMD_EXISTS, cmd, log=False)
+						log_msg(" "*len(MODULE_OK), ERROR, CMD_EXISTS, cmd)
 			except Exception as e:
-				log_msg("Error loading module " + file + ":" + repr(e))
-				return 0
+				log_msg("Error loading module " + file + ":" + repr(e), log=SERVER_LOG, header=TITLE_SERVER)
+				return BOOT_FAILURE
 
 	#Successful load
-	return 1
+	return BOOT_SUCCESS
 
 ### BUILT IN COMMANDS ###
 def reload_hub():
-	if OS_LINUX:
-		os.system("sleep 5s && sudo killall python3 &")
-		os.system("sleep 10s && " + PYTHON_CMD + __file__ + " &")
-		return (1,"Reloading HUB process")
-	elif OS_WIN:
-		os.system("timeout 5 && TASKKILL /IM " + __file__)
-		os.system("timeout 10 && " + PYTHON_CMD + __file__)
-		return (1,"Reloading HUB process")
+	request.environ.get('werkzeug.server.shutdown')() #Shutdown flask listener
+	exec_cmd(time=5, func=Popen, args=[[PYTHON_CMD, os.path.abspath(__file__)]])
+	return (1,"Reloading HUB process")
 
 
 def cmd_help(*args):
@@ -259,11 +168,11 @@ def cmd_help(*args):
 				s += (" "*len(MODULE_OK) + cmd + "(" + CMD_LVL + " " + str(command_restrict[cmd] if cmd in command_restrict else 0) + "): ")
 				if cmd in command_args:
 					s += command_args[cmd]
-				s +=  "\n"
+					s += "\n"
 				if cmd in command_desc: 
 					s += (" "*len(MODULE_OK)*2 + command_desc[cmd] + "\n")
-				s += "\n"
-		
+					s +=  "\n"
+
 		if len([c for c in commands.keys() if c in cmds]) > 0:
 			return (1,s)
 		else:
@@ -274,41 +183,20 @@ def cmd_help(*args):
 
 ### MAIN ###
 def main():
-	log_msg(LOADING, log=False)
+	log_msg(LOADING, header=TITLE_SERVER)
 
-	#Start client service for HUB control
-	#listener.before_first_request(self_control)
 
 	#Load modules
-	mod = load_modules()
-	if mod==1:
-		log_msg(BOOT_SUCCESS, log=False)
-	elif mod==0:
-		log_msg(BOOT_FAILURE, log=False)
+	log_msg(load_modules(), header=TITLE_SERVER)
 	
+
 	#Set FLASK logging to verbose (only error)
 	log = logging.getLogger('werkzeug')
 	log.setLevel(logging.ERROR)
 
-
-
-
-
-
-	#from multiprocessing import Pool
-	#pool = Pool(processes=1)
-	#pool.apply_async(func=self_control, args=["name=hub", "mute", "registered"])
-	#hub_client.main(["name=hub", "mute", "registered"])
-	#msg("Started self control module")
-
-	#if OS_LINUX:
-		#os.system("sleep 10s && " + PYTHON_CMD + "hub_client.py name=hub mute registered" + " &")
-	#elif OS_WIN:
-		#os.system("timeout 10 >nul && hub_client.py") #Run in background?
-	
-	#Start FLASK listening on SERVER_PORT
+	#Start FLASK listening on PORT
 	#listener.debug = True
-	listener.run(host="0.0.0.0", port=SERVER_PORT)
+	listener.run(host="0.0.0.0", port=PORT)
 
 
 if __name__ == "__main__":

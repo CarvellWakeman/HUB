@@ -15,7 +15,7 @@ class default_module(ABC):
 	def get_desc(self, command):
 		return self.description[command] if command in self.description else ""
 	def get_restriction(self, command):
-		return self.restriction[command] if command in self.restriction else 0
+		return self.restriction[command] if command in self.restriction else 1
 
 
 	### COMMAND FUNCTIONS ###

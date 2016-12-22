@@ -37,8 +37,7 @@
 import requests
 import sys
 
-HOST = "192.168.1.72" # Set destination URL here
-PORT = "5001"
+PORT = "5000"
 data = {}     # Set POST fields here
 
 
@@ -61,15 +60,22 @@ def send(cmddict):
 	r = requests.post("http://"+ HOST + ":" + PORT, data=cmddict, timeout=5)
 	print("    -> " + r.text)
 
-if len(sys.argv) > 1:
+if len(sys.argv) > 2:
 	print("args:", str(sys.argv))
-	data["command"] = " ".join(sys.argv[1:])
+	data["auth"] = sys.argv[1]
+	data["command"] = " ".join(sys.argv[2:])
 	send(data)
 else:
+	HOST = input("HUB IP <- ")
+	auth = input("AUTHORIZATION <- ")
 	while 1:
-		#Send command to hub
-		data["command"] = input("HUB <- ")
-		send(data)
+		try:
+			#Send command to hub
+			data["auth"] = auth
+			data["command"] = input("HUB <- ")
+			send(data)
+		except Exception as e:
+			print ("Coult not reach HUB")
 
 
 

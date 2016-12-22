@@ -1,3 +1,14 @@
+Ver 1.0.1 ALPHA 2016-12-21
+*[BUGFIX] reloadhub command has no delay when hub is running on windows
+
+*[CHANGE] Authentication based on password, no "level" variable
+*[CHANGE] devices command now shows client network status
+*[CHANGE] Multithreaded call to time.sleep instead of using schtasks (win) and sleep (linux)
+*[CHANGE] Startup parameter now creates a batch file in the startup directory that runs the client (it is no longer copied)
+
+*[ADD] hub_lib.py, container for shared code between hub_client and hub_server
+
+
 Ver 1.0.0 ALPHA 2016-12-20
 -HUB is not yet initial-feature-complete
 
@@ -12,17 +23,3 @@ Ver 1.0.0 ALPHA 2016-12-20
 *[ADD] hub_server.py has a few of its own commands that should not live in a module (help, reloadhub)
 *[ADD] hub_client.py runs on local slave machines. They attempt to make contact (register) with the HUB until connection is stablished
 *[ADD] hub_client.py When client makes connection to HUB, it sits idle awaiting commands, which it routes to its own functions
-
-
-
-
-Ver #.#.# CHANNEL YYYY-MM-DD
--This is a note
-
-*[BUGFIX] This is a bugfix
-
-*[CHANGE] This is a change
-
-*[ADD] This is an addition
-
-*[DEL] This is a deletion

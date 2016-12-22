@@ -22,7 +22,6 @@ $(document).ready(function(){
 			    data: {
 			    	"auth": input_auth.val(), 
 	        		"command": input_command.val(),
-	        		"level":1
 	    		},
 	    		//Send response
 				success: function (response) {
@@ -33,7 +32,7 @@ $(document).ready(function(){
 					console.log("ERROR:")
 					console.log(err)
 					//alert("ERROR:" + err)
-					output.innerHTML = "Error sending data"
+					output.innerHTML = "Error: Could not contact HUB"
 				},
 				failure: function (response) {
 					console.log("FAIL" + response)

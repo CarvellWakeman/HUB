@@ -1,25 +1,45 @@
-[21:22:32]Contacting HUB to register
-[21:24:14]Connection to HUB lost. Retrying connection in 10 seconds...
-[21:24:24]Connection restored.
-[21:49:58]Contacting HUB to register
-[21:50:20] Contacting HUB to register
-[21:50:57] Contacting HUB to register
-[22:24:29] Contacting HUB to register
-[22:24:42] Contacting HUB to register
-[22:25:31] Connection to HUB lost. Retrying connection in 12 seconds...
-[22:25:31] Connection restored.
-[22:26:06] Contacting HUB to register
-[22:26:19] Contacting HUB to register
-[22:26:55] Connection to HUB lost.
-[22:26:55] Connection restored.
-[22:29:32] Connection to HUB lost.
-[22:29:32] Connection restored.
-[22:30:20] Connection to HUB lost.
-[22:30:20] Connection restored.
-[22:31:06] Connection to HUB lost.
-[22:31:06] Connection restored.
-[22:32:55] Connection to HUB lost.
-[22:32:55] Connection restored.
-[22:34:35] Connection to HUB lost.
-[22:34:35] Connection restored.
-[22:38:37] Contacting HUB to register
+[2016-12-21 00:00:47] Contacting HUB to register
+[2016-12-21 00:02:09] Client program copied to startup directory: C:\Users\Zach\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup
+[2016-12-21 00:02:10] Contacting HUB to register
+[2016-12-21 00:02:27] status from 192.168.1.72
+[2016-12-21 00:02:27] Online
+[2016-12-21 00:02:27] status from 192.168.1.72
+[2016-12-21 00:02:27] Online
+[2016-12-21 00:02:33] status from 192.168.1.72
+[2016-12-21 00:02:33] Online
+[2016-12-21 00:04:10] Client program copied to startup directory: C:\Users\Zach\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup
+[2016-12-21 00:04:10] Contacting HUB to register
+[2016-12-21 00:04:16] Command received 'status' from 192.168.1.72
+[2016-12-21 00:04:16] Online
+[2016-12-21 00:04:18] Command received 'status' from 192.168.1.72
+[2016-12-21 00:04:18] Online
+[2016-12-21 00:11:06] Client program copied to startup directory: C:\Users\Zach\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup
+[2016-12-21 00:11:06] Contacting HUB to register
+[2016-12-21 00:15:57] Client program copied to startup directory: C:\Users\Zach\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup
+[2016-12-21 00:15:58] Contacting HUB to register
+[2016-12-21 16:46:13] Command received 'status' from 192.168.1.72
+[2016-12-21 16:48:01] Command received 'status' from 192.168.1.72
+[2016-12-21 16:50:44] Command received 'status' from 192.168.1.72
+[2016-12-21 16:51:14] Command received 'status' from 192.168.1.72
+[2016-12-21 16:55:39] Command received 'status' from 192.168.1.72
+[2016-12-21 16:56:33] Command received 'status' from 192.168.1.72
+[2016-12-21 16:58:25] Command received 'status' from 192.168.1.72
+[2016-12-21 16:59:02] Command received 'status' from 192.168.1.72
+[2016-12-21 16:59:41] Command received 'status' from 192.168.1.72
+[2016-12-21 17:00:33] Command received 'status' from 192.168.1.72
+[2016-12-21 17:03:42] Command received 'status' from 192.168.1.72
+[2016-12-21 17:05:48] Command received 'status' from 192.168.1.72
+[2016-12-21 17:15:27] Command received 'status' from 192.168.1.72
+[2016-12-21 17:15:44] Command received 'status' from 192.168.1.72
+[2016-12-21 17:22:13] Command received 'status' from 192.168.1.72
+[2016-12-21 17:23:48] Command received 'status' from 192.168.1.72
+[2016-12-21 17:23:58] Command received 'status' from 192.168.1.72
+[2016-12-21 17:24:30] Command received 'status' from 192.168.1.72
+[2016-12-21 17:27:48] Command received 'status' from 192.168.1.72
+[2016-12-21 17:28:03] Command received 'hibernate' from 192.168.1.72
+[2016-12-21 17:47:43] Command received 'status' from 192.168.1.72
+[2016-12-21 17:52:58] Command received 'status' from 192.168.1.72
+[2016-12-21 17:53:08] Command received 'status' from 192.168.1.72
+[2016-12-21 20:02:24] Command received 'status' from 192.168.1.72
+[2016-12-21 20:02:29] Command received 'status' from 192.168.1.72
+[2016-12-21 20:02:38] Command received 'hibernate' from 192.168.1.72
