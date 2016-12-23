@@ -42,6 +42,7 @@ def cmd_post():
 
 		if auth[0]:
 			result = cmd_handle(command, auth_key, auth[1], ip)
+			status_code = 200
 		else:
 			result = AUTH_FAIL
 			status_code = 401
@@ -101,12 +102,17 @@ def load_modules():
 	#Add reload hub command
 	commands["reloadhub"] = reload_hub
 	command_args["reloadhub"] = ""
-	command_desc["reloadhub"] = "Restart HUB server process. Hardware will remain online. Could take up to 30s."
+	command_desc["reloadhub"] = "Restart HUB server program. Hardware will remain online."
 
 	#Add help command
 	commands["help"] = cmd_help
 	command_args["help"] = ""
 	command_desc["help"] = "Shows this menu. Help <command> for details on a specific command."
+
+	#Add help command
+	commands["checkauth"] = check_auth
+	command_args["checkauth"] = "<key>"
+	command_desc["checkauth"] = "Checks authentication"
 
 	#Load modules and their commands
 	path = os.path.dirname(os.path.realpath(__file__)) + "/modules"
@@ -168,23 +174,31 @@ def cmd_help(*args):
 				s += (" "*len(MODULE_OK) + cmd + "(" + CMD_LVL + " " + str(command_restrict[cmd] if cmd in command_restrict else 0) + "): ")
 				if cmd in command_args:
 					s += command_args[cmd]
-					s += "\n"
+				s += "\n"
 				if cmd in command_desc: 
 					s += (" "*len(MODULE_OK)*2 + command_desc[cmd] + "\n")
-					s +=  "\n"
+				s +=  "\n"
 
 		if len([c for c in commands.keys() if c in cmds]) > 0:
 			return (1,s)
 		else:
 			return (0,"Commands ("+",".join(cmds)+") not found")
 
+def check_auth(*args):
+	if len(args) == 0:
+		return (1,"Autentication good")
+	else:
+		return (0,"Incorrect arguments")
 
 	
 
 ### MAIN ###
-def main():
-	log_msg(LOADING, header=TITLE_SERVER)
+def main():	
+	#Header
+	print_header("HUB SERVER")
 
+	#Loading
+	log_msg(LOADING, header=TITLE_SERVER)
 
 	#Load modules
 	log_msg(load_modules(), header=TITLE_SERVER)

@@ -35,7 +35,7 @@ class device_control(default_module):
 		## Bind Functions ##
 		self.commands["wake"] = self.wake
 		self.arguments["wake"] = "<ip address> <mac address>, <device name>"
-		self.description["wake"] = "Wake a LAN computer by address or by name. Only works for WIRED computers."
+		self.description["wake"] = "Wake a WIRED LAN computer"
 
 		#Temporary disable
 		#self.commands["shutdown"] = self.shutdown
@@ -44,7 +44,7 @@ class device_control(default_module):
 
 		self.commands["hibernate"] = self.hibernate
 		self.arguments["hibernate"] = "<device name>"
-		self.description["hibernate"] = "Hibernate a LAN computer (Can be woken using 'wake')"
+		self.description["hibernate"] = "Hibernate a LAN computer"
 
 		self.commands["restart"] = self.restart
 		self.arguments["restart"] = "<device name>"

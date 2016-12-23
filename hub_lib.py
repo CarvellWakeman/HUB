@@ -16,8 +16,8 @@ from uuid import getnode
 # MESSAGE STRING CONSTANTS #
 TITLE_SERVER = "HUB"
 LOG = "LOG"
-SERVER_LOG = "server_log.txt"
-CLIENT_LOG = "client_log.txt"
+SERVER_LOG = "hub_server_log.txt"
+CLIENT_LOG = "hub_client_log.txt"
 
 #Command
 CMD = "Command"
@@ -53,16 +53,27 @@ VALIDMACCHARS = "0123456789abcdefABCDEF"
 ERROR = "Error:"
 
 
-### AUTHORIZATION ###
-def authorize(key):
-	h = bhash(key)
-	valid = h in auths
-	return (valid, auths[h] if valid else -100)
-def bhash(key):
-	r = 0
-	for i in range(0,len(key)):
-		r += (i+1) * ord(key[i])
-	return r;
+# SYSTEM VARS #
+
+#OS
+OS_WIN = os.name == "nt"
+OS_LINUX = os.name == "posix"
+
+#Logging
+user_folder = os.path.expanduser("~")
+
+#Python
+PYTHON_CMD = "python3" if OS_LINUX else "python.exe" if OS_WIN else ""
+
+#Authorization
+auths = {}
+auths[2177] = 0 #picard
+auths[5990] = 1 #startrekDS9
+#auths[3828] = 1 #brobeans
+
+#Network (TODO: Load from file)
+HUB_IP = "192.168.1.72"
+PORT = "5000"
 
 
 ### NETWORK ###
@@ -72,7 +83,6 @@ def get_ip_address():
 	return s.getsockname()[0]
 def get_mac_address():
 	return "".join(c + ":" if i % 2 else c for i, c in enumerate(hex( getnode() )[2:].zfill(12)))[:-1]
-
 def valid_mac(MAC):
 	#D3:38:9F... (17char)
 	#D3389F...   (12char)
@@ -88,6 +98,25 @@ def valid_ip(IP):
 
 def clean_mac(MAC):
 	return MAC.replace(MAC[2],"").upper() if len(MAC)==17 else MAC.upper()
+
+
+#This device
+THIS_NAME = socket.gethostname()
+THIS_IP = get_ip_address()
+THIS_MAC = clean_mac(get_mac_address())
+
+
+### AUTHORIZATION ###
+def authorize(key):
+	h = bhash(key)
+	valid = h in auths
+	return (valid, auths[h] if valid else -100)
+def bhash(key):
+	r = 0
+	for i in range(0,len(key)):
+		r += (i+1) * ord(key[i])
+	return r;
+
 	
 
 ### SEND REQUESTS ###
@@ -99,15 +128,15 @@ def send_cmd(cmd, ip, port, auth_key):
 			return (1, r.text)
 		else:
 			if r.status_code == 500:
-				return (0, ip + " encountered an error processing the request\n" + r.text)
+				return (0, str(ip) + " encountered an error processing the request\n" + r.text)
 			else:
 				return (0, "Something went wrong, status code " + str(r.status_code))
 	except requests.exceptions.ConnectTimeout as e:
-		return (0,"Could not reach "+ip+": Connection timeout")
+		return (0,"Could not reach "+str(ip)+": Connection timeout")
 	except requests.exceptions.ConnectionError as e:
-		return (0,"Cound not reach "+ip+": Machine actively refused connection")
+		return (0,"Cound not reach "+str(ip)+": Machine actively refused connection")
 	except Exception as e:
-		return (0,"Cound not reach "+ip+" due to general error: " + repr(e))
+		return (0,"Cound not reach "+str(ip)+" due to general error: " + repr(e))
 
 
 ### TERMINAL COMMAND WAIT ###
@@ -133,11 +162,46 @@ def log_msg(*messages, display=True, log="", header=""):
 	if len(log)>0:
 		lm = "["+str(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))+"] "   +   m
 		try:
-			with open(log, "a+") as f:
+			with open( (user_folder + ( "\\Desktop\\") if OS_WIN else "") + log, "a+") as f:
 				f.write(str(lm) + "\n")
+				f.close()
 		except Exception as e:
 			print ("Error: Could not write to " + log + "\n" + repr(e))
 
+def print_header(title):
+	try:
+		import math
+
+		N0 = (22-len(title))
+		N0S = math.floor(N0/2)
+		N0E = (N0S+1) if N0%2!=0 else N0S
+
+		N = (22-len(get_name()))
+		NS = math.floor(N/2)
+		NE = (NS+1) if N%2!=0 else NS
+
+		N1 = (22-len(get_ip()))
+		N1S = math.floor(N1/2)
+		N1E = (N1S+1) if N1%2!=0 else N1S
+
+		N2 = (22-len(get_mac()))
+		N2S = math.floor(N2/2)
+		N2E = (N2S+1) if N2%2!=0 else N2S
+
+		#Creator
+		log_msg("################################")
+		log_msg("#####" + " "*N0S + title + " "*N0E + "#####")
+		log_msg("#####   Zach Lerew 2016    #####")
+		log_msg("#####                      #####")
+
+		#Device
+		log_msg("#####" + " "*NS  + get_name() + " " *NE  + "#####")
+		log_msg("##IP#" + " "*N1S + get_ip()   + " " *N1E + "#####")
+		log_msg("#MAC#" + " "*N2S + get_mac()  + " " *N2E + "#####")
+
+		log_msg("################################")
+	except Exception as e:
+		pass #Meh, if the header breaks don't throw a fit
 
 ### OTHER ###
 def try_int(s):
@@ -146,27 +210,10 @@ def try_int(s):
     except ValueError:
         return -1
 
+### SCHTASK WINDOWS ###
+def sch_task_startup(name, task):
+	os.system("schtasks /create /tn \"" + str(name) + "\" /sc onstart /tr \"" + str(task) + "\" /f")
 
-# SYSTEM VARS #
-
-#OS
-OS_WIN = os.name == "nt"
-OS_LINUX = os.name == "posix"
-
-#Python
-PYTHON_CMD = "python3" if OS_LINUX else "python.exe" if OS_WIN else ""
-
-#Authorization
-auths = {}
-auths[2177] = 0 #picard
-auths[5990] = 1 #startrekDS9
-
-#Network (TODO: Load from file)
-HUB_IP = "192.168.1.72"
-PORT = "5000"
-THIS_NAME = socket.gethostname()
-THIS_IP = get_ip_address()
-THIS_MAC = clean_mac(get_mac_address())
 
 def set_name(name):
 	global THIS_NAME

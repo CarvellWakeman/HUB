@@ -1,15 +1,42 @@
-
-
-/* Input */
-#authorization, #commandData {
-	width: 100%;
+/* Disable outline around input */
+input:focus {
+    outline:none;
 }
 
 
 
-
-/* Buttons */
-#commandSubmit {
-	width: 100%;
+/* Body */
+html {
+  height: 90%;
+}
+body {
+	min-height: 90%;
 }
 
+/* Terminal output 
+#terminal_output {
+	margin-bottom: 20px;
+	overflow-y: scroll;
+}
+
+
+#terminal_input {
+	background-color: black;
+	color: white;
+	font-size: 100%;
+	font-family: "Courier New";
+	border-color: black
+}
+
+
+p {
+	color: white;
+	margin: 0px;
+	font-size: 100%;
+	font-family: "Courier New"
+}
+*/
+/* DEBUG */
+/* { border: 1px solid white; }
+/* { padding: 0px; }
+/* { margin: 0px; }

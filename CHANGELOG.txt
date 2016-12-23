@@ -1,3 +1,11 @@
+Ver 1.0.2 ALPHA 2016-12-22
+*[CHANGE] Change log directory
+
+*[ADD] Web server new interface, emulate terminal, authenticate on first connection
+*[ADD] Mobile friendly web server
+*[ADD] hub_client header showing creator and device information
+
+
 Ver 1.0.1 ALPHA 2016-12-21
 *[BUGFIX] reloadhub command has no delay when hub is running on windows
 

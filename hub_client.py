@@ -115,8 +115,6 @@ commands["status"] = device_status
 
 ### HUB REGISTRATION ###
 def register(Register_timeout, INITIAL_REGISTER_ATTEMPT=False, RETRYING_CONNECTION=False):
-
-
 	register_cmd = "register " + get_name() + " " + get_ip() + " " + get_mac()
 	is_registered_cmd = "isregistered " + get_name()
 
@@ -137,18 +135,16 @@ def register(Register_timeout, INITIAL_REGISTER_ATTEMPT=False, RETRYING_CONNECTI
 
 		#Could not contact HUB
 		if is_registered[0] == 0 and not RETRYING_CONNECTION:
-			if not MUTE: log_msg(CONNECTION_LOST, header=get_name())
+			if not MUTE: log_msg(CONNECTION_LOST, header=get_name(), log=CLIENT_LOG)
 			RETRYING_CONNECTION = True
-
-		#Is not registered now
-		if is_registered[1] == "no":
+		elif is_registered[0] != 0 and is_registered[1] == "no": #Contacted hub, we're not registered
+			if not MUTE and RETRYING_CONNECTION: log_msg(CONNECTION_RESTORED, header=get_name(), log=CLIENT_LOG)
 
 			#Try register
 			result = send_cmd(register_cmd, HUB_IP, PORT, auth_key)
 
 			#Successful re-register
 			if result[0] != 0:
-				if not MUTE: log_msg(CONNECTION_RESTORED, header=get_name())
 				RETRYING_CONNECTION = False
 		
 
@@ -193,15 +189,19 @@ def main(*args):
 				if OS_LINUX:
 					log_msg ("Create a file called 'hub_launcher.sh'\nIn it, include 'sudo " + path + "' in the file.\nEdit /etc/rc.local and add 'sleep 6s' and 'sudo sh <path to hub_launcher.sh> &' BEFORE 'exit 0'", header=get_name())
 				elif OS_WIN:
-					user_folder = os.environ['USERPROFILE']
+					#sch_task_startup("hub_client", "\"" + path + "\"")
 
-					if not windows_startup_folder.lower() in path.lower():
-						#os.system("copy \"" + __file__ + "\" " + "\"" + user_folder + "\\" + windows_startup_folder + "\"")
+					#user_folder = os.environ['USERPROFILE']
 
-						startup_dir = user_folder + "\\" + windows_startup_folder
-						batch_file = "hub_client_shortcut.bat"
-						contents = PYTHON_CMD + " \"" + path + "\""
+					#os.system("copy \"" + __file__ + "\" " + "\"" + user_folder + "\\" + windows_startup_folder + "\"")
 
+					startup_dir = user_folder + "\\" + windows_startup_folder
+					batch_file = "hub_client_shortcut.bat"
+					contents = PYTHON_CMD + " \"" + path + "\""
+
+					exists = any([batch_file in f for f in os.listdir(startup_dir)])
+					
+					if not exists:
 						shortcut = open(startup_dir + "\\" + batch_file, 'w')
 						shortcut.write(contents)
 						shortcut.close()
@@ -212,36 +212,13 @@ def main(*args):
 	
 	#Startup header
 	if not MUTE:
-		import math
-
-		log_msg("################################")
-		log_msg("#####      HUB CLIENT      #####")
-
-		N = (22-len(get_name()))
-		NS = math.floor(N/2)
-		NE = (NS+1) if N%2!=0 else NS
-
-		N1 = (22-len(get_ip()))
-		N1S = math.floor(N1/2)
-		N1E = (N1S+1) if N1%2!=0 else N1S
-
-		N2 = (22-len(get_mac()))
-		N2S = math.floor(N2/2)
-		N2E = (N2S+1) if N2%2!=0 else N2S
-
-		#Device
-		log_msg("#####" + " "*NS + get_name() + " "*NE + "#####")
-		log_msg("## IP" + " "*N1S + get_ip() + " "*N1E + "#####")
-		log_msg("# MAC" + " "*N2S + get_mac() + " "*N2E + "#####")
-
-		log_msg("################################")
-
 		#Startup tip
 		if not "startup" in args:
-			log_msg("TIP: Run '"+PYTHON_CMD+" hub_client.py startup' to run this when the computer starts.")
+			log_msg("TIP: Execute '"+PYTHON_CMD+" hub_client.py startup' with admin priviledges to run this on startup.")
 		
-	
+		print_header("HUB CLIENT")
 
+	
 	#Remote mode (listener and registration)
 	if not LOCAL_MODE:
 		#Register client with HUB (On another thread, so that connection scheduler does not stop client from receiving data)
