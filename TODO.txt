@@ -7,8 +7,6 @@
 -Low
 
 
-*[CHANGE] GET requests instead of POST requests?
-
 
 *[ADD] hub_client reads HUB_IP, PORT, and AUTH_KEY from local file or parameter
 *[ADD] hub_server reads auth keys from file

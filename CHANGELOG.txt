@@ -1,3 +1,10 @@
+Ver 1.0.3 ALPHA 2017-2-9
+*[BUGFIX] Devices that do not exist can no longer have commands sent to them
+
+*[CHANGE] GET or POST requests can both be received by the hub, allowing for ?auth=thepassword&command=thecommand to be sent in the URL
+*[CHANGE] HUB supports multiple incoming connections now
+
+
 Ver 1.0.2 ALPHA 2016-12-22
 *[CHANGE] Change log directory
 
