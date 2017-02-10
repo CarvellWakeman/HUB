@@ -25,14 +25,13 @@ command_desc = {}
 listener = Flask(__name__)
 @listener.route('/', methods=['GET', 'POST'])
 def cmd_recv():
-
 	#Get Variables
-	#if reqest.method == "GET":
-	cmdargs = str(request.args.get("command"))
-	auth_key = str(request.args.get("auth"))
-	#elif request.method == "POST":
-		#cmdargs = str(request.form["command"]) if "command" in request.form else ""
-		#auth_key = str(request.form["auth"]) if "auth" in request.form else ""
+	if request.method == "GET":
+		cmdargs = str(request.args.get("command"))
+		auth_key = str(request.args.get("auth"))
+	elif request.method == "POST":
+		cmdargs = str(request.form["command"]) if "command" in request.form else ""
+		auth_key = str(request.form["auth"]) if "auth" in request.form else ""
 
 	ip = str(request.remote_addr)
 	status_code = 200

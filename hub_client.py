@@ -27,10 +27,12 @@ commands = {}
 listener = Flask(__name__)
 @listener.route('/', methods=["GET", "POST"])
 def cmd_recv():
-
 	#Get Variables
-	#command = str(request.form["command"])
-	command = str(request.args.get("command"))
+	if request.method == "GET":
+		command = str(request.args.get("command"))
+	elif request.method == "POST":
+		command = str(request.form["command"])
+
 	ip = str(request.remote_addr)
 
 	#Command received
