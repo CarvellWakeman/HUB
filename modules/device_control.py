@@ -129,28 +129,28 @@ class device_control(default_module):
 	def shutdown(self, *args):
 		if len(args) > 0:
 			target = str(args[0]).lower()
-			return self.send_cmd(target, "shutdown")
+			return self.try_send_cmd(target, "shutdown")
 		else:
 			return (0,"Missing Arguments")
 
 	def hibernate(self, *args):
 		if len(args) > 0:
 			target = str(args[0]).lower()
-			return self.send_cmd(target, "hibernate")
+			return self.try_send_cmd(target, "hibernate")
 		else:
 			return (0,"Missing Arguments")
 
 	def restart(self, *args):
 		if len(args) > 0:
 			target = str(args[0]).lower()
-			return self.send_cmd(target, "restart")
+			return self.try_send_cmd(target, "restart")
 		else:
 			return (0,"Missing Arguments")
 
 	def logoff(self, *args):
 		if len(args) > 0:
 			target = str(args[0]).lower()
-			return self.send_cmd(target, "logoff")
+			return self.try_send_cmd(target, "logoff")
 		else:
 			return (0,"Missing Arguments")
 
@@ -167,8 +167,11 @@ class device_control(default_module):
 	def device_status(self, *args):
 		if len(args) > 0:
 			target = str(args[0]).lower()
-			status = self.send_cmd(target, "status")
-			return (0,"Offline" if status[0]==0 else status[1])
+			status = self.try_send_cmd(target, "status")
+			if status != None:
+				return (0,"Offline" if status[0]==0 else status[1])
+			else:
+				return (0,"Device " + target + " could not be found")
 		else:
 			return (0,"Missing Arguments")
 
@@ -209,10 +212,10 @@ class device_control(default_module):
 			return (0,"This device name is taken (for the HUB)")
 
 	def get_device(self, name):
-		if name.lower() in self.devices:
-			return self.devices[name]
-		else:
-			return None
+		if len(self.devices) > 0 and name != None and name != "":
+			if name.lower() in self.devices:
+				return self.devices[name]
+		return None
 
 	def register_device(self, *args):
 		if len(args) > 2:
@@ -231,7 +234,7 @@ class device_control(default_module):
 
 			if device != device_hub:
 				if device in self.devices:
-					self.send_cmd(device, "unregister")
+					self.try_send_cmd(device, "unregister")
 					self.devices.pop(device, None)
 					return (1,"Un-registered " + device)
 				else:
@@ -242,7 +245,7 @@ class device_control(default_module):
 			return (0,"Missing Arguments")
 
 
-	def send_cmd(self, target, cmd):
+	def try_send_cmd(self, target, cmd):
 		if target == device_hub:
 			return hub_client.cmd_handle(cmd)
 		else:
@@ -250,4 +253,5 @@ class device_control(default_module):
 			if device != None:
 				ip = device[0]
 				return send_cmd(cmd, ip, PORT, "startrekDS9")
+			return (0,"Device " + target + " could not be found")
 	### END COMMAND FUNCTIONS ###

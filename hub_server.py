@@ -37,6 +37,8 @@ def cmd_recv():
 	ip = str(request.remote_addr)
 	status_code = 200
 
+	#Split command from arguments
+	cmdargs = cmdargs.replace("%", " ")
 	sp = cmdargs.split(" ")
 	if len(sp)>0:
 		command = sp[0].lower()
@@ -66,7 +68,7 @@ def cmd_recv():
 		if get_cmd_restriction(command) >= 0:
 			log_msg(result)
 	except Exception as e:
-		result = "Something went wrong processing input. Command&args:" + cmdargs + ", auth:" + auth_key + ", ip:" + ip + ", err:" + str(repr(e))
+		result = "Something went wrong processing input. Command:" + command + " Args:" + args + ", auth:" + auth_key + ", ip:" + ip + ", err:" + str(repr(e))
 		status_code = 500
 		log_msg("ERROR:", result, log=SERVER_LOG)
 
