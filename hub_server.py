@@ -27,10 +27,10 @@ listener = Flask(__name__)
 def cmd_recv():
 	#Get Variables
 	if request.method == "GET":
-		cmdargs = str(request.args.get("command"))
+		cmdargs = str(request.args.get("command")).strip()
 		auth_key = str(request.args.get("auth"))
 	elif request.method == "POST":
-		cmdargs = str(request.form["command"]) if "command" in request.form else ""
+		cmdargs = str(request.form["command"]).strip() if "command" in request.form else ""
 		auth_key = str(request.form["auth"]) if "auth" in request.form else ""
 
 	ip = str(request.remote_addr)
