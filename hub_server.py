@@ -23,34 +23,59 @@ command_desc = {}
 
 ### INCOMING REQUESTS ###
 listener = Flask(__name__)
-@listener.route('/', methods=["POST"])
-def cmd_post():
-	if request.method == "POST":
+@listener.route('/', methods=['GET', 'POST'])
+def cmd_recv():
 
-		#Get Variables
-		command = str(request.form["command"]) if "command" in request.form else ""
-		auth_key = str(request.form["auth"]) if "auth" in request.form else ""
-		ip = str(request.remote_addr)
-		status_code = 200
-		
-		#Command received
-		#log_msg(str(command), "from", ip, "auth '" + str(auth) + "' level", str(level), display=False)
+	#Get Variables
+	#if reqest.method == "GET":
+	cmdargs = str(request.args.get("command"))
+	auth_key = str(request.args.get("auth"))
+	#elif request.method == "POST":
+		#cmdargs = str(request.form["command"]) if "command" in request.form else ""
+		#auth_key = str(request.form["auth"]) if "auth" in request.form else ""
 
+	ip = str(request.remote_addr)
+	status_code = 200
 
-		#Check authorization
+	sp = cmdargs.split(" ")
+	if len(sp)>0:
+		command = sp[0].lower()
+		if len(sp)>1:
+			args = sp[1:]
+		else:
+			args = []
+	else:
+		command = ""
+	
+	#Command received
+	#log_msg(str(command), str(args), "from", ip, "auth '" + str(auth) + "' level", str(level), display=True)
+	if get_cmd_restriction(command) >= 0:
+		log_msg(CMD_RECV, "'" + str(cmdargs) + "'", "from", ip, "auth '" + str(auth_key) + "'", header=TITLE_SERVER, log=SERVER_LOG)
+
+	#Check authorization
+	try:
 		auth = authorize(auth_key)
 
 		if auth[0]:
-			result = cmd_handle(command, auth_key, auth[1], ip)
+			result = cmd_handle(command, args, auth_key, auth[1], ip)[1]
 			status_code = 200
 		else:
 			result = AUTH_FAIL
 			status_code = 401
-		
-		#Send response
-		resp = Response(str(result), mimetype="text/xml")
-		resp.headers["Access-Control-Allow-Origin"] = "*"
-		return resp, status_code
+
+		if get_cmd_restriction(command) >= 0:
+			log_msg(result)
+	except Exception as e:
+		result = "Something went wrong processing input. Command&args:" + cmdargs + ", auth:" + auth_key + ", ip:" + ip + ", err:" + str(repr(e))
+		status_code = 500
+		log_msg("ERROR:", result, log=SERVER_LOG)
+
+
+	#Send response
+	resp = Response(str(result), mimetype="text/xml")
+	resp.headers["Access-Control-Allow-Origin"] = "*"
+	return resp, status_code
+	
 
 
 
@@ -61,16 +86,11 @@ def get_cmd_restriction(cmd):
 	else:
 		return 0
 
-def cmd_handle(cmdargs, auth, level, ip):
-
-	#Separate arguments from command
-	sp = cmdargs.split(" ")
-	command = sp[0].lower()
-	args = sp[1:]
+def cmd_handle(command, args, auth, level, ip):
 
 	#Command received
-	if get_cmd_restriction(command) >= 0:
-		log_msg(CMD_RECV, "'" + str(cmdargs) + "'", "from", ip, "auth '" + str(auth) + "' level", str(level), header=TITLE_SERVER, log=SERVER_LOG)
+	#if get_cmd_restriction(command) >= 0:
+		#log_msg(CMD_RECV, "'" + str(cmdargs) + "'", "from", ip, "auth '" + str(auth) + "' level", str(level), header=TITLE_SERVER, log=SERVER_LOG)
 
 	#Check if command exists in any module
 	if command in commands:
@@ -86,15 +106,14 @@ def cmd_handle(cmdargs, auth, level, ip):
 			result = (0, "Authorization level too low to run this command.")
 			
 		#Print result
-		if get_cmd_restriction(command) >= 0:
-			log_msg(result[1])
+		#if get_cmd_restriction(command) >= 0:
+			#log_msg(result[1])
 
-		return result[1]
+		return result
 	else: #Command not found
 		if get_cmd_restriction(command) >= 0:
 			log_msg(CMD, command, CMD_NOTFOUND, header=TITLE_SERVER, log=SERVER_LOG)
-		return CMD + " " + command + " " + CMD_NOTFOUND
-
+		return (0, CMD + " " + command + " " + CMD_NOTFOUND)
 
 
 ### MODULES ###
@@ -210,7 +229,9 @@ def main():
 
 	#Start FLASK listening on PORT
 	#listener.debug = True
-	listener.run(host="0.0.0.0", port=PORT)
+	#listener.use_reloader=False
+	#listener.use_debugger=True
+	listener.run(host="0.0.0.0", port=PORT, threaded=True)
 
 
 if __name__ == "__main__":

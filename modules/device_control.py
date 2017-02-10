@@ -34,8 +34,8 @@ class device_control(default_module):
 
 		## Bind Functions ##
 		self.commands["wake"] = self.wake
-		self.arguments["wake"] = "<ip address> <mac address>, <device name>"
-		self.description["wake"] = "Wake a WIRED LAN computer"
+		self.arguments["wake"] = "<ip address> <mac address>, <device>"
+		self.description["wake"] = "Wake a wired LAN computer"
 
 		#Temporary disable
 		#self.commands["shutdown"] = self.shutdown
@@ -43,36 +43,31 @@ class device_control(default_module):
 		#self.description["shutdown"] = "Shutdown a LAN computer (Cannot be woken using 'wake')"
 
 		self.commands["hibernate"] = self.hibernate
-		self.arguments["hibernate"] = "<device name>"
+		self.arguments["hibernate"] = "<device>"
 		self.description["hibernate"] = "Hibernate a LAN computer"
 
 		self.commands["restart"] = self.restart
-		self.arguments["restart"] = "<device name>"
+		self.arguments["restart"] = "<device>"
 		self.description["restart"] = "Restart a LAN computer"
 
 		self.commands["logoff"] = self.logoff
-		self.arguments["logoff"] = "<device name>"
+		self.arguments["logoff"] = "<device>"
 		self.description["logoff"] = "Log off a LAN computer"
-
-		self.commands["ping"] = self.ping
-		self.restriction["ping"] = -1
-		self.arguments["ping"] = ""
-		self.description["ping"] = "Check connection to HUB"
 
 		self.commands["isregistered"] = self.device_is_registered
 		self.restriction["isregistered"] = -1
-		self.arguments["isregistered"] = ""
+		self.arguments["isregistered"] = "<device>"
 		self.description["isregistered"] = "Check if device is registered to the HUB"
 
 
 		self.commands["register"] = self.register_device
 		self.restriction["register"] = 0
-		self.arguments["register"] = "<device name> <ip address> <mac address>"
+		self.arguments["register"] = "<device> <ip address> <mac address>"
 		self.description["register"] = "Register device as a client to the HUB"
 
 		self.commands["unregister"] = self.unregister_device
 		self.restriction["unregister"] = 0
-		self.arguments["unregister"] = "<device name>"
+		self.arguments["unregister"] = "<device>"
 		self.description["unregister"] = "Un-register device from the HUB"
 
 		self.commands["devices"] = self.get_devices
@@ -80,7 +75,7 @@ class device_control(default_module):
 		self.description["devices"] = "Get the current list of devices"
 
 		self.commands["status"] = self.device_status
-		self.arguments["status"] = "<device name>"
+		self.arguments["status"] = "<device>"
 		self.description["status"] = "Get network status of LAN device"
 
 
@@ -229,9 +224,6 @@ class device_control(default_module):
 			return self.add_update_device(name, ip, mac)
 		else:
 			return (0,"Missing Arguments")
-
-	def ping(self, *args):
-		return (1,"Connection established")
 
 	def unregister_device(self, *args):
 		if len(args) == 1:

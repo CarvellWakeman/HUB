@@ -25,11 +25,12 @@ commands = {}
 
 ### RECEIVE REQUESTS ###
 listener = Flask(__name__)
-@listener.route('/', methods=["POST"])
-def cmd_post():
+@listener.route('/', methods=["GET", "POST"])
+def cmd_recv():
 
 	#Get Variables
-	command = str(request.form["command"])
+	#command = str(request.form["command"])
+	command = str(request.args.get("command"))
 	ip = str(request.remote_addr)
 
 	#Command received
@@ -114,7 +115,13 @@ commands["status"] = device_status
 
 
 ### HUB REGISTRATION ###
-def register(Register_timeout, INITIAL_REGISTER_ATTEMPT=False, RETRYING_CONNECTION=False):
+def do_register(Register_timeout, INITIAL_REGISTER_ATTEMPT):
+	reg_res = (INITIAL_REGISTER_ATTEMPT, False)
+	while True:
+		reg_res = register(reg_res[0], reg_res[1])
+		time.sleep(Register_timeout)
+
+def register(INITIAL_REGISTER_ATTEMPT=False, RETRYING_CONNECTION=False):
 	register_cmd = "register " + get_name() + " " + get_ip() + " " + get_mac()
 	is_registered_cmd = "isregistered " + get_name()
 
@@ -146,11 +153,8 @@ def register(Register_timeout, INITIAL_REGISTER_ATTEMPT=False, RETRYING_CONNECTI
 			#Successful re-register
 			if result[0] != 0:
 				RETRYING_CONNECTION = False
-		
-
-	#Schedule next contact attempt
-	time.sleep(Register_timeout)
-	register(Register_timeout, INITIAL_REGISTER_ATTEMPT, RETRYING_CONNECTION)
+	
+	return (INITIAL_REGISTER_ATTEMPT, RETRYING_CONNECTION)
 
 
 ### MAIN ###
@@ -224,7 +228,7 @@ def main(*args):
 		#Register client with HUB (On another thread, so that connection scheduler does not stop client from receiving data)
 		from multiprocessing import Pool
 		pool = Pool(processes=1)
-		pool.apply_async(func=register, args=(Register_timeout, INITIAL_REGISTER_ATTEMPT))
+		pool.apply_async(func=do_register, args=(Register_timeout, INITIAL_REGISTER_ATTEMPT))
 
 
 		#Set FLASK logging to verbose (only error)

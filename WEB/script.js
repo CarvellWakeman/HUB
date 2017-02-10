@@ -29,7 +29,7 @@ var TERMINAL_BLUE = "#55BFFF";
 
 
 //Network
-IP = (window.location).toString().replace("//", "*").replace("/","").replace("*","//");
+IP = window.location.host
 PORT = 5000;
 
 //Authentication
@@ -225,7 +225,7 @@ function handle_input(event){
 	if (event.keyCode == 13){
 		//Is this input an auth key?
 		if (auth_key == null){
-			send_input("checkauth", input.value, function(status){
+			send_input("checkauth", input.value, function(result, status){
 				if (status < 400 && status > 0 && status != null){
 					//Set auth key
 					auth_key = input.value
@@ -247,7 +247,7 @@ function handle_input(event){
 
 				reset_input()
 				scroll_to_bottom()
-			}, false);
+			});
 		}
 		else{
 			//Create input line and add it to the output container (Record input in output history)
@@ -258,7 +258,8 @@ function handle_input(event){
 				input_container.style.visibility = "hidden";
 
 				//Send input
-				send_input(input.value, auth_key, function(status){
+				send_input(input.value, auth_key, function(result, status){
+					create_output_line(result, false)
 					reset_input()
 					scroll_to_bottom()
 				});
@@ -271,44 +272,100 @@ function handle_input(event){
 	}
 }
 
-function send_input(cmd, auth, callback = null, display = true){
+window.onload = function() {
+	//setTimeout(function(){
+	url = window.location.href
+	split = url.split("?")
+	auth = ""
+	cmd = "checkauth"
+
+	//If parameters were included
+	if (split.length > 1){
+		params = split[1].split("&")
+
+		for (i = 0; i < params.length; i++){
+			param = params[i]
+
+			//Auth parameter
+			if (param.includes("auth=")){
+				auth = param.replace("auth=","")
+			}
+			//Command parameter
+			else if (param.includes("command=")){
+				cmd = param.replace("command=","")
+			}
+			//Else ignore it
+		}
+
+		//Check if auth and command are present
+		if (auth != ""){
+			send_input(cmd, auth, function(result, status){
+				if (status < 400 && status > 0 && status != null){
+					//Set auth key
+					auth_key = auth
+
+					//Set server domain/directory title
+					input_container.replaceChild(get_server_input_line(), input_title);
+
+					//Print result
+					create_output_line(result, false)
+				} else {
+					//No response
+					if (status == 0){
+						create_output_line(ERR_CONTACT, false)
+					} else {
+						create_output_line(AUTH_FAIL, false)
+					}
+				}
+
+				reset_input()
+				scroll_to_bottom()
+			})
+		}
+	}
+	
+}//);
+
+//TODO Weird bug when sending request from mobile browser: Exception happened during processing of request from ('50.188.131.99', 47675)
+function send_input(cmd, auth, callback = null){
 	//If data was entered
-	if (cmd != null && cmd.length > 0 && auth != null) 
-	{
+	if (cmd != null && cmd.length > 0 && auth != null) {
+		console.log("http://" + IP + ":" + PORT + "/?auth=" + auth + "&command=" + cmd)
 		//Send request
 		$.ajax({
-			type: "POST",
-			url: IP + ":" + PORT,
+			type: "GET",
+			url: "http://" + IP + ":" + PORT + "/?auth=" + auth + "&command=" + cmd,
+			timeout: 10000,
 			dataType: "text",
-			data: {
-				"auth": auth, 
-				"command": cmd,
-			},
+			//data: {
+			//	"auth": auth, 
+			//	"command": cmd,
+			//},
 			//Send response
 			success: function (response, textStatus, XHR) {
 				console.log("Response:")
 				console.log(response)
 				
 				//Add response to the output container
-				result = replaceAll(response, "\n", "<br />")
-				if (display) { create_output_line(result, false); }
-				if (callback != null) { callback(XHR.status); }
+				result = replaceAll(replaceAll(replaceAll(response, "<", "&lt"), ">", "&gt"), "\n", "<br />")
+				//if (display) { create_output_line(result, false); }
+				if (callback != null) { callback(result, XHR.status); }
 			},
 			error: function (err) {
 				console.log("ERROR:")
 				console.log(err)
 
 				//Add response to the output container
-				if (display) { create_output_line(ERR_CONTACT, false) }
-				if (callback != null) { callback(err.status); }
+				//if (display) { create_output_line(ERR_CONTACT, false) }
+				if (callback != null) { callback(ERR_CONTACT, err.status); }
 			},
 			failure: function (response, textStatus, XHR) {
 				console.log("FAIL:")
 				console.log(response)
 
 				//Add response to the output container
-				if (display) { create_output_line(ERR_FAILSEND, false) }
-				if (callback != null) { callback(XHR.status); }
+				//if (display) { create_output_line(ERR_FAILSEND, false) }
+				if (callback != null) { callback(ERR_FAILSEND, XHR.status); }
 			},
 		});
 	}

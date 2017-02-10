@@ -57,7 +57,7 @@ def send(cmddict):
 	#httpServ.close()
 
 
-	r = requests.post("http://"+ HOST + ":" + PORT, data=cmddict, timeout=5)
+	r = requests.post("http://"+ "192.168.1.72" + ":" + PORT, data=cmddict, timeout=5)
 	print("    -> " + r.text)
 
 if len(sys.argv) > 2:

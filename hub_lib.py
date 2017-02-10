@@ -41,7 +41,7 @@ BOOT_SELFCONTROL = "STARTED SELF CONTROL MODULE"
 LOADING = "LOADING"
 
 #Network
-AUTH_FAIL = "Authorization invalid"
+AUTH_FAIL = "Authentication invalid"
 RETRYING = "Retrying connection in"
 CONNECTION_LOST = "Connection to HUB lost."
 CONNECTION_RESTORED = "Connection restored."
@@ -73,7 +73,7 @@ auths[5990] = 1 #startrekDS9
 
 #Network (TODO: Load from file)
 HUB_IP = "192.168.1.72"
-PORT = "5000"
+PORT = 5000
 
 
 ### NETWORK ###
@@ -117,13 +117,11 @@ def bhash(key):
 		r += (i+1) * ord(key[i])
 	return r;
 
-	
-
-### SEND REQUESTS ###
+### SEND REQUESTS  ###
 def send_cmd(cmd, ip, port, auth_key):
 	#Send command
 	try:
-		r = requests.post("http://"+ ip + ":" + port, data={"command": cmd, "auth": auth_key}, timeout=5)
+		r = requests.get("http://"+ str(ip) + ":" + str(port) + "/?auth=" + auth_key + "&command=" + cmd, timeout=5)
 		if r.status_code < 400:
 			return (1, r.text)
 		else:
@@ -157,16 +155,18 @@ def msg(*messages, header=""):
 	#print (comp)
 def log_msg(*messages, display=True, log="", header=""):
 	m = " ".join([str(m) for m in messages])
-	if display: msg(m, header=header)
+	lm = "["+str(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))+"] "   +   m
 
 	if len(log)>0:
-		lm = "["+str(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))+"] "   +   m
+		if display: msg(lm, header=header)
 		try:
 			with open( (user_folder + ( "\\Desktop\\") if OS_WIN else "") + log, "a+") as f:
 				f.write(str(lm) + "\n")
 				f.close()
 		except Exception as e:
 			print ("Error: Could not write to " + log + "\n" + repr(e))
+	else:
+		if display: msg(m, header=header)
 
 def print_header(title):
 	try:
