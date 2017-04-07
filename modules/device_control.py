@@ -30,7 +30,7 @@ class device_control(default_module):
 
 		## Devices ##
 		self.devices = {}
-		self.devices[device_hub] = (get_ip(), get_mac())
+		self.devices[device_hub] = (get_ip_address(), get_mac_address())
 
 		## Bind Functions ##
 		self.commands["wake"] = self.wake
@@ -38,9 +38,9 @@ class device_control(default_module):
 		self.description["wake"] = "Wake a wired LAN computer"
 
 		#Temporary disable
-		#self.commands["shutdown"] = self.shutdown
-		#self.arguments["shutdown"] = "<device name>"
-		#self.description["shutdown"] = "Shutdown a LAN computer (Cannot be woken using 'wake')"
+		self.commands["shutdown"] = self.shutdown
+		self.arguments["shutdown"] = "<device name>"
+		self.description["shutdown"] = "Shutdown a LAN computer (Cannot be woken using 'wake')"
 
 		self.commands["hibernate"] = self.hibernate
 		self.arguments["hibernate"] = "<device>"

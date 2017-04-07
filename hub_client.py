@@ -36,7 +36,7 @@ def cmd_recv():
 	ip = str(request.remote_addr)
 
 	#Command received
-	if not MUTE: log_msg(CMD_RECV, "'" + str(command) + "'", "from", ip, log=CLIENT_LOG, header=get_name())#, "auth '" + str(auth) + "' level", str(level))
+	if not MUTE: log_msg(CMD_RECV, "'" + str(command) + "'", "from", ip, log=CLIENT_LOG, header=get_hostname())#, "auth '" + str(auth) + "' level", str(level))
 
 	if ip == HUB_IP:
 		result = cmd_handle(command)
@@ -67,7 +67,7 @@ def cmd_handle(cmdargs):
 		if not MUTE: log_msg(result[1])
 	else: #Command not found
 		result = (0, CMD + " " + command + " " + CMD_NOTFOUND)
-		if not MUTE: log_msg(CMD, command, CMD_NOTFOUND, log=CLIENT_LOG, header=get_name())
+		if not MUTE: log_msg(CMD, command, CMD_NOTFOUND, log=CLIENT_LOG, header=get_hostname())
 	
 	return result
 
@@ -79,7 +79,7 @@ def shutdown(*args):
 		exec_cmd(10, func=os.system, args=["sudo shutdown"])
 	elif OS_WIN:
 		exec_cmd(0, func=os.system, args=["shutdown /t 10 /s"])
-	return (1,"Shutting down " + get_name())
+	return (1,"Shutting down " + get_hostname())
 commands["shutdown"] = shutdown
 
 def restart(*args):
@@ -87,7 +87,7 @@ def restart(*args):
 		exec_cmd(10, func=os.system, args=["sudo reboot"])
 	elif OS_WIN:
 		exec_cmd(0, func=os.system, args=["shutdown /t 10 /r"])
-	return (1,"Restarting " + get_name())
+	return (1,"Restarting " + get_hostname())
 commands["restart"] = restart
 
 def hibernate(*args):
@@ -95,7 +95,7 @@ def hibernate(*args):
 		return (0,"Not supported")
 	elif OS_WIN:
 		exec_cmd(10, func=os.system, args=["shutdown /h"])
-	return (1,"Hibernating " + get_name())
+	return (1,"Hibernating " + get_hostname())
 commands["hibernate"] = hibernate
 
 def logoff(*args):
@@ -103,7 +103,7 @@ def logoff(*args):
 		return (0,"Not supported")
 	elif OS_WIN:
 		exec_cmd(10, func=os.system, args=["shutdown /l"])
-	return (1,"Logging off " + get_name())
+	return (1,"Logging off " + get_hostname())
 commands["logoff"] = logoff
 
 def unregister(*args):
@@ -124,30 +124,30 @@ def do_register(Register_timeout, INITIAL_REGISTER_ATTEMPT):
 		time.sleep(Register_timeout)
 
 def register(INITIAL_REGISTER_ATTEMPT=False, RETRYING_CONNECTION=False):
-	register_cmd = "register " + get_name() + " " + get_ip() + " " + get_mac()
-	is_registered_cmd = "isregistered " + get_name()
-
+	#Registration commands
+	register_cmd = "register " + get_hostname() + " " + get_ip_address() + " " + get_mac_address()
+	is_registered_cmd = "isregistered " + get_hostname()
 
 	#Have ever registered
 	if not INITIAL_REGISTER_ATTEMPT:
-		if not MUTE: log_msg(CONTACTING_HUB, header=get_name())
+		if not MUTE: log_msg(CONTACTING_HUB, header=get_hostname())
 		#Try register
 		result = send_cmd(register_cmd, HUB_IP, PORT, auth_key)
 		if not MUTE: log_msg(" "*5, result[1])
 
 		#Successful register
 		if result[0] != 0:
-			if not MUTE: log_msg(READY, header=get_name())
+			if not MUTE: log_msg(READY, header=get_hostname())
 			INITIAL_REGISTER_ATTEMPT = True
 	else: #Have been registered before
 		is_registered = send_cmd(is_registered_cmd, HUB_IP, PORT, auth_key)
 
 		#Could not contact HUB
 		if is_registered[0] == 0 and not RETRYING_CONNECTION:
-			if not MUTE: log_msg(CONNECTION_LOST, header=get_name(), log=CLIENT_LOG)
+			if not MUTE: log_msg(CONNECTION_LOST, header=get_hostname(), log=CLIENT_LOG)
 			RETRYING_CONNECTION = True
 		elif is_registered[0] != 0 and is_registered[1] == "no": #Contacted hub, we're not registered
-			if not MUTE and RETRYING_CONNECTION: log_msg(CONNECTION_RESTORED, header=get_name(), log=CLIENT_LOG)
+			if not MUTE and RETRYING_CONNECTION: log_msg(CONNECTION_RESTORED, header=get_hostname(), log=CLIENT_LOG)
 
 			#Try register
 			result = send_cmd(register_cmd, HUB_IP, PORT, auth_key)
@@ -193,7 +193,7 @@ def main(*args):
 				#Run hub_client on startup
 				path = os.path.abspath(__file__)
 				if OS_LINUX:
-					log_msg ("Create a file called 'hub_launcher.sh'\nIn it, include 'sudo " + path + "' in the file.\nEdit /etc/rc.local and add 'sleep 6s' and 'sudo sh <path to hub_launcher.sh> &' BEFORE 'exit 0'", header=get_name())
+					log_msg ("Create a file called 'hub_launcher.sh'\nIn it, include 'sudo " + path + "' in the file.\nEdit /etc/rc.local and add 'sleep 6s' and 'sudo sh <path to hub_launcher.sh> &' BEFORE 'exit 0'", header=get_hostname())
 				elif OS_WIN:
 					#sch_task_startup("hub_client", "\"" + path + "\"")
 
@@ -212,9 +212,9 @@ def main(*args):
 						shortcut.write(contents)
 						shortcut.close()
 
-						if not MUTE: log_msg("Client program shortcut copied to startup directory: " + user_folder + "\\" + windows_startup_folder, header=get_name())
+						if not MUTE: log_msg("Client program shortcut copied to startup directory: " + user_folder + "\\" + windows_startup_folder, header=get_hostname())
 					else:
-						if not MUTE: log_msg("Client program is already in the startup directory.", header=get_name())
+						if not MUTE: log_msg("Client program is already in the startup directory.", header=get_hostname())
 	
 	#Startup header
 	if not MUTE:
@@ -237,7 +237,7 @@ def main(*args):
 		log = logging.getLogger('werkzeug')
 		log.setLevel(logging.ERROR)
 
-		#Start FLASK listening on CLIENT_PORT
+		#Start FLASK listening
 		#listener.debug = True
 		listener.run(host="0.0.0.0", port=PORT)
 

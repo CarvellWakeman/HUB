@@ -35,7 +35,7 @@ MODULE_OK = "[ OK ]"
 MODULE_FAIL = "[FAIL]"
 
 #Boot
-BOOT_SUCCESS = "LOAD SUCCESS"
+BOOT_SUCCESS = "LOAD COMPLETE"
 BOOT_FAILURE = "LOAD FAILURE"
 BOOT_SELFCONTROL = "STARTED SELF CONTROL MODULE"
 LOADING = "LOADING"
@@ -75,14 +75,33 @@ auths[5990] = 1 #startrekDS9
 HUB_IP = "192.168.1.72"
 PORT = 5000
 
+#This device
+THIS_NAME = ""
+THIS_IP = ""
+THIS_MAC = ""
+
 
 ### NETWORK ###
+def get_hostname():
+	global THIS_NAME
+	if THIS_NAME == "":
+		THIS_NAME = socket.gethostname()
+	return THIS_NAME
+
 def get_ip_address():
-	s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-	s.connect(("8.8.8.8", 80))
-	return s.getsockname()[0]
+	global THIS_IP
+	if THIS_IP == "":
+		s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+		s.connect(("8.8.8.8", 80))
+		THIS_IP = s.getsockname()[0]
+	return THIS_IP
+
 def get_mac_address():
-	return "".join(c + ":" if i % 2 else c for i, c in enumerate(hex( getnode() )[2:].zfill(12)))[:-1]
+	global THIS_MAC
+	if THIS_MAC == "":
+		THIS_MAC = clean_mac("".join(c + ":" if i % 2 else c for i, c in enumerate(hex( getnode() )[2:].zfill(12)))[:-1])
+	return THIS_MAC
+
 def valid_mac(MAC):
 	#D3:38:9F... (17char)
 	#D3389F...   (12char)
@@ -91,7 +110,11 @@ def valid_mac(MAC):
 	if len(MAC) == 12:
 			if all(C in VALIDMACCHARS for C in MAC): #Valid characters in each section
 				return True
-	return False		
+	return False
+	
+def try_int(s):
+    try: return int(s)
+    except ValueError: return -1			
 def valid_ip(IP):
 	SPIP = IP.split(".")
 	return IP.count(".")==3 and all(True if (try_int(N) >= 0 and try_int(N) <= 255) else False for N in SPIP)
@@ -99,11 +122,16 @@ def valid_ip(IP):
 def clean_mac(MAC):
 	return MAC.replace(MAC[2],"").upper() if len(MAC)==17 else MAC.upper()
 
+def set_name(name):
+	global THIS_NAME
+	THIS_NAME = name
+def set_ip(ip):
+	global THIS_IP
+	THIS_IP = ip
+def set_mac(mac):
+	global THIS_MAC
+	THIS_MAC = mac
 
-#This device
-THIS_NAME = socket.gethostname()
-THIS_IP = get_ip_address()
-THIS_MAC = clean_mac(get_mac_address())
 
 
 ### AUTHORIZATION ###
@@ -117,18 +145,22 @@ def bhash(key):
 		r += (i+1) * ord(key[i])
 	return r;
 
+
 ### SEND REQUESTS  ###
 def send_cmd(cmd, ip, port, auth_key):
-	#Send command
 	try:
-		r = requests.get("http://"+ str(ip) + ":" + str(port) + "/?auth=" + auth_key + "&command=" + cmd, timeout=5)
-		if r.status_code < 400:
+
+		#Send request
+		r = requests.get("http://"+ str(ip) + ":" + str(port) + "/?auth=" + str(auth_key) + "&command=" + str(cmd), timeout=5)
+
+		#Request response
+		if r.status_code < 400: #Response good
 			return (1, r.text)
-		else:
-			if r.status_code == 500:
-				return (0, str(ip) + " encountered an error processing the request\n" + r.text)
-			else:
-				return (0, "Something went wrong, status code " + str(r.status_code))
+		elif r.status_code == 500: #Response server error
+			return (0, str(ip) + " encountered an error processing the request\n" + r.text)
+		else: #Response bad
+			return (0, "Something went wrong, status code " + str(r.status_code))
+
 	except requests.exceptions.ConnectTimeout as e:
 		return (0,"Could not reach "+str(ip)+": Connection timeout")
 	except requests.exceptions.ConnectionError as e:
@@ -137,7 +169,7 @@ def send_cmd(cmd, ip, port, auth_key):
 		return (0,"Cound not reach "+str(ip)+" due to general error: " + repr(e))
 
 
-### TERMINAL COMMAND WAIT ###
+### RUN TERMINAL COMMAND AFTER SLEEP ###
 def wait_exec_cmd(t, func, args=[]):
 	time.sleep(t)
 	func(*args) if len(args) > 0 else func()
@@ -150,9 +182,7 @@ def exec_cmd(time, func, args=[]):
 def msg(*messages, header=""):
 	comp = " ".join([str(m) for m in messages])
 	print (header + (":" if len(header)>0 else ""), comp)
-#def status_msg(*messages):
-	#comp = " ".join([str(m) for m in messages])
-	#print (comp)
+
 def log_msg(*messages, display=True, log="", header=""):
 	m = " ".join([str(m) for m in messages])
 	lm = "["+str(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))+"] "   +   m
@@ -180,7 +210,7 @@ def print_header(title):
 		NS = math.floor(N/2)
 		NE = (NS+1) if N%2!=0 else NS
 
-		N1 = (22-len(get_ip()))
+		N1 = (22-len(get_ip_address()))
 		N1S = math.floor(N1/2)
 		N1E = (N1S+1) if N1%2!=0 else N1S
 
@@ -196,43 +226,24 @@ def print_header(title):
 
 		#Device
 		log_msg("#####" + " "*NS  + get_name() + " " *NE  + "#####")
-		log_msg("##IP#" + " "*N1S + get_ip()   + " " *N1E + "#####")
+		log_msg("##IP#" + " "*N1S + get_ip_address()   + " " *N1E + "#####")
 		log_msg("#MAC#" + " "*N2S + get_mac()  + " " *N2E + "#####")
 
 		log_msg("################################")
 	except Exception as e:
 		pass #Meh, if the header breaks don't throw a fit
 
+
 ### OTHER ###
-def try_int(s):
-    try:
-        return int(s)
-    except ValueError:
-        return -1
+
+
 
 ### SCHTASK WINDOWS ###
-def sch_task_startup(name, task):
-	os.system("schtasks /create /tn \"" + str(name) + "\" /sc onstart /tr \"" + str(task) + "\" /f")
+#def sch_task_startup(name, task):
+#	os.system("schtasks /create /tn \"" + str(name) + "\" /sc onstart /tr \"" + str(task) + "\" /f")
 
 
-def set_name(name):
-	global THIS_NAME
-	THIS_NAME = name
-def set_ip(ip):
-	global THIS_IP
-	THIS_IP = ip
-def set_mac(mac):
-	global THIS_MAC
-	THIS_MAC = mac
-def get_name():
-	return THIS_NAME
-def get_ip():
-	return THIS_IP
-def get_mac():
-	return THIS_MAC
-
-
-#Python version
+### VERIFY PYTHON VERSION ###
 if sys.version_info[0] < 3:
 	print("This program requires python version 3.5.2+. You have version " + str(sys.version_info) + "\nPlease download the latest version.")
 	download = raw_input("Would you like to open the python  download page? Y/N:")
@@ -240,8 +251,7 @@ if sys.version_info[0] < 3:
 		import webbrowser
 		webbrowser.open("http://www.python.org/downloads", new=0, autoraise=True)
 	sys.exit()
-
-#Requests
+### VERIFY REQUESTS LIBRARY ###
 try: 
 	import requests
 except ImportError as e:
@@ -253,7 +263,7 @@ except ImportError as e:
 		os.system(PYTHON_CMD + " \"" + __file__ + "\"")
 	else:
 		sys.exit()
-#Flask
+### VERIFY FLASK LIBRARY ###
 try: 
 	from flask import Flask, request, Response
 except ImportError as e:

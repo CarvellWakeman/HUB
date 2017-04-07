@@ -25,19 +25,20 @@ command_desc = {}
 listener = Flask(__name__)
 @listener.route('/', methods=['GET', 'POST'])
 def cmd_recv():
+
 	#Get Variables
 	if request.method == "GET":
-		cmdargs = str(request.args.get("command")).strip()
+		cmdargs = str(request.args.get("command"))
 		auth_key = str(request.args.get("auth"))
 	elif request.method == "POST":
-		cmdargs = str(request.form["command"]).strip() if "command" in request.form else ""
+		cmdargs = str(request.form["command"]) if "command" in request.form else ""
 		auth_key = str(request.form["auth"]) if "auth" in request.form else ""
 
 	ip = str(request.remote_addr)
 	status_code = 200
 
 	#Split command from arguments
-	cmdargs = cmdargs.replace("%", " ")
+	cmdargs = cmdargs.strip().replace("%", " ")
 	sp = cmdargs.split(" ")
 	if len(sp)>0:
 		command = sp[0].lower()
@@ -48,8 +49,7 @@ def cmd_recv():
 	else:
 		command = ""
 	
-	#Command received
-	#log_msg(str(command), str(args), "from", ip, "auth '" + str(auth) + "' level", str(level), display=True)
+	#Log Command received
 	if get_cmd_restriction(command) >= 0:
 		log_msg(CMD_RECV, "'" + str(cmdargs) + "'", "from", ip, "auth '" + str(auth_key) + "'", header=TITLE_SERVER, log=SERVER_LOG)
 
@@ -57,22 +57,24 @@ def cmd_recv():
 	try:
 		auth = authorize(auth_key)
 
-		if auth[0]:
+		if auth[0]: #Auth pass, run command
 			result = cmd_handle(command, args, auth_key, auth[1], ip)[1]
 			status_code = 200
-		else:
+		else: #Auth fail, return
 			result = AUTH_FAIL
 			status_code = 401
+		
+		#Log result of running if that is allowed
+		#if get_cmd_restriction(command) >= 0:
+			#log_msg(result)
 
-		if get_cmd_restriction(command) >= 0:
-			log_msg(result)
 	except Exception as e:
 		result = "Something went wrong processing input. Command:" + command + " Args:" + args + ", auth:" + auth_key + ", ip:" + ip + ", err:" + str(repr(e))
 		status_code = 500
 		log_msg("ERROR:", result, log=SERVER_LOG)
 
 
-	#Send response
+	#return response
 	resp = Response(str(result), mimetype="text/xml")
 	resp.headers["Access-Control-Allow-Origin"] = "*"
 	return resp, status_code
@@ -163,22 +165,24 @@ def load_modules():
 						if args != "": command_args[cmd] = args
 						if desc != "": command_desc[cmd] = desc
 
+						#Good load
 						log_msg(" "*len(MODULE_OK), CMD_ADD, CMD.lower(), cmd)
 					else: #Command already exists
 						log_msg(" "*len(MODULE_OK), ERROR, CMD_EXISTS, cmd)
 			except Exception as e:
-				log_msg("Error loading module " + file + ":" + repr(e), log=SERVER_LOG, header=TITLE_SERVER)
-				return BOOT_FAILURE
+				log_msg(MODULE_FAIL, MODULE, file, "\n", " "*len(MODULE_FAIL), " -> " + repr(e), header=TITLE_SERVER)
+				log_msg("Error loading module " + file + " : " + repr(e), log=SERVER_LOG, header=TITLE_SERVER, display=False)
+				#return BOOT_FAILURE
 
 	#Successful load
 	return BOOT_SUCCESS
+
 
 ### BUILT IN COMMANDS ###
 def reload_hub():
 	request.environ.get('werkzeug.server.shutdown')() #Shutdown flask listener
 	exec_cmd(time=5, func=Popen, args=[[PYTHON_CMD, os.path.abspath(__file__)]])
 	return (1,"Reloading HUB process")
-
 
 def cmd_help(*args):
 	if len(args) > 0:
@@ -214,7 +218,7 @@ def check_auth(*args):
 
 ### MAIN ###
 def main():	
-	#Header
+	#Header message (IP, MAC, NAME, etc)
 	print_header("HUB SERVER")
 
 	#Loading
