@@ -197,7 +197,7 @@ def exec_cmd(time, func, args=[]):
 ### PRINTING STATUS ###
 def msg(*messages, header=""):
 	comp = " ".join([str(m) for m in messages])
-	print (header + (":" if len(header)>0 else ""), comp)
+	print(header + (":" if len(header)>0 else ""), comp)
 
 def log_msg(*messages, display=True, log="", header=""):
 	m = " ".join([str(m) for m in messages])
@@ -210,7 +210,7 @@ def log_msg(*messages, display=True, log="", header=""):
 			f.write(str(lm) + "\n")
 			f.close()
 		except Exception as e:
-			print ("Error: Could not write to " + log + "\n" + repr(e))
+			print("Error: Could not write to " + log + "\n" + repr(e))
 			
 	if display: msg(lm, header=header)
 

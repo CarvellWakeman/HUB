@@ -21,8 +21,6 @@
 UNRELEASED
 *[BUGFIX] Fixed mac address value returning incorrect on windows systems
 
-*[ADD] device_control stores device state, updates with registration calls
-
 
 FORMAT
 Ver #.#.# CHANNEL YYYY-MM-DD

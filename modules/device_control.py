@@ -21,11 +21,11 @@ class Device(object):
 		self.name = name
 		self.ip = ip
 		self.mac = mac
-		self.status = "Online"
+		#self.status = "Online"
 
 	def get_ip(self): return self.ip
 	def get_mac(self): return self.mac
-	def get_status(self): return self.status
+	#def get_status(self): return self.status
 
 
 
@@ -168,7 +168,6 @@ class device_control(default_module):
 		if len(args) > 1:
 			name = str(args[1]).lower()
 			device = self.get_device(name)
-			self.devices[name].status = self.device_status(args[0], name)[1]
 			if device != None:
 				return (1,"yes")
 			else:
@@ -191,7 +190,7 @@ class device_control(default_module):
 			for n,a in self.devices.items():
 				ip = a.get_ip()
 				mac = a.get_mac()
-				status = a.get_status()
+				status = self.device_status(args[0], n)[1]
 				s += n[0:10] + " "*(11-len(n)) + str(ip) + " "*(16-len(ip)) + str(mac) + " "*3 + str(status) + "\n"
 			return (1,s)
 

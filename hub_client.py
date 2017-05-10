@@ -131,8 +131,10 @@ commands["status"] = device_status
 
 ### HUB REGISTRATION ###
 def do_register(Register_timeout, INITIAL_REGISTER_ATTEMPT):
+
 	reg_res = (INITIAL_REGISTER_ATTEMPT, False)
 	while True:
+		#print("do_register")
 		reg_res = register(reg_res[0], reg_res[1])
 		time.sleep(Register_timeout)
 
@@ -237,7 +239,8 @@ def main(*args):
 		#Startup tip
 		if not "startup" in args:
 			log_msg("TIP: Execute '"+PYTHON_CMD+" hub_client.py startup' with admin priviledges to run this on startup.")
-		
+
+
 		print_header("HUB CLIENT")
 
 	
@@ -249,7 +252,7 @@ def main(*args):
 		pool.apply_async(func=do_register, args=(Register_timeout, INITIAL_REGISTER_ATTEMPT))
 
 
-		#Set FLASK logging to verbose (only error)
+		#Set FLASK logging to only error
 		log = logging.getLogger('werkzeug')
 		log.setLevel(logging.ERROR)
 
