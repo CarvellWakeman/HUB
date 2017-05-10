@@ -16,6 +16,16 @@ from default_module import default_module
 #HUB device control
 device_hub = "hub"
 
+class Device(object):
+	def __init__(self, name, ip, mac):
+		self.name = name
+		self.ip = ip
+		self.mac = mac
+		self.status = "Online"
+
+	def get_ip(self): return self.ip
+	def get_mac(self): return self.mac
+	def get_status(self): return self.status
 
 
 
@@ -30,7 +40,7 @@ class device_control(default_module):
 
 		## Devices ##
 		self.devices = {}
-		self.devices[device_hub] = (get_ip_address(), get_mac_address())
+		self.devices[device_hub] = Device(device_hub, get_ip_address(), get_mac_address())
 
 		## Bind Functions ##
 		self.commands["wake"] = self.wake
@@ -85,16 +95,16 @@ class device_control(default_module):
 
 	## POWER OPTIONS ##
 	def wake(self, *args):
-		if len(args) == 1: #Wake by device name
-			name = str(args[0])
-			target = self.get_device(name)
-			if target != None:
-				self.sub_wake(target[0], target[1])
+		if len(args) == 2: #Wake by device name
+			name = str(args[1]).lower()
+			device = self.get_device(name)
+			if device != None:
+				self.sub_wake(device.get_ip(), device.get_mac())
 				return (1,"Sending magic packet to " + name)
 			else:
 				return (0,"Device " + name + " could not be found")
 		elif len(args) == 2:#Wake by IP and MAC
-			return self.sub_wake(args[0], args[1])
+			return self.sub_wake(args[1], args[2])
 		else:
 			return (0,"Incorrect Arguments")
 	def sub_wake(self, IP, MAC):
@@ -127,37 +137,38 @@ class device_control(default_module):
 
 
 	def shutdown(self, *args):
-		if len(args) > 0:
-			target = str(args[0]).lower()
-			return self.try_send_cmd(target, "shutdown")
+		if len(args) > 1:
+			name = str(args[1]).lower()
+			return self.try_send_cmd(args[0], name, "shutdown")
 		else:
 			return (0,"Missing Arguments")
 
 	def hibernate(self, *args):
-		if len(args) > 0:
-			target = str(args[0]).lower()
-			return self.try_send_cmd(target, "hibernate")
+		if len(args) > 1:
+			name = str(args[1]).lower()
+			return self.try_send_cmd(args[0], name, "hibernate")
 		else:
 			return (0,"Missing Arguments")
 
 	def restart(self, *args):
-		if len(args) > 0:
-			target = str(args[0]).lower()
-			return self.try_send_cmd(target, "restart")
+		if len(args) > 1:
+			name = str(args[1]).lower()
+			return self.try_send_cmd(args[0], name, "restart")
 		else:
 			return (0,"Missing Arguments")
 
 	def logoff(self, *args):
-		if len(args) > 0:
-			target = str(args[0]).lower()
-			return self.try_send_cmd(target, "logoff")
+		if len(args) > 1:
+			name = str(args[1]).lower()
+			return self.try_send_cmd(args[0], name, "logoff")
 		else:
 			return (0,"Missing Arguments")
 
 	def device_is_registered(self, *args):
-		if len(args) > 0:
-			target = str(args[0]).lower()
-			device = self.get_device(target)
+		if len(args) > 1:
+			name = str(args[1]).lower()
+			device = self.get_device(name)
+			self.devices[name].status = self.device_status(args[0], name)[1]
 			if device != None:
 				return (1,"yes")
 			else:
@@ -165,51 +176,51 @@ class device_control(default_module):
 		else:
 			return (0,"Missing Arguments")
 	def device_status(self, *args):
-		if len(args) > 0:
-			target = str(args[0]).lower()
-			status = self.try_send_cmd(target, "status")
+		if len(args) > 1:   
+			name = str(args[1]).lower()
+			status = self.try_send_cmd(args[0], name, "status")
 			if status != None:
 				return (0,"Offline" if status[0]==0 else status[1])
 			else:
-				return (0,"Device " + target + " could not be found")
+				return (0,"Device " + name + " could not be found")
 		else:
 			return (0,"Missing Arguments")
 
 	def get_devices(self, *args):
 			s = "NAME" + " "*7 + "IP" + " "*14 + "MAC" + " "*12 + "STATUS" + "\n"
 			for n,a in self.devices.items():
-				ip = a[0]
-				mac = a[1]
-				status = self.device_status(n)[1]
+				ip = a.get_ip()
+				mac = a.get_mac()
+				status = a.get_status()
 				s += n[0:10] + " "*(11-len(n)) + str(ip) + " "*(16-len(ip)) + str(mac) + " "*3 + str(status) + "\n"
 			return (1,s)
 
 
 
 	### REMOTE DEVICE MANAGEMENT ###
-	def add_update_device(self, name, ip, mac):
+	def add_update_device(self, name, ip, phys_addr):
 		if name is not device_hub: #Hub cannot be changed or added
 			device = self.get_device(name)
 
 			if device != None: #Edit or do nothing
-				if device[0] != ip or device[1] != mac: #Edit
-					self.devices[name] = (ip, mac)
+				if device.get_ip() != ip:# or device[1] != mac: #Edit
+					self.devices[name] = Device(name, ip, phys_addr)
 					return (1, name + " device information changed")
 				else: #do nothing
 					return (1, "Device " + name + " already registered")
 			else: #New
 				if valid_ip(ip):
-					if valid_mac(mac):
-						mac = clean_mac(mac)
+					if valid_mac(phys_addr):
+						mac = clean_mac(phys_addr)
 
-						self.devices[name] = (ip, mac)
+						self.devices[name] = Device(name, ip, mac)
 						return (1, "Registered device " + name + ", IP=" + ip + ", MAC=" + mac)
 					else:
 						return (0,"MAC address format incorrect:" + mac)
 				else:
 					return (0,"IP address format incorrect:" + ip)
 		else:
-			return (0,"This device name is taken (for the HUB)")
+			return (0,"This device name is taken (for the HUB itself)")
 
 	def get_device(self, name):
 		if len(self.devices) > 0 and name != None and name != "":
@@ -218,40 +229,39 @@ class device_control(default_module):
 		return None
 
 	def register_device(self, *args):
-		if len(args) > 2:
-			proper_name = str(args[0])
-			name = proper_name.lower()
-			ip = str(args[1])
-			mac = clean_mac(str(args[2]))
+		if len(args) > 3:
+			name = str(args[1]).lower()
+			ip = str(args[2])
+			mac = clean_mac(str(args[3]))
 
 			return self.add_update_device(name, ip, mac)
 		else:
 			return (0,"Missing Arguments")
 
 	def unregister_device(self, *args):
-		if len(args) == 1:
-			device = args[0].lower()
+		if len(args) == 2:
+			name = args[1].lower()
 
-			if device != device_hub:
-				if device in self.devices:
-					self.try_send_cmd(device, "unregister")
-					self.devices.pop(device, None)
-					return (1,"Un-registered " + device)
+			if name != device_hub:
+				if name in self.devices:
+					self.try_send_cmd(args[0], name, "unregister")
+					self.devices.pop(name, None)
+					return (1,"Un-registered " + name)
 				else:
-					return (0,"Device " + device + " could not be found")
+					return (0,"Device " + name + " could not be found")
 			else:
 				return (0,"Cannot unregister the HUB")
 		else:
 			return (0,"Missing Arguments")
 
 
-	def try_send_cmd(self, target, cmd):
-		if target == device_hub:
+	def try_send_cmd(self, auth, name, cmd):
+		if name == device_hub:
 			return hub_client.cmd_handle(cmd)
 		else:
-			device = self.get_device(target)
+			device = self.get_device(name)
 			if device != None:
-				ip = device[0]
-				return send_cmd(cmd, ip, PORT, "startrekDS9")
-			return (0,"Device " + target + " could not be found")
+				ip = device.get_ip()
+				return send_cmd(cmd, ip, PORT, auth)
+			return (0,"Device " + name + " could not be found")
 	### END COMMAND FUNCTIONS ###

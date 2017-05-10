@@ -11,7 +11,9 @@ import struct
 from importlib import import_module
 from multiprocessing import Process
 from subprocess import Popen
+
 from uuid import getnode
+#import netifaces
 
 # MESSAGE STRING CONSTANTS #
 TITLE_SERVER = "HUB"
@@ -96,10 +98,24 @@ def get_ip_address():
 		THIS_IP = s.getsockname()[0]
 	return THIS_IP
 
+
+
 def get_mac_address():
 	global THIS_MAC
+
 	if THIS_MAC == "":
-		THIS_MAC = clean_mac("".join(c + ":" if i % 2 else c for i, c in enumerate(hex( getnode() )[2:].zfill(12)))[:-1])
+		if OS_WIN: 
+			for line in os.popen("ipconfig /all"): 
+				if line.lstrip().startswith('Physical Address'):
+					mac = line.split(':')[1].strip().replace('-',':')
+					break 
+		else: 
+			for line in os.popen("/sbin/ifconfig"): 
+				if line.find('Ether') > -1: 
+					mac = line.split()[4] 
+					break
+		THIS_MAC = clean_mac(mac)
+	#THIS_MAC = clean_mac("".join(c + ":" if i % 2 else c for i, c in enumerate(hex( getnode() )[2:].zfill(12)))[:-1])
 	return THIS_MAC
 
 def valid_mac(MAC):
@@ -186,17 +202,17 @@ def msg(*messages, header=""):
 def log_msg(*messages, display=True, log="", header=""):
 	m = " ".join([str(m) for m in messages])
 	lm = "["+str(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))+"] "   +   m
-
+	
 	if len(log)>0:
-		if display: msg(lm, header=header)
 		try:
-			with open( (user_folder + ( "\\Desktop\\") if OS_WIN else "") + log, "a+") as f:
-				f.write(str(lm) + "\n")
-				f.close()
+			dir = (user_folder + ( "\\Desktop\\") if OS_WIN else "")
+			f = open( dir + log, "a+")
+			f.write(str(lm) + "\n")
+			f.close()
 		except Exception as e:
 			print ("Error: Could not write to " + log + "\n" + repr(e))
-	else:
-		if display: msg(m, header=header)
+			
+	if display: msg(lm, header=header)
 
 def print_header(title):
 	try:

@@ -21,6 +21,7 @@ MUTE = False
 
 #Client commands
 commands = {}
+command_restrict = {'status':-1}
 
 
 ### RECEIVE REQUESTS ###
@@ -36,7 +37,9 @@ def cmd_recv():
 	ip = str(request.remote_addr)
 
 	#Command received
-	if not MUTE: log_msg(CMD_RECV, "'" + str(command) + "'", "from", ip, log=CLIENT_LOG, header=get_hostname())#, "auth '" + str(auth) + "' level", str(level))
+	if not MUTE:
+		if get_cmd_restriction(command) >= 0:
+			log_msg(CMD_RECV, "'" + str(command) + "'", "from", ip, log=CLIENT_LOG, header=get_hostname())#, "auth '" + str(auth) + "' level", str(level))
 
 	if ip == HUB_IP:
 		result = cmd_handle(command)
@@ -48,6 +51,12 @@ def cmd_recv():
 
 
 ### COMMAND HANDLING ###
+def get_cmd_restriction(cmd):
+	if cmd in command_restrict:
+		return command_restrict[cmd]
+	else:
+		return 0
+
 def cmd_handle(cmdargs):
 
 	#Split command
@@ -64,10 +73,14 @@ def cmd_handle(cmdargs):
 			result = (0, "Command encountered an error while running:" + repr(e))
 
 		#Print result
-		if not MUTE: log_msg(result[1])
+		if not MUTE:
+			if get_cmd_restriction(command) >= 0:
+				log_msg(result[1])
 	else: #Command not found
 		result = (0, CMD + " " + command + " " + CMD_NOTFOUND)
-		if not MUTE: log_msg(CMD, command, CMD_NOTFOUND, log=CLIENT_LOG, header=get_hostname())
+		if not MUTE:
+			if get_cmd_restriction(command) >= 0:
+				log_msg(CMD, command, CMD_NOTFOUND, log=CLIENT_LOG, header=get_hostname())
 	
 	return result
 
@@ -127,7 +140,8 @@ def register(INITIAL_REGISTER_ATTEMPT=False, RETRYING_CONNECTION=False):
 	#Registration commands
 	register_cmd = "register " + get_hostname() + " " + get_ip_address() + " " + get_mac_address()
 	is_registered_cmd = "isregistered " + get_hostname()
-
+	#print(register_cmd)
+	
 	#Have ever registered
 	if not INITIAL_REGISTER_ATTEMPT:
 		if not MUTE: log_msg(CONTACTING_HUB, header=get_hostname())
@@ -161,14 +175,16 @@ def register(INITIAL_REGISTER_ATTEMPT=False, RETRYING_CONNECTION=False):
 
 ### MAIN ###
 def main(*args):
+	global MUTE
+
 	Register_timeout = 10 #Default 30?
 	INITIAL_REGISTER_ATTEMPT = False
 	LOCAL_MODE = False
 
-	global MUTE
 
 	windows_startup_folder = "AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup"
 
+	#print(get_mac_address())
 
 	#Arguments
 	if len(args)==0:

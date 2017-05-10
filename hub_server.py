@@ -102,7 +102,7 @@ def cmd_handle(command, args, auth, level, ip):
 		if level >= get_cmd_restriction(command):
 			#Run command in module
 			try:
-				result = commands[command](*args)
+				result = commands[command](auth, *args)
 			except Exception as e:
 				result = (0, command + " encountered an error while running: " + repr(e))
 		else:

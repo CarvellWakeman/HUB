@@ -6,8 +6,12 @@
 
 -Low
 
+*[CHANGE] hub_client start minimized
 
-
+*[ADD] command delay argument
+*[ADD] webpage authentication blanked out ****
+*[ADD] hub_server logs command to show log text (argument for how many?)
+*[ADD] hub_server saves devices over reboot
 *[ADD] hub_client reads HUB_IP, PORT, and AUTH_KEY from local file or parameter
 *[ADD] hub_server reads auth keys from file
 *[ADD] Push files between server and client (to update hub_client.py?)
@@ -15,6 +19,9 @@
 
 
 UNRELEASED
+*[BUGFIX] Fixed mac address value returning incorrect on windows systems
+
+*[ADD] device_control stores device state, updates with registration calls
 
 
 FORMAT
