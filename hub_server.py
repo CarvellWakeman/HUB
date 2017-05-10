@@ -209,7 +209,7 @@ def cmd_help(*args):
 			return (0,"Commands ("+",".join(cmds)+") not found")
 
 def check_auth(*args):
-	if len(args) == 0:
+	if len(args) == 1:
 		return (1,"Autentication good")
 	else:
 		return (0,"Incorrect arguments")
