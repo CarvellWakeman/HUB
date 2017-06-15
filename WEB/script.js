@@ -254,17 +254,21 @@ function handle_input(event){
 			});
 		}
 		else{
-			// Special case for clear command
-			if (input.value == "clear"){
-				output_container.innerHTML = "";
-				return;
-			}
 
 			// Add to history (beginning of array)
 			if (command_index==-1){
-				command_history.unshift(input.value);
+				if (input.value.length > 0){
+					command_history.unshift(input.value);
+				}
 			}
 			command_index = -1;
+
+			// Special breaking case for clear command
+			if (input.value == "clear"){
+				output_container.innerHTML = "";
+				input.value = "";
+				return;
+			}
 
 			//Create input line and add it to the output container (Record input in output history)
 			create_output_line(input.value);
