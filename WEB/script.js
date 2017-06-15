@@ -40,6 +40,10 @@ drag_threshold = 10
 dragging = false
 last_mouse_position = {x:0, y:0}
 
+//Command history
+command_history = []
+command_index = -1
+
 
 
 function buildTerminal()
@@ -250,6 +254,12 @@ function handle_input(event){
 			});
 		}
 		else{
+			// Add to history (beginning of array)
+			if (command_index==-1){
+				command_history.unshift(input.value)
+			}
+			command_index = -1
+
 			//Create input line and add it to the output container (Record input in output history)
 			create_output_line(input.value);
 
@@ -268,7 +278,21 @@ function handle_input(event){
 				scroll_to_bottom()
 			}
 		}
-		
+	}
+	else if (event.keyCode == 38){ //Up arrow
+		if (command_index+1 < command_history.length){
+			command_index++
+			input.value = command_history[command_index]
+		}
+	}
+	else if (event.keyCode == 40){ //Down arrow
+		if (command_index-1 >= 0){
+			command_index--
+			input.value = command_history[command_index]
+		} else if (command_index-1 < 0){
+			command_index = -1
+			input.value = ""
+		}
 	}
 }
 
