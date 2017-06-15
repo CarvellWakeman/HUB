@@ -91,10 +91,6 @@ def get_cmd_restriction(cmd):
 
 def cmd_handle(command, args, auth, level, ip):
 
-	#Command received
-	#if get_cmd_restriction(command) >= 0:
-		#log_msg(CMD_RECV, "'" + str(cmdargs) + "'", "from", ip, "auth '" + str(auth) + "' level", str(level), header=TITLE_SERVER, log=SERVER_LOG)
-
 	#Check if command exists in any module
 	if command in commands:
 
@@ -109,11 +105,12 @@ def cmd_handle(command, args, auth, level, ip):
 			result = (0, "Authorization level too low to run this command.")
 			
 		#Print result
-		#if get_cmd_restriction(command) >= 0:
-			#log_msg(result[1])
+		if get_cmd_restriction(command) >= 0:
+			log_msg(result[1])
 
 		return result
 	else: #Command not found
+		print("COmmand not found")
 		if get_cmd_restriction(command) >= 0:
 			log_msg(CMD, command, CMD_NOTFOUND, header=TITLE_SERVER, log=SERVER_LOG)
 		return (0, CMD + " " + command + " " + CMD_NOTFOUND)
@@ -184,7 +181,7 @@ def reload_hub():
 	exec_cmd(time=5, func=Popen, args=[[PYTHON_CMD, os.path.abspath(__file__)]])
 	return (1,"Reloading HUB process")
 
-def cmd_help(*args):
+def cmd_help(auth, *args):
 	if len(args) > 0:
 		cmds = [a for a in args if a != ""]
 	else:
