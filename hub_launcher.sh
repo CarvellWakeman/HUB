@@ -1,8 +1,7 @@
 #!/bin/sh -e
-# launcher.sh
+# /etc/rc0.d/hub_launcher.sh
+# /etc/init.d/hub_launcher.sh
 # navigate to home directory, then to this directory, then execute python script, then back home
 
-cd /
-cd home/cooper/hub
-sudo python3 hub_server.py
-cd /
+cd /home/cooper/hub
+sudo java -jar HubServer.jar 5000

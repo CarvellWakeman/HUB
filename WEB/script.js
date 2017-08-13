@@ -119,25 +119,27 @@ function buildTerminal()
 		input.style.fontSize = "12pt";
 		input.style.fontFamily = "Courier New";
 
+		input.type = "password"; // Hide for initial Auth entry
+
 	input_container.appendChild(input);
 
 	//Send input by keypress
 	input.addEventListener("keydown", handle_input);
 
 	//Focus input when the page is clicked UNLESS the user is dragging
-	body.addEventListener("mousedown", function(e){ 
+	body.addEventListener("mousedown", function(e) { 
 		dragging = false; 
 		last_mouse_position = { x:e.clientX, y:e.clientY };
 	});
-	body.addEventListener("mousemove", function(e){ 
+	body.addEventListener("mousemove", function(e) { 
 		deltaX = Math.abs(last_mouse_position.x - e.clientX)
 		deltaY = Math.abs(last_mouse_position.y - e.clientY)
 
-		if (deltaX > drag_threshold || deltaY > drag_threshold){
+		if (deltaX > drag_threshold || deltaY > drag_threshold) {
 			dragging = true
 		}
 	});
-	body.addEventListener("mouseup", function(e){ 
+	body.addEventListener("mouseup", function(e) { 
 		if (dragging) { 
 			e.preventDefault(); 
 			e.stopPropagation(); 
@@ -149,7 +151,7 @@ function buildTerminal()
 }
 
 //Creating input lines
-function get_server_input_line(){
+function get_server_input_line() {
 	var cont = document.createElement("div");
 
 	//Create input server line
@@ -218,31 +220,51 @@ function reset_input()
 }
 
 //Scroll to bottom
-function scroll_to_bottom(){
+function scroll_to_bottom() {
 	body.scrollTop = body.scrollHeight;
 }
 
+// AUTHORIZATION //
+function bhash(key) {
+	r = 0;
+	for (i = 0; i < key.length; i++) {
+		r += (i+1) * key.charCodeAt(i);
+	}
+	return r;
+}
+
 //Managing terminal
-function handle_input(event){
-	console.log("keyCode:", event.keyCode)
+function handle_input(event) {
 	//Enter key
-	if (event.keyCode == 13){
+	if (event.keyCode == 13) {
+		// Split input
+		var split = input.value.split(" ")
+		var cmd = split[0]
+		split.splice(0,1)
+		var args = split
+
+		console.log("Cmd:" + cmd)
+		console.log("args:" + JSON.stringify(args))
+
 		//Is this input an auth key?
-		if (auth_key == null){
-			send_input("checkauth", input.value, function(result, status){
-				if (status < 400 && status > 0 && status != null){
+		if (auth_key == null) {
+			send_input("checkauth", [bhash(input.value).toString()], bhash(input.value), function(result, status) {
+				if (status < 400 && status > 0 && status != null) {
 					//Set auth key
-					auth_key = input.value
+					auth_key = bhash(input.value)
 
 					//Header text
 					for (i = 0; i < SERVER_HEADERS.length; i++) { create_output_line(SERVER_HEADERS[i]); }
 
 					//Set server domain/directory title
 					input_container.replaceChild(get_server_input_line(), input_title);
+
+					//Set input field back to regular type
+					input.type = "text";
 				}
 				else {
 					//No response
-					if (status == 0){
+					if (status == 0) {
 						create_output_line(ERR_CONTACT, false)
 					} else {
 						create_output_line(AUTH_FAIL, false)
@@ -256,15 +278,14 @@ function handle_input(event){
 		else{
 
 			// Add to history (beginning of array)
-			if (command_index==-1){
-				if (input.value.length > 0){
-					command_history.unshift(input.value);
-				}
+			if (input.value.length > 0 && input.value != command_history[0]) {
+				command_history.unshift(input.value);
 			}
+			
 			command_index = -1;
 
 			// Special breaking case for clear command
-			if (input.value == "clear"){
+			if (input.value == "clear") {
 				output_container.innerHTML = "";
 				input.value = "";
 				return;
@@ -278,7 +299,7 @@ function handle_input(event){
 				input_container.style.visibility = "hidden";
 
 				//Send input
-				send_input(input.value, auth_key, function(result, status){
+				send_input(cmd, args, auth_key, function(result, status) {
 					create_output_line(result, false)
 					reset_input()
 					scroll_to_bottom()
@@ -289,52 +310,66 @@ function handle_input(event){
 			}
 		}
 	}
-	else if (event.keyCode == 38){ //Up arrow
-		if (command_index+1 < command_history.length){
+	else if (event.keyCode == 38) { //Up arrow
+		if (command_index+1 < command_history.length) {
 			command_index=command_index+1;
 			input.value = command_history[command_index];
 		}
+
+		// Move cursor to end
+		setTimeout((function(input) {
+        var strLength = input.value.length;
+        return function() {
+            if(input.setSelectionRange !== undefined) {
+                input.setSelectionRange(strLength, strLength);
+            } else {
+                $(input).val(input.value);
+            }
+    	}}(this)), 0);
 	}
-	else if (event.keyCode == 40){ //Down arrow
-		if (command_index-1 >= 0){
+	else if (event.keyCode == 40) { //Down arrow
+		if (command_index-1 >= 0) {
 			command_index=command_index-1;
 			input.value = command_history[command_index];
-		} else if (command_index-1 < 0){
+		} else if (command_index-1 < 0) {
 			command_index = -1;
 			input.value = "";
 		}
+		// Move cursor to end
+		input.focus();
 	}
 }
 
 window.onload = function() {
-	//setTimeout(function(){
+	//setTimeout(function() {
 	url = window.location.href
 	split = url.split("?")
 	auth = ""
 	cmd = "checkauth"
+	args = []
 
 	//If parameters were included
-	if (split.length > 1){
+	if (split.length > 1) {
 		params = split[1].split("&")
 
-		for (i = 0; i < params.length; i++){
+		for (i = 0; i < params.length; i++) {
 			param = params[i]
 
 			//Auth parameter
-			if (param.includes("auth=")){
+			if (param.includes("auth=")) {
 				auth = param.replace("auth=","")
 			}
 			//Command parameter
-			else if (param.includes("command=")){
-				cmd = param.replace("command=","")
+			else if (param.includes("cmd=")) {
+				cmd = param.replace("cmd=","")
 			}
 			//Else ignore it
 		}
 
 		//Check if auth and command are present
-		if (auth != ""){
-			send_input(cmd, auth, function(result, status){
-				if (status < 400 && status > 0 && status != null){
+		if (auth != "") {
+			send_input(cmd, args, auth, function(result, status) {
+				if (status < 400 && status > 0 && status != null) {
 					//Set auth key
 					auth_key = auth
 
@@ -345,7 +380,7 @@ window.onload = function() {
 					create_output_line(result, false)
 				} else {
 					//No response
-					if (status == 0){
+					if (status == 0) {
 						create_output_line(ERR_CONTACT, false)
 					} else {
 						create_output_line(AUTH_FAIL, false)
@@ -361,20 +396,21 @@ window.onload = function() {
 }//);
 
 //TODO Weird bug when sending request from mobile browser: Exception happened during processing of request from ('50.188.131.99', 47675)
-function send_input(cmd, auth, callback = null){
+function send_input(cmd, args, auth, callback = null) {
 	//If data was entered
 	if (cmd != null && cmd.length > 0 && auth != null) {
-		console.log("http://" + IP + ":" + PORT + "/?auth=" + auth + "&command=" + cmd)
+
 		//Send request
 		$.ajax({
 			type: "GET",
-			url: "http://" + IP + ":" + PORT + "/?auth=" + auth + "&command=" + cmd,
+			url: "http://" + IP + ":" + PORT,// + "/?auth=" + auth + "&cmd=" + cmd,
 			timeout: 10000,
 			dataType: "text",
-			//data: {
-			//	"auth": auth, 
-			//	"command": cmd,
-			//},
+			data: {
+				"auth": auth, 
+				"cmd": cmd,
+				"args": JSON.stringify(args),
+			},
 			//Send response
 			success: function (response, textStatus, XHR) {
 				console.log("Response:")
@@ -406,7 +442,7 @@ function send_input(cmd, auth, callback = null){
 }
 
 function replaceAll(str, find, replace) {
-	if (str != null && str.length > 0){
+	if (str != null && str.length > 0) {
 		return str.replace(new RegExp(find, "g"), replace);
 	}
 	else { return str; }
