@@ -29,7 +29,7 @@ var TERMINAL_BLUE = "#55BFFF";
 
 
 //Network
-IP = window.location.host
+IP = window.location.host;
 PORT = 5000;
 
 //Authentication
@@ -236,44 +236,44 @@ function bhash(key) {
 //Managing terminal
 function handle_input(event) {
 	//Enter key
-	if (event.keyCode == 13) {
+	if (event.keyCode == 13) { 
 		// Split input
 		var split = input.value.split(" ")
 		var cmd = split[0]
 		split.splice(0,1)
 		var args = split
 
-		console.log("Cmd:" + cmd)
-		console.log("args:" + JSON.stringify(args))
-
 		//Is this input an auth key?
 		if (auth_key == null) {
-			send_input("checkauth", [bhash(input.value).toString()], bhash(input.value), function(result, status) {
-				if (status < 400 && status > 0 && status != null) {
-					//Set auth key
-					auth_key = bhash(input.value)
+			// input was provided
+			if (input.value.length > 0) {
+				send_input("checkauth", [bhash(input.value).toString()], bhash(input.value), function(result, status) {
+					if (status < 400 && status > 0 && status != null) {
+						//Set auth key
+						auth_key = bhash(input.value)
 
-					//Header text
-					for (i = 0; i < SERVER_HEADERS.length; i++) { create_output_line(SERVER_HEADERS[i]); }
+						//Header text
+						for (i = 0; i < SERVER_HEADERS.length; i++) { create_output_line(SERVER_HEADERS[i]); }
 
-					//Set server domain/directory title
-					input_container.replaceChild(get_server_input_line(), input_title);
+						//Set server domain/directory title
+						input_container.replaceChild(get_server_input_line(), input_title);
 
-					//Set input field back to regular type
-					input.type = "text";
-				}
-				else {
-					//No response
-					if (status == 0) {
-						create_output_line(ERR_CONTACT, false)
-					} else {
-						create_output_line(AUTH_FAIL, false)
+						//Set input field back to regular type
+						input.type = "text";
 					}
-				}
+					else {
+						//No response
+						if (status == 0) {
+							create_output_line(ERR_CONTACT, false)
+						} else {
+							create_output_line(AUTH_FAIL, false)
+						}
+					}
 
-				reset_input()
-				scroll_to_bottom()
-			});
+					reset_input()
+					scroll_to_bottom()
+				});
+			}
 		}
 		else{
 
@@ -399,6 +399,9 @@ window.onload = function() {
 function send_input(cmd, args, auth, callback = null) {
 	//If data was entered
 	if (cmd != null && cmd.length > 0 && auth != null) {
+
+		console.log("Cmd:" + cmd)
+		console.log("args:" + JSON.stringify(args))
 
 		//Send request
 		$.ajax({

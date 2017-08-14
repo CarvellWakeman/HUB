@@ -2,6 +2,7 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import org.json.JSONArray;
+import spark.embeddedserver.NotSupportedException;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -21,6 +22,8 @@ public class Utils {
     // Logging
     static String SERVER_LOG = "hub_server_log.txt";
     static String CLIENT_LOG = "hub_client_log.txt";
+
+    static String STARTUP_SCRIPT = "Creating startup script...";
 
     // Command
     static String CMD = "Command";
@@ -173,7 +176,7 @@ public class Utils {
                 // Write
                 bw.write(msg + "\n");
             } catch (IOException ex) {
-                System.out.println("Error: Could not write to logfile '" + fileName + "'");
+                System.out.println(String.format("Error: Could not write to logfile '%s':%s", fileName, ex.getMessage()));
             } finally {
                 try {
                     if (bw != null) bw.close();
@@ -235,7 +238,6 @@ public class Utils {
 
 
     // NETWORK //
-
     public static HttpResponse<String> SendCommand(String Command, String[] Arguments, String IP, int Port, String Token) {
         String URL = "http://" + IP + ":" + String.valueOf(Port);
         HttpResponse<String> response = null;
@@ -287,4 +289,76 @@ public class Utils {
         return response;
     }
 
+
+    // STARTUP //
+    public static void CreateStartupScript(OS_TYPE OS, String filename, String[] arguments) throws IOException, UnsupportedOperationException{
+        logMsg(STARTUP_SCRIPT, true, null);
+
+        // Assemble startup file contents
+        StringBuilder contents = new StringBuilder();
+        // Startup directory
+        String startupDirectory;
+
+        // PWD
+        String PWD = System.getProperty("user.dir");
+        String UserHome = System.getProperty("user.home");
+
+        // Startup script file
+        File startupScript = null;
+
+        // OS specific startup data
+        if (OS == Utils.OS_TYPE.WIN) {
+            // Windows unique strings
+            startupDirectory = String.format("%s\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\", UserHome);
+            //startupDirectory = "C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\";
+            contents.append(String.format("java -jar \"%s\\%s.jar\" ", PWD, filename));
+            for (String s : arguments){ contents.append(s + " "); }
+            contents.append("\r\npause");
+
+            // Remove old script if it exists
+            //Runtime.getRuntime().exec(String.format("del %s%s.bat", startupDirectory, filename));
+
+            startupScript = new File(startupDirectory, filename + ".bat");
+
+            // Create batch script file
+            //Runtime.getRuntime().exec(String.format("echo. > \"%s%s.bat\"", startupDirectory, filename));
+
+            // Write contents to startup file
+            //Runtime.getRuntime().exec(String.format("echo \"%s\" > \"%s%s.bat\"", contents, startupDirectory, filename));
+        } else if (OS == Utils.OS_TYPE.UNIX){
+            // Unix unique strings
+            startupDirectory = "/etc/init.d/";
+            contents.append(String.format("#!/bin/sh\n"));
+            contents.append(String.format("sudo java -jar %s/%s.jar ", PWD, filename));
+            for (String s : arguments){ contents.append(s + " "); }
+
+            // Remove old script if it exists
+            //Runtime.getRuntime().exec(String.format("sudo rm -f %s%s.sh", startupDirectory, filename));
+
+            startupScript = new File(startupDirectory, filename + ".sh");
+
+            //Runtime.getRuntime().exec(String.format("sudo printf '%s' | sudo tee ./%s.sh", contents, filename));
+
+            // Link rc0.d to init.d
+            Runtime.getRuntime().exec(String.format("sudo ln -s %s%s.sh /etc/rc0.d/%s.sh", startupDirectory, filename, filename));
+        } else {
+            throw new UnsupportedOperationException("This operating system is not supported");
+        }
+
+        // Try to write to startup script
+        try {
+            BufferedWriter bw = new BufferedWriter(new FileWriter(startupScript.getAbsoluteFile(), false));
+            try {
+                startupScript.createNewFile();
+                bw.write(contents.toString());
+            } catch (IOException ex) {
+                System.out.println("Error:Could not create startup script");
+            } finally {
+                bw.close();
+            }
+        } catch (Exception ex){
+            System.out.println(String.format("Error:Could not create startup script. Did you run this with elevated permissions?: \n%s", ex.getMessage()));
+        }
+
+    }
 }

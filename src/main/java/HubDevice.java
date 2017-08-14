@@ -10,6 +10,9 @@ import spark.Response;
 import spark.Route;
 import spark.Spark;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -23,12 +26,23 @@ public class HubDevice
     // Run from cmd line
     public static void main(String[] args) {
 
-        // Get SERVER ADDRESS and PORT from command line
-        if (args.length != 4) {
-            System.out.printf("USAGE: java HubDevice [SERVER_IP] [SERVER_PORT] [CLIENT_PORT]\n");
+        // Process command line arguments
+        if (args.length < 4 || args.length > 5){
+            System.out.printf("USAGE: java -jar %s.jar SERVER_IP SERVER_PORT CLIENT_PORT AUTH_TOKEN\n", HubDevice.class.getName());
             System.exit(1);
+        } else {
+            // Startup
+            if (args.length == 5 && args[args.length-1].equals("startup")) {
+                try {
+                    Utils.CreateStartupScript(GetMachineOS(), HubDevice.class.getName(), Arrays.copyOfRange(args, 0, args.length - 1));
+                } catch (Exception ex) {
+                    System.out.println(ex.getMessage());
+                }
+            }
         }
 
+
+        // Start hub device
         String SERVER_IP = args[0];
         int SERVER_PORT = Integer.valueOf(args[1]);
         int CLIENT_PORT = Integer.valueOf(args[2]);
@@ -159,11 +173,11 @@ public class HubDevice
 
         if (isRegistered == null){
             if (connected) {
-                // Connection failed
+                // Connection lost
                 Utils.logMsg(new String[]{Utils.CONNECTION_LOST, Utils.CONNECTION_RETRY, String.valueOf(retryDelay / 1000), "seconds." }, true, GetLogFile());
             } else {
-                // Connection lost
-                Utils.logMsg(new String[]{Utils.CONNECTION_FAILED, Utils.CONNECTION_RETRY, String.valueOf(retryDelay / 1000), "seconds." }, true, GetLogFile());
+                // Connection failed
+                Utils.logMsg(new String[]{Utils.CONNECTION_FAILED, Utils.CONNECTION_RETRY, String.valueOf(retryDelay / 1000), "seconds." }, true, null);
             }
             // Try again
             Utils.ExecuteBackgroundTask(new Runnable() { @Override public void run() { Register(HUBIP, HUBPort, authToken, retryDelay, false); } }, retryDelay);
@@ -172,7 +186,7 @@ public class HubDevice
                 // Try to register
                 HttpResponse registerResp = Utils.SendCommand("register", new String[]{GetName(), GetIP(), String.valueOf(GetPort()), GetMAC(), String.valueOf(authToken)}, HUBIP, HUBPort, authToken);
                 if (registerResp == null){
-                    Utils.logMsg(new String[]{Utils.CONNECTION_FAILED, Utils.CONNECTION_RETRY, String.valueOf(retryDelay / 1000), "seconds." }, true, GetLogFile());
+                    Utils.logMsg(new String[]{Utils.CONNECTION_FAILED, Utils.CONNECTION_RETRY, String.valueOf(retryDelay / 1000), "seconds." }, true, null);
                 } else {
                     // Success
                     Utils.logMsg(Utils.CONNECTION_READY, true, GetLogFile());
@@ -281,7 +295,6 @@ public class HubDevice
     // DEVICE INFO //
     public static Utils.OS_TYPE GetMachineOS() {
         String OS = System.getProperty("os.name").toLowerCase();
-        System.out.println("OS:" + OS);
         if (OS.contains("windows")){ return Utils.OS_TYPE.WIN; }
         if (OS.contains("mac os x") || OS.contains("linux")){ return Utils.OS_TYPE.UNIX; }
         return Utils.OS_TYPE.UNSUPPORTED;

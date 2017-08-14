@@ -1,9 +1,5 @@
-[2017-08-13 14:15:37] LOADING 
-[2017-08-13 14:15:37] MODULES LOADED 
-[2017-08-13 14:15:41] Connected to HUB. Awaiting commands 
-[2017-08-13 14:16:52] Connection to HUB lost. Retrying connection in 10 seconds. 
-[2017-08-13 14:17:03] Registration failed, could not contact HUB. Retrying connection in 10 seconds. 
-[2017-08-13 14:17:14] Registration failed, could not contact HUB. Retrying connection in 10 seconds. 
-[2017-08-13 14:17:26] Connected to HUB. Awaiting commands 
-[2017-08-13 14:18:52] LOADING 
-[2017-08-13 14:18:52] MODULES LOADED 
+[2017-08-13 17:21:54] LOADING 
+[2017-08-13 17:21:54] MODULES LOADED 
+[2017-08-13 17:21:55] Connected to HUB. Awaiting commands 
+[2017-08-13 17:22:55] LOADING 
+[2017-08-13 17:22:55] MODULES LOADED 

@@ -2,19 +2,31 @@ import spark.Request;
 import spark.Response;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class HubServer extends HubDevice
 {
     // Run from cmd line
     public static void main(String[] args) {
-        // Get PORT from command line
-        if (args.length == 1){
-            int PORT = Integer.valueOf(args[0]);
-            new HubServer(PORT);
-        } else {
-            System.out.printf("USAGE: java HubServer <PORT>\n");
+
+        // Process command line arguments
+        if (args.length < 1 || args.length > 2){
+            System.out.printf("USAGE: java -jar %s.jar SERVER_PORT\n", HubServer.class.getName());
             System.exit(1);
+        } else {
+            // Startup
+            if (args.length == 2 && args[args.length-1].equals("startup")) {
+                try {
+                    Utils.CreateStartupScript(GetMachineOS(), HubServer.class.getName(), Arrays.copyOfRange(args, 0, args.length - 1));
+                } catch (Exception ex) {
+                    System.out.println(ex.getMessage());
+                }
+            }
         }
+
+        // Start hub server
+        int PORT = Integer.valueOf(args[0]);
+        new HubServer(PORT);
     }
 
 

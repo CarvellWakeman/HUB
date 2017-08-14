@@ -29,7 +29,6 @@ public class DeviceManagement extends Module {
                 if (d == null){
                     return "";
                 } else {
-                    RegisterDevice(d); // Update device information
                     return deviceName;
                 }
             }
@@ -280,7 +279,6 @@ public class DeviceManagement extends Module {
 
 
     // Device registration
-    public Device RegisterDevice(Device device){ return RegisterDevice(device.name, device.IP, device.PORT, device.MAC, device.AUTH); }
     public Device RegisterDevice(String name, String IP, int PORT, String MAC, String AUTH){
         Device d = GetDevice(name);
         if (d == null){
