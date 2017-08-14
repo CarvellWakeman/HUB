@@ -363,6 +363,10 @@ window.onload = function() {
 			else if (param.includes("cmd=")) {
 				cmd = param.replace("cmd=","")
 			}
+			//Argument parameter
+			else if (param.includes("args=") {
+				args.push(param.replace("args=", ""));
+			}
 			//Else ignore it
 		}
 
