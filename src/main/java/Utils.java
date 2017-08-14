@@ -339,8 +339,14 @@ public class Utils {
 
             //Runtime.getRuntime().exec(String.format("sudo printf '%s' | sudo tee ./%s.sh", contents, filename));
 
+            // Make script executable
+            Runtime.getRuntime().exec(String.format("sudo chmod +x %s%s.sh", startupDirectory, filename));
+
+            // Register script to run on startup
+            Runtime.getRuntime().exec(String.format("sudo update-rc.d %s.sh defaults", filename));
+
             // Link rc0.d to init.d
-            Runtime.getRuntime().exec(String.format("sudo ln -s %s%s.sh /etc/rc0.d/%s.sh", startupDirectory, filename, filename));
+            //Runtime.getRuntime().exec(String.format("sudo ln -s %s%s.sh /etc/rc0.d/%s.sh", startupDirectory, filename, filename));
         } else {
             throw new UnsupportedOperationException("This operating system is not supported");
         }
