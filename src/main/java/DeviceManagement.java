@@ -29,7 +29,7 @@ public class DeviceManagement extends Module {
                 if (d == null){
                     return "";
                 } else {
-                    return deviceName;
+                    return d.name;
                 }
             }
         };

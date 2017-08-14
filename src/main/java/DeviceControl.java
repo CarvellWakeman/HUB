@@ -85,13 +85,14 @@ public class DeviceControl extends Module {
                 // OS switch
                 switch (device.GetOS()){
                     case WIN:
-                            Utils.ExecuteBackgroundTask(new Runnable() {
-                                @Override public void run() {
-                                    try { Runtime.getRuntime().exec("shutdown /h"); }
-                                    catch (IOException ex){}
-                                }
-                            }, 10000);
-                            return String.format(Utils.DEVICE_HIBERNATING, deviceName);
+                        Utils.ExecuteBackgroundTask(new Runnable() {
+                            @Override public void run() {
+                                try { Runtime.getRuntime().exec("shutdown /h"); }
+                                catch (IOException ex){}
+                            }
+                        }, 10000);
+
+                        return String.format(Utils.DEVICE_HIBERNATING, deviceName);
 
                     case UNIX:
                         return Utils.ERR_CMD_OS_NOTSUPPORTED;

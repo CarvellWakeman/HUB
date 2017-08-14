@@ -17,6 +17,8 @@ import java.util.*;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import static java.lang.Thread.sleep;
+
 public class Utils {
 
     // Logging
@@ -225,15 +227,37 @@ public class Utils {
         //final ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
         //executor.schedule(runnable, delay, TimeUnit.MILLISECONDS);
 
+
+        final ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
+        executor.schedule(new Runnable() {
+            @Override public void run() {
+                runnable.run();
+            }
+        }, delay, TimeUnit.MILLISECONDS);
+
+/*
         Thread thread = new Thread(new Runnable() {
             @Override public void run() {
-                try {
-                    Thread.sleep(delay);
-                    runnable.run();
-                } catch (Exception ex){}
+                System.out.println("BG Task");
+                runnable.run();
             }
         });
-        thread.run();
+        thread.start();
+
+
+        Thread thread = new Thread(new Runnable() {
+            @Override public void run() {
+                new Timer().schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        System.out.println("BG Timer Task");
+                        runnable.run();
+                    }
+                }, delay);
+            }
+        });
+        thread.start();
+*/
     }
 
 
@@ -274,6 +298,8 @@ public class Utils {
                 return NETWORK_REQ_ERROR + ":Unknown error (status code " + String.valueOf(response.getStatus()) + ")";
             */
         } catch (UnirestException ex){
+            //System.out.println("SEND COMMAND ERROR " + ex.getMessage());
+
             // timeout
             if (ex.getMessage().contains("ConnectTimeoutException")){
                 //return NETWORK_REQ_ERROR + ":" + NETWORK_CONNECTION_TIMEOUT;

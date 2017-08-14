@@ -51,8 +51,8 @@ public class HubDevice
         new HubDevice(Utils.CLIENT_LOG, SERVER_IP, SERVER_PORT, CLIENT_PORT, AUTH_KEY);
 
         // Shutdown unirest
-        try { Unirest.shutdown(); }
-        catch (IOException ex){ System.exit(1); }
+        //try { Unirest.shutdown(); }
+        //catch (IOException ex){ System.exit(1); }
     }
 
 
@@ -169,7 +169,7 @@ public class HubDevice
     // Registration with the HUB
     protected void Register(final String HUBIP, final int HUBPort, final String authToken, final int retryDelay, boolean connected){
         // Check if device is registered
-        HttpResponse isRegistered = Utils.SendCommand("isregistered", new String[]{GetName(), GetIP(), String.valueOf(GetPort()), GetMAC(), String.valueOf(authToken)}, HUBIP, HUBPort, authToken);
+        HttpResponse isRegistered = Utils.SendCommand("isregistered", new String[]{GetName()}, HUBIP, HUBPort, authToken);
 
         if (isRegistered == null){
             if (connected) {
@@ -177,7 +177,7 @@ public class HubDevice
                 Utils.logMsg(new String[]{Utils.CONNECTION_LOST, Utils.CONNECTION_RETRY, String.valueOf(retryDelay / 1000), "seconds." }, true, GetLogFile());
             } else {
                 // Connection failed
-                Utils.logMsg(new String[]{Utils.CONNECTION_FAILED, Utils.CONNECTION_RETRY, String.valueOf(retryDelay / 1000), "seconds." }, true, null);
+                Utils.logMsg(new String[]{"Herp", Utils.CONNECTION_RETRY, String.valueOf(retryDelay / 1000), "seconds." }, true, null);
             }
             // Try again
             Utils.ExecuteBackgroundTask(new Runnable() { @Override public void run() { Register(HUBIP, HUBPort, authToken, retryDelay, false); } }, retryDelay);
