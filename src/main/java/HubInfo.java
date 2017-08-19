@@ -16,11 +16,8 @@ public class HubInfo extends Module {
         Command checkauth = new Command("checkauth", Utils.CLEARANCE.BASIC){
             @Override
             public String Run(ArrayList<String> arguments){
-                String validArgs = ValidateArguments(arguments);
-                if (validArgs != null){ return validArgs; }
-
-                String authToken = GetValidArgument(arguments, 0);
-                return (hub.tokenIsValid(authToken) ? Utils.AUTH_PASS : Utils.AUTH_FAIL);
+                // If we made it this far, the authentication is valid
+                return Utils.AUTH_PASS;
             }
         };
         checkauth.AddArg("token", false);

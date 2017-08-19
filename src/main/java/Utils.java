@@ -159,12 +159,15 @@ public class Utils {
             printMsg(msg);
         }
 
+        // Get home directory
+        String UserHome = System.getProperty("user.home");
+
         // Try to write
         if (fileName != null && fileName.length() > 0) {
             FileWriter fw = null;
             BufferedWriter bw = null;
             try {
-                File logFile = new File(fileName);
+                File logFile = new File(UserHome + "\\" + fileName);
 
                 // Create file if it DNE
                 if (!logFile.exists()) {

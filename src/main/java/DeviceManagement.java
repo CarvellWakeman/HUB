@@ -283,13 +283,13 @@ public class DeviceManagement extends Module {
         Device d = GetDevice(name);
         if (d == null){
             d = new Device(name, IP, PORT, MAC, AUTH);
+            mDevices.add(d);
         }
 
         d.IP = IP;
         d.PORT = PORT;
         d.MAC = MAC;
         d.AUTH = AUTH;
-        mDevices.add(d);
 
         return d;
     }

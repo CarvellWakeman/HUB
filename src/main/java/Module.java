@@ -30,7 +30,7 @@ public class Module {
     public void RemoveCommand(Command command) { mCommands.remove(command); }
     public Command GetCommand(String name){
         for (Command c : mCommands){
-            if (c.GetName().equals(name)){ return c; }
+            if (c.GetName().toLowerCase().equals(name.toLowerCase())){ return c; }
         }
         return null;
     }

@@ -14,12 +14,7 @@ SetKeyDelay, 5, 5
 ControlSend, ,^c, ahk_class KiTTY
 ControlSend, ,{enter}, ahk_class KiTTY
 
-ControlSend, ,mvn install ahk_class KiTTY
-ControlSend, ,{enter}, ahk_class KiTTY
-
-ControlSend, ,cd src/ ahk_class KiTTY
-ControlSend, ,{enter}, ahk_class KiTTY
-ControlSend, ,java com.hub.carvellwakeman.HubServer 5000 ahk_class KiTTY
+ControlSend, ,java -jar HubServer.jar 5000, ahk_class KiTTY
 ControlSend, ,{enter}, ahk_class KiTTY
 sleep, 100
 
