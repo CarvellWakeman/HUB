@@ -226,11 +226,19 @@ public class HubDevice
     }
 
     protected String CommandReceive(Request request, Response response){
+<<<<<<< HEAD
+=======
+        System.out.println("A");
+>>>>>>> 1e16f5a89e1ccb07291341bcd03fb33f9b877feb
         // Build header
         response.header("Access-Control-Allow-Origin", "*");
         response.header("Access-Control-Allow-Headers", "Authorization");
         response.type("text/xml");
 
+<<<<<<< HEAD
+=======
+        System.out.println("B");
+>>>>>>> 1e16f5a89e1ccb07291341bcd03fb33f9b877feb
         // Get request variables
         String command = request.queryParams("cmd");
         ArrayList<String> arguments = new ArrayList<>();
@@ -246,10 +254,15 @@ public class HubDevice
                 if (ja.getString(i).length() > 0){ arguments.add(ja.getString(i)); }
             }
         }
+        System.out.println("C");
 
         // Authentication
         String authHeader = new String(Base64.decodeBase64(request.headers("Authorization")));
+<<<<<<< HEAD
         //System.out.println("AuthHeader:" + request.headers("Authorization"));
+=======
+        System.out.println("AuthHeader:" + request.headers("Authorization"));
+>>>>>>> 1e16f5a89e1ccb07291341bcd03fb33f9b877feb
         if (authHeader.equals("")){
             response.status(401);
             return Utils.AUTH_FAIL;
@@ -259,7 +272,11 @@ public class HubDevice
         String password = credentials[1];
         boolean authIsValid = isAuthValid(username, password);
         Utils.CLEARANCE userClearance = getAuthorization(username, password);
+<<<<<<< HEAD
 
+=======
+        System.out.println("D");
+>>>>>>> 1e16f5a89e1ccb07291341bcd03fb33f9b877feb
         String handle;
         if (authIsValid){
             response.status(200);
@@ -269,6 +286,10 @@ public class HubDevice
             handle = Utils.AUTH_FAIL;
         }
 
+<<<<<<< HEAD
+=======
+        System.out.println("E");
+>>>>>>> 1e16f5a89e1ccb07291341bcd03fb33f9b877feb
         // Log command received (only if it's not hidden)
         Command cmdClr = null;
         for (Module m : mModules){
@@ -279,8 +300,13 @@ public class HubDevice
         if (cmdClr == null || cmdClr.GetClearance() != Utils.CLEARANCE.HIDDEN) {
             Utils.logMsg(new String[]{
                     Utils.CMD_RECV, "'" + command + ":" + arguments.toString() + "'",
+<<<<<<< HEAD
                     "from " + (authIsValid ? "valid" : "invalid") + " user '" + username + ":" + password + "'",
                     "(" + ip + ":" + String.valueOf(port) + ")",
+=======
+                    "from", ip, "on port " + String.valueOf(port),
+                    "user '" + username + ":" + password + "' " + (authIsValid ? "(VALID)." : "(INVALID)."),
+>>>>>>> 1e16f5a89e1ccb07291341bcd03fb33f9b877feb
                     "Responding '" + handle + "';",
             },
             true, GetLogFile());
