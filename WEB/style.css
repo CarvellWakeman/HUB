@@ -1,30 +1,46 @@
 
 /* Body */
-html {
-  height: 90%;
-}
 body {
-	min-height: 90%;
-	background: #000000;
-}
-
-/* Terminal */
-#terminal_container {
-    display: block;
-
-	margin-left: 5px;
-	margin-top: 20px;
-	margin-bottom: 20px;
+	background: black;
 
 	overflow: hidden;
 }
 
+/* Header */
+#navbar {
+	position: absolute;
+	left:0;
+	right:0;
+	top:0;
+
+	background-color: black;
+}
+
+/* Terminal */
+div.output_line {
+	color: #FFFFFF;
+	float: left;
+
+	white-space:pre;
+
+	font-size: 12pt;
+	font-family: 'Courier New';
+}
+
+#terminal_container {
+	position:absolute;
+	top:60px;
+	bottom:20px;
+	right:0;
+	left:0;
+	overflow-y: auto;
+}
+#terminal_container::-webkit-scrollbar { 
+    display: none; 
+}
+
 #output_container {
 	width: 100%;
-
-	overflow: auto;
-
-	white-space: pre;
 
 	font-size: 12pt;
 	font-family: "Courier New";
@@ -49,7 +65,7 @@ body {
 #input_text {
 	outline: none;
 	
-	height: 14px;
+	height: 18px;
 
 	background: #000000;
 	color: #FFFFFF;
@@ -63,6 +79,21 @@ body {
 	font-family: "Courier New";
 }
 
+
+/* Other */
+hr {
+   display: block;
+   position: relative;
+   padding: 0;
+   margin: 0;
+   height: 1px;
+   width: 100%;
+   clear: both;
+   border: none;
+   border-top: 1px solid #161616;
+   background-color: #262626;
+   border-bottom: 1px solid #161616;
+}
 
 /* Terminal output 
 #terminal_output {

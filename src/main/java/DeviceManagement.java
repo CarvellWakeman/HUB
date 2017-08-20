@@ -29,7 +29,7 @@ public class DeviceManagement extends Module {
                 if (d == null){
                     return "";
                 } else {
-                    return d.name;
+                    return d.NAME;
                 }
             }
         };
@@ -46,7 +46,7 @@ public class DeviceManagement extends Module {
                 Device d = GetDevice(deviceName);
 
                 // Register (or update) new device
-                RegisterDevice(deviceName, GetValidArgument(arguments, 1), Integer.valueOf(GetValidArgument(arguments, 2)), GetValidArgument(arguments, 3), GetValidArgument(arguments, 4));
+                RegisterDevice(deviceName, GetValidArgument(arguments, 1), Integer.valueOf(GetValidArgument(arguments, 2)), GetValidArgument(arguments, 3), GetValidArgument(arguments, 4), GetValidArgument(arguments, 5));
 
                 if (d == null){
                     return String.format(Utils.DEVICE_REGISTERED, deviceName);
@@ -59,7 +59,8 @@ public class DeviceManagement extends Module {
         register.AddArg("ip", false);
         register.AddArg("port", false);
         register.AddArg("mac", false);
-        register.AddArg("authToken", false);
+        register.AddArg("username", false);
+        register.AddArg("password", false);
         register.SetDesc("Register device as a client to the HUB");
 
 
@@ -120,15 +121,15 @@ public class DeviceManagement extends Module {
                     String s = "";
 
                     // HUB shortcut
-                    if (d.name.equals(Utils.SERVER_NAME)){
+                    if (d.NAME.equals(Utils.SERVER_NAME)){
                         s = Utils.DEVICE_ONLINE;
                     } else {
                         if (GetCommand("status") != null) {
-                            s = GetCommand("status").Run(new ArrayList<>(Arrays.asList(d.name)));
+                            s = GetCommand("status").Run(new ArrayList<>(Arrays.asList(d.NAME)));
                         }
                     }
 
-                    String nmTrunc = (d.name.length()>10?d.name.substring(0,10):d.name);
+                    String nmTrunc = (d.NAME.length()>10?d.NAME.substring(0,10):d.NAME);
                     int nmOffset = 11-nmTrunc.length();
                     int ipOffset = 16-d.IP.length();
                     int macOffset = 3;
@@ -279,17 +280,18 @@ public class DeviceManagement extends Module {
 
 
     // Device registration
-    public Device RegisterDevice(String name, String IP, int PORT, String MAC, String AUTH){
+    public Device RegisterDevice(String name, String IP, int PORT, String MAC, String USERNAME, String PASSWORD){
         Device d = GetDevice(name);
         if (d == null){
-            d = new Device(name, IP, PORT, MAC, AUTH);
+            d = new Device(name, IP, PORT, MAC, USERNAME, PASSWORD);
             mDevices.add(d);
         }
 
         d.IP = IP;
         d.PORT = PORT;
         d.MAC = MAC;
-        d.AUTH = AUTH;
+        d.USERNAME = USERNAME;
+        d.PASSWORD = PASSWORD;
 
         return d;
     }
@@ -298,7 +300,7 @@ public class DeviceManagement extends Module {
 
     public Device GetDevice(String name){
         for (Device d : mDevices){
-            if (d.name.toLowerCase().equals(name.toLowerCase())){ return d; }
+            if (d.NAME.toLowerCase().equals(name.toLowerCase())){ return d; }
         }
         return null;
     }
@@ -313,9 +315,9 @@ public class DeviceManagement extends Module {
         }
 
         // Send Command
-        HttpResponse<String> resp = Utils.SendCommand(command, new String[]{device.name}, device.IP, device.PORT, device.AUTH);
+        HttpResponse<String> resp = Utils.SendCommand(command, new String[]{device.NAME}, device.IP, device.PORT, device.USERNAME, device.PASSWORD);
         if (resp == null){
-            return String.format(Utils.DEVICE_COULDNOT_CONTACT, device.name);
+            return String.format(Utils.DEVICE_COULDNOT_CONTACT, device.NAME);
         }
         return resp.getBody();
     }
@@ -341,18 +343,20 @@ public class DeviceManagement extends Module {
 
     // Data holder for remote device
     private class Device{
-        protected String name;
+        protected String NAME;
         protected String IP;
         protected int PORT;
         protected String MAC;
-        protected String AUTH;
+        protected String USERNAME;
+        protected String PASSWORD;
 
-        public Device(String name, String IP, int PORT, String MAC, String AUTH) {
-            this.name = name;
+        public Device(String NAME, String IP, int PORT, String MAC, String USERNAME, String PASSWORD) {
+            this.NAME = NAME;
             this.IP = IP;
             this.PORT = PORT;
             this.MAC = MAC;
-            this.AUTH = AUTH;
+            this.USERNAME = USERNAME;
+            this.PASSWORD = PASSWORD;
         }
     }
 }

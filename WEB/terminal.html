@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>HUB</title>
+
+        <!-- Bootstrap -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+
+        <link rel="stylesheet" href="style.css" type="text/css">
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0,  minimum-scale=1.0">
+    </head>
+
+    <body>
+        
+        <!-- Navigation bar -->
+        <div id="navbar">
+            <div style= "position:relative;">
+                <h1 style="color:white; margin-left:10px;">HUB</h1>
+                <button id="btn_logout" class="btn btn-primary" style="position:absolute; bottom:0; right:0; margin-right:10px;">logout</button>
+            </div>
+            <hr>
+        </div>
+
+        <!-- Terminal -->
+        <div id="terminal_container">
+            <div id="output_container">
+                <div>
+                    <div class="output_line" style="color: rgb(85, 255, 85);">root@hub</div>
+                    <div class="output_line" style="color: rgb(255, 255, 255);">:</div>
+                    <div class="output_line" style="color: rgb(85, 191, 255);">/ $ </div>
+                    <div class="output_line" style="color: rgb(255, 255, 255);">Welcome to the HUB.</div>
+                </div>
+                </br>
+                <div>
+                    <div class="output_line" style="color: rgb(85, 255, 85);">root@hub</div>
+                    <div class="output_line" style="color: rgb(255, 255, 255);">:</div>
+                    <div class="output_line" style="color: rgb(85, 191, 255);">/ $ </div>
+                    <div class="output_line" style="color: rgb(255, 255, 255);">Enter a command below.</div>
+                </div>
+                </br>
+            </div>
+            <div id="input_container">
+                <input id="input_text" type="text"></input>
+            </div>
+        </div>
+
+        <script type="text/javascript" src="./terminal.js"></script>
+    </body>
+</html>

@@ -41,7 +41,7 @@ public class HubServer extends HubDevice
         super(Utils.SERVER_TITLE, Utils.SERVER_LOG);
 
         // Register HUB to itself
-        deviceManagement.RegisterDevice(Utils.SERVER_NAME, GetIP(), PORT, GetMAC(), ""); //TODO:Not this (auth)
+        deviceManagement.RegisterDevice(Utils.SERVER_NAME, GetIP(), PORT, GetMAC(), Utils.SERVER_NAME, ""); //TODO:Not this (auth)
 
         // Listen for commands from Devices
         Listen(PORT);
@@ -65,7 +65,7 @@ public class HubServer extends HubDevice
 
     // Process commands differently
     @Override
-    protected String CommandHandle(String command, ArrayList<String> arguments, String authToken){
+    protected String CommandHandle(String command, ArrayList<String> arguments, Utils.CLEARANCE clearance){
         Command c = null;
 
         // If arguments contain HUB name, check device control
@@ -75,18 +75,10 @@ public class HubServer extends HubDevice
 
         // Search all modules
         if (c == null) {
-            for (Module m : mModules) {
-                c = m.GetCommand(command);
-                if (c != null) {
-                    break;
-                }
-            }
-        }
-
-        // Command found
-        if (c != null){
+            return super.CommandHandle(command, arguments, clearance);
+        } else {
             // Check authorization level of command
-            if (tokenClearance(authToken).ordinal() >= c.GetClearance().ordinal()){
+            if (clearance.ordinal() >= c.GetClearance().ordinal()){
                 return c.Run(arguments);
             } else { // Not authorized
                 String notAuth = Utils.CMD_NOTAUTH + " '" + command + "'";
@@ -94,9 +86,6 @@ public class HubServer extends HubDevice
                 return notAuth;
             }
         }
-
-        // Command not found
-        return Utils.CMD + " '" + command + "' " + Utils.CMD_NOTFOUND;
     }
 
     /*

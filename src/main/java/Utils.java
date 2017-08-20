@@ -1,6 +1,7 @@
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import org.apache.commons.codec.binary.Base64;
 import org.json.JSONArray;
 import spark.embeddedserver.NotSupportedException;
 
@@ -17,7 +18,6 @@ import java.util.*;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import static java.lang.Thread.sleep;
 
 public class Utils {
 
@@ -265,20 +265,22 @@ public class Utils {
 
 
     // NETWORK //
-    public static HttpResponse<String> SendCommand(String Command, String[] Arguments, String IP, int Port, String Token) {
+    public static HttpResponse<String> SendCommand(String Command, String[] Arguments, String IP, int Port, String Username, String Password) {
         String URL = "http://" + IP + ":" + String.valueOf(Port);
         HttpResponse<String> response = null;
 
         try {
+            String auth = Username + ":" + Password;
+
             JSONArray ja = new JSONArray(Arguments);
             response = Unirest.post(URL)
                     .header("connection", "close")
-                    .field("auth", String.valueOf(Token))
+                    .header("Authorization", new String(Base64.encodeBase64(auth.getBytes())))
                     .field("cmd", Command)
                     .field("args", ja.toString())
                     .asString();
 
-            /* Example of a GET request equivalent
+            /* Example of a similar GET request
             response = Unirest.get(URL)
                     .header("connection", "close")
                     .queryString("auth", String.valueOf(bhash(Token)))
@@ -287,19 +289,7 @@ public class Utils {
                     .asString();
             */
 
-            //return response;
-            /*
-            //Request response
-            if (response.getStatus() < 400) //Response good
-                return "Status Code:" + String.valueOf(response.getStatus()) + "\n" + response.getBody();
-            else if (response.getStatus() == 500) //Response server error
-                return NETWORK_REQ_ERROR + ":" + IP + " encountered an error processing the request\n" + response.getBody();
-            else if (response.getStatus() == 401) {//Unauthorized
-                return NETWORK_REQ_ERROR + ":" + NETWORK_UNAUTHORIZED;
-            }
-            else //Response bad
-                return NETWORK_REQ_ERROR + ":Unknown error (status code " + String.valueOf(response.getStatus()) + ")";
-            */
+
         } catch (UnirestException ex){
             //System.out.println("SEND COMMAND ERROR " + ex.getMessage());
 

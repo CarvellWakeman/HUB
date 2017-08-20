@@ -2,6 +2,8 @@
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.http.auth.AUTH;
 import org.json.JSONArray;
 import org.json.JSONML;
@@ -27,12 +29,12 @@ public class HubDevice
     public static void main(String[] args) {
 
         // Process command line arguments
-        if (args.length < 4 || args.length > 5){
-            System.out.printf("USAGE: java -jar %s.jar SERVER_IP SERVER_PORT CLIENT_PORT AUTH_TOKEN\n", HubDevice.class.getName());
+        if (args.length < 5 || args.length > 6){
+            System.out.printf("USAGE: java -jar %s.jar SERVER_IP SERVER_PORT CLIENT_PORT USERNAME PASSWORD\n", HubDevice.class.getName());
             System.exit(1);
         } else {
             // Startup
-            if (args.length == 5 && args[args.length-1].equals("startup")) {
+            if (args[args.length-1].equals("startup")) {
                 try {
                     Utils.CreateStartupScript(GetMachineOS(), HubDevice.class.getName(), Arrays.copyOfRange(args, 0, args.length - 1));
                 } catch (Exception ex) {
@@ -46,13 +48,10 @@ public class HubDevice
         String SERVER_IP = args[0];
         int SERVER_PORT = Integer.valueOf(args[1]);
         int CLIENT_PORT = Integer.valueOf(args[2]);
-        String AUTH_KEY = args[3];
+        String USERNAME = args[3];
+        String PASSWORD = args[4];
 
-        new HubDevice(Utils.CLIENT_LOG, SERVER_IP, SERVER_PORT, CLIENT_PORT, AUTH_KEY);
-
-        // Shutdown unirest
-        //try { Unirest.shutdown(); }
-        //catch (IOException ex){ System.exit(1); }
+        new HubDevice(Utils.CLIENT_LOG, SERVER_IP, SERVER_PORT, CLIENT_PORT, USERNAME, PASSWORD);
     }
 
 
@@ -66,12 +65,11 @@ public class HubDevice
     private String mDeviceMAC = Utils.NETWORK_UNKNOWN_MAC;
     private Utils.OS_TYPE mDeviceOS;
 
-    // Authorized tokens
-    private Map<String, Utils.CLEARANCE> tokens;
+    // Authentication
+    private Map<String, Auth> users;
 
     // Modules
     ArrayList<Module> mModules;
-
 
 
     // General hub device constructor
@@ -82,11 +80,12 @@ public class HubDevice
         // Set the local log file
         SetLogFile(LogFile);
 
-        // Load tokens from file TODO:Implement
-        tokens = new HashMap<>();
-        tokens.put("2177", Utils.CLEARANCE.BASIC); //picard
-        tokens.put("5990", Utils.CLEARANCE.FULL); //startrekDS9
-        tokens.put("3828", Utils.CLEARANCE.FULL); //brobeans
+        // Load tokens from DB TODO:Implement
+        users = new HashMap<>();
+        users.put("hubdevice", new Auth("hubdevice", "picard", Utils.CLEARANCE.BASIC));
+        users.put("lerewz", new Auth("lerewz", "cchffq32", Utils.CLEARANCE.FULL));
+        users.put("admin", new Auth("admin", "startrekDS9", Utils.CLEARANCE.FULL));
+        users.put("guest", new Auth("guest", "brobeans", Utils.CLEARANCE.FULL));
 
         // Device info
         try {
@@ -110,7 +109,7 @@ public class HubDevice
 
     }
     // Hub client constructor
-    public HubDevice(String LogFile, String SERVER_IP, int SERVER_PORT, int CLIENT_PORT, String AUTH_KEY){
+    public HubDevice(String LogFile, String SERVER_IP, int SERVER_PORT, int CLIENT_PORT, String USERNAME, String PASSWORD){
         this(Utils.CLIENT_TITLE, LogFile);
 
         // Set client port
@@ -121,7 +120,7 @@ public class HubDevice
 
         // Connect to HubServer for registration
         Utils.logMsg(new String[]{Utils.CONTACTING_HUB}, true, null);
-        Register(SERVER_IP, SERVER_PORT, Utils.bhash(AUTH_KEY), 10000, false);
+        Register(SERVER_IP, SERVER_PORT, USERNAME, PASSWORD, 10000, false);
     }
 
 
@@ -142,11 +141,19 @@ public class HubDevice
 
 
     // AUTHORIZATION //
-    protected boolean tokenIsValid(String token){
-        return tokens.containsKey(token);
+    protected boolean isAuthValid(String username, String password){
+        Auth auth = users.get(username);
+        if (auth != null && auth.username.equals(username)){
+            return auth.password.equals(password);
+        }
+        return false;
     }
-    protected Utils.CLEARANCE tokenClearance(String token){
-        return (tokenIsValid(token) ? tokens.get(token) : Utils.CLEARANCE.NONE);
+    protected Utils.CLEARANCE getAuthorization(String username, String password){
+        Auth auth = users.get(username);
+        if (auth != null && auth.username.equals(username) && auth.password.equals(password)){
+            return auth.clearance;
+        }
+        return Utils.CLEARANCE.NONE;
     }
 
 
@@ -164,12 +171,20 @@ public class HubDevice
                 return CommandReceive(request, response);
             }
         });
+        Spark.options("/", new Route() {
+            @Override public Object handle(Request request, Response response) throws Exception {
+                response.header("Access-Control-Allow-Origin", "*");
+                response.header("Access-Control-Allow-Headers", "Authorization");
+                response.type("text/xml");
+                return "Connection Established";
+            }
+        });
     }
 
     // Registration with the HUB
-    protected void Register(final String HUBIP, final int HUBPort, final String authToken, final int retryDelay, boolean connected){
+    protected void Register(final String HUBIP, final int HUBPort, final String username, final String password, final int retryDelay, boolean connected){
         // Check if device is registered
-        HttpResponse isRegistered = Utils.SendCommand("isregistered", new String[]{GetName()}, HUBIP, HUBPort, authToken);
+        HttpResponse isRegistered = Utils.SendCommand("isregistered", new String[]{GetName()}, HUBIP, HUBPort, username, password);
 
         if (isRegistered == null){
             if (connected) {
@@ -180,11 +195,11 @@ public class HubDevice
                 Utils.logMsg(new String[]{"Herp", Utils.CONNECTION_RETRY, String.valueOf(retryDelay / 1000), "seconds." }, true, null);
             }
             // Try again
-            Utils.ExecuteBackgroundTask(new Runnable() { @Override public void run() { Register(HUBIP, HUBPort, authToken, retryDelay, false); } }, retryDelay);
+            Utils.ExecuteBackgroundTask(new Runnable() { @Override public void run() { Register(HUBIP, HUBPort, username, password, retryDelay, false); } }, retryDelay);
         } else {
             if (isRegistered.getBody().toString().toLowerCase().equals("")){
                 // Try to register
-                HttpResponse registerResp = Utils.SendCommand("register", new String[]{GetName(), GetIP(), String.valueOf(GetPort()), GetMAC(), String.valueOf(authToken)}, HUBIP, HUBPort, authToken);
+                HttpResponse registerResp = Utils.SendCommand("register", new String[]{GetName(), GetIP(), String.valueOf(GetPort()), GetMAC(), username, password}, HUBIP, HUBPort, username, password);
                 if (registerResp == null){
                     Utils.logMsg(new String[]{Utils.CONNECTION_FAILED, Utils.CONNECTION_RETRY, String.valueOf(retryDelay / 1000), "seconds." }, true, null);
                 } else {
@@ -198,7 +213,7 @@ public class HubDevice
             }
 
             // Try again
-            Utils.ExecuteBackgroundTask(new Runnable() { @Override public void run() { Register(HUBIP, HUBPort, authToken, retryDelay, true); } }, retryDelay);
+            Utils.ExecuteBackgroundTask(new Runnable() { @Override public void run() { Register(HUBIP, HUBPort, username, password, retryDelay, true); } }, retryDelay);
         }
 
     }
@@ -211,11 +226,14 @@ public class HubDevice
     }
 
     protected String CommandReceive(Request request, Response response){
+        // Build header
+        response.header("Access-Control-Allow-Origin", "*");
+        response.header("Access-Control-Allow-Headers", "Authorization");
+        response.type("text/xml");
+
         // Get request variables
         String command = request.queryParams("cmd");
         ArrayList<String> arguments = new ArrayList<>();
-        String authToken = request.queryParams("auth");
-        boolean authTokenIsValid = tokenIsValid(authToken);
         String ip = request.ip();
         int port = request.port();
 
@@ -229,22 +247,27 @@ public class HubDevice
             }
         }
 
+        // Authentication
+        String authHeader = new String(Base64.decodeBase64(request.headers("Authorization")));
+        //System.out.println("AuthHeader:" + request.headers("Authorization"));
+        if (authHeader.equals("")){
+            response.status(401);
+            return Utils.AUTH_FAIL;
+        }
+        String[] credentials = authHeader.split(":");
+        String username = credentials[0];
+        String password = credentials[1];
+        boolean authIsValid = isAuthValid(username, password);
+        Utils.CLEARANCE userClearance = getAuthorization(username, password);
 
-        // Build header
-        response.header("Access-Control-Allow-Origin", "*");
-        response.type("text/xml");
-
-
-        // Check authorization token and Process command
         String handle;
-        if (authTokenIsValid){
+        if (authIsValid){
             response.status(200);
-            handle = CommandHandle(command, arguments, authToken);
+            handle = CommandHandle(command, arguments, userClearance);
         } else {
             response.status(401);
             handle = Utils.AUTH_FAIL;
         }
-
 
         // Log command received (only if it's not hidden)
         Command cmdClr = null;
@@ -255,20 +278,19 @@ public class HubDevice
         }
         if (cmdClr == null || cmdClr.GetClearance() != Utils.CLEARANCE.HIDDEN) {
             Utils.logMsg(new String[]{
-                            Utils.CMD_RECV, "'" + command + ":" + arguments.toString() + "'",
-                            "from", ip, "on port " + String.valueOf(port),
-                            "with " + (authTokenIsValid ? "VALID" : "INVALID"),
-                            "auth '" + authToken + "'.",
-                            "Responding '" + handle + "';",
-                    },
-                    true, GetLogFile());
+                    Utils.CMD_RECV, "'" + command + ":" + arguments.toString() + "'",
+                    "from " + (authIsValid ? "valid" : "invalid") + " user '" + username + ":" + password + "'",
+                    "(" + ip + ":" + String.valueOf(port) + ")",
+                    "Responding '" + handle + "';",
+            },
+            true, GetLogFile());
         }
 
         return handle;
     }
 
     // Command handling
-    protected String CommandHandle(String command, ArrayList<String> arguments, String authToken){
+    protected String CommandHandle(String command, ArrayList<String> arguments, Utils.CLEARANCE clearance){
         // Find appropriate command
         for (Module m : mModules){
             Command c = m.GetCommand(command);
@@ -277,7 +299,7 @@ public class HubDevice
             if (c != null){
 
                 // Check authorization level of command
-                if (tokenClearance(authToken).ordinal() >= c.GetClearance().ordinal()){
+                if (clearance.ordinal() >= c.GetClearance().ordinal()){
                     return c.Run(arguments);
                 } else { // Not authorized
                     String notAuth = Utils.CMD_NOTAUTH + " '" + command + "'";

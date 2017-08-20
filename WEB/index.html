@@ -3,20 +3,73 @@
     <head>
         <meta charset="UTF-8">
         <title>HUB</title>
-        <link rel="stylesheet" href="style.css" type="text/css">
+
+        <!-- Bootstrap -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+        <style>
+            .vertical-center {
+                min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
+                min-height: 100vh; /* These two lines are counted as one :-)       */
+
+                display: flex;
+                align-items: center;
+            }
+        </style>
+
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
         <meta name="viewport" content="width=device-width, initial-scale=1.0,  minimum-scale=1.0">
     </head>
 
-    <body>
-        <div id="terminal_container">
-            <div id="output_container"></div>
-            <div id="input_container">
-                <div id="input_title">Enter authentication: </div>
-                <input id="input_text" type="password"></input>
+    <body >
+        <!-- Login container -->
+        <div class="vertical-center" style="background:black;">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-4"></div>
+                    <div class="col-lg-4">
+
+                        <div class="card">
+                            <div class="card-body" style="background:white;">
+                                <!-- Connection Status -->
+                                <div id="connection_status" style="position:absolute; right:20px; color:#d1a300;">
+                                    Connecting
+                                    <i class="fa fa-spinner fa-pulse fa-fw"></i>
+                                </div>
+
+                                <!-- Login form -->
+                                <h1 class="card-title">HUB</h1>
+                                <h6 class="card-subtitle text-muted">Zach Lerew 2016-17</h6>
+                                <div style="margin-top:40px">
+                                    <div id="login_status" style="color:red; display:none;"></div>
+
+                                    <input id="input_username" class="form-control form-control-lg" type="text" placeholder="Username">
+                                    <div id="username_validate" style="color:red; display:none;">*Enter a username!</div>
+
+                                    <input id="input_password" class="form-control form-control-lg" type="password" placeholder="Password">
+                                    <div id="password_validate" style="color:red; display:none;">*Enter a password!</div>
+                                </div>
+
+                                <button id="input_login" class="btn btn-primary w-100" style="margin-top:40px">Login</button>
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-lg-4"></div>
+                </div>
             </div>
         </div>
 
-        <script type="text/javascript" src="./script.js"></script>
+
+        <!-- Scripts -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+
+        <script type="text/javascript" src="./login.js"></script>
     </body>
 </html>
