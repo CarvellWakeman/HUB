@@ -8,17 +8,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6a891964-be06-468e-8f3e-6ebbc89d9192" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/HubDevice.jar" afterPath="$PROJECT_DIR$/HubDevice.jar" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/HubServer.jar" afterPath="$PROJECT_DIR$/HubServer.jar" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/classes/HubDevice$6.class" afterPath="$PROJECT_DIR$/out/production/classes/HubDevice$6.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/classes/HubDevice$7.class" afterPath="$PROJECT_DIR$/out/production/classes/HubDevice$7.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/classes/HubDevice.class" afterPath="$PROJECT_DIR$/out/production/classes/HubDevice.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WEB/index.html" afterPath="$PROJECT_DIR$/WEB/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WEB/login.js" afterPath="$PROJECT_DIR$/WEB/login.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WEB/style.css" afterPath="$PROJECT_DIR$/WEB/style.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WEB/terminal.html" afterPath="$PROJECT_DIR$/WEB/terminal.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WEB/terminal.js" afterPath="$PROJECT_DIR$/WEB/terminal.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/HubDevice.java" afterPath="$PROJECT_DIR$/src/main/java/HubDevice.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -48,10 +37,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DeviceManagement.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="DeviceManagement.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/DeviceManagement.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4692">
+            <state relative-caret-position="-49">
               <caret line="282" column="18" lean-forward="false" selection-start-line="282" selection-start-column="18" selection-end-line="282" selection-end-column="18" />
               <folding />
             </state>
@@ -81,8 +70,8 @@
       <file leaf-file-name="HubServer.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/HubServer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="663">
-              <caret line="43" column="101" lean-forward="false" selection-start-line="43" selection-start-column="101" selection-end-line="43" selection-end-column="101" />
+            <state relative-caret-position="595">
+              <caret line="35" column="71" lean-forward="true" selection-start-line="35" selection-start-column="71" selection-end-line="35" selection-end-column="71" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -90,16 +79,15 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="HubDevice.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="HubDevice.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/HubDevice.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-391">
-              <caret line="155" column="36" lean-forward="true" selection-start-line="155" selection-start-column="36" selection-end-line="155" selection-end-column="36" />
+            <state relative-caret-position="238">
+              <caret line="168" column="37" lean-forward="true" selection-start-line="168" selection-start-column="37" selection-end-line="168" selection-end-column="37" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#5414#5607#0" expanded="true" />
                 <element signature="e#5606#5607#0" expanded="true" />
-                <element signature="e#5634#5827#0" expanded="true" />
                 <element signature="e#5826#5827#0" expanded="true" />
                 <element signature="e#5857#6235#0" expanded="true" />
                 <element signature="e#6234#6235#0" expanded="true" />
@@ -109,14 +97,14 @@
                 <element signature="e#8182#8296#0" expanded="true" />
                 <element signature="e#8295#8296#0" expanded="true" />
                 <element signature="method#LoadModules#0;class#HubDevice#0" expanded="false" />
-                <element signature="method#GetMachineOS#0;class#HubDevice#0" expanded="false" />
-                <element signature="method#GetMachineName#0;class#HubDevice#0" expanded="false" />
-                <element signature="method#GetMachineIP#0;class#HubDevice#0" expanded="false" />
                 <element signature="e#14032#14232#0" expanded="true" />
                 <element signature="e#14231#14232#0" expanded="true" />
-                <element signature="method#GetMachineMAC#0;class#HubDevice#0" expanded="false" />
                 <element signature="e#15853#16053#0" expanded="true" />
                 <element signature="e#16052#16053#0" expanded="true" />
+                <marker date="1503256809807" expanded="false" signature="11854:12124" ph="{...}" />
+                <marker date="1503256809807" expanded="false" signature="12183:12773" ph="{...}" />
+                <marker date="1503256809807" expanded="false" signature="12842:14711" ph="{...}" />
+                <marker date="1503256809807" expanded="false" signature="14781:16466" ph="{...}" />
               </folding>
             </state>
           </provider>
@@ -537,7 +525,7 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="33" />
     <option name="y" value="394" />
     <option name="width" value="1874" />
@@ -747,16 +735,16 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="54" y="-8" width="1874" height="1096" extended-state="7" />
+    <frame x="54" y="-8" width="1874" height="1096" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32960325" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32960325" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32960325" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32960325" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32960325" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -803,7 +791,6 @@
             <element signature="imports" expanded="true" />
             <element signature="e#5414#5607#0" expanded="true" />
             <element signature="e#5606#5607#0" expanded="true" />
-            <element signature="e#5634#5827#0" expanded="true" />
             <element signature="e#5826#5827#0" expanded="true" />
             <element signature="e#5857#6235#0" expanded="true" />
             <element signature="e#6234#6235#0" expanded="true" />
@@ -813,14 +800,14 @@
             <element signature="e#8182#8296#0" expanded="true" />
             <element signature="e#8295#8296#0" expanded="true" />
             <element signature="method#LoadModules#0;class#HubDevice#0" expanded="false" />
-            <element signature="method#GetMachineOS#0;class#HubDevice#0" expanded="false" />
-            <element signature="method#GetMachineName#0;class#HubDevice#0" expanded="false" />
-            <element signature="method#GetMachineIP#0;class#HubDevice#0" expanded="false" />
             <element signature="e#14032#14232#0" expanded="true" />
             <element signature="e#14231#14232#0" expanded="true" />
-            <element signature="method#GetMachineMAC#0;class#HubDevice#0" expanded="false" />
             <element signature="e#15853#16053#0" expanded="true" />
             <element signature="e#16052#16053#0" expanded="true" />
+            <marker date="1503256809807" expanded="false" signature="11854:12124" ph="{...}" />
+            <marker date="1503256809807" expanded="false" signature="12183:12773" ph="{...}" />
+            <marker date="1503256809807" expanded="false" signature="12842:14711" ph="{...}" />
+            <marker date="1503256809807" expanded="false" signature="14781:16466" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -874,7 +861,6 @@
             <element signature="imports" expanded="true" />
             <element signature="e#5414#5607#0" expanded="true" />
             <element signature="e#5606#5607#0" expanded="true" />
-            <element signature="e#5634#5827#0" expanded="true" />
             <element signature="e#5826#5827#0" expanded="true" />
             <element signature="e#5857#6235#0" expanded="true" />
             <element signature="e#6234#6235#0" expanded="true" />
@@ -884,14 +870,14 @@
             <element signature="e#8182#8296#0" expanded="true" />
             <element signature="e#8295#8296#0" expanded="true" />
             <element signature="method#LoadModules#0;class#HubDevice#0" expanded="false" />
-            <element signature="method#GetMachineOS#0;class#HubDevice#0" expanded="false" />
-            <element signature="method#GetMachineName#0;class#HubDevice#0" expanded="false" />
-            <element signature="method#GetMachineIP#0;class#HubDevice#0" expanded="false" />
             <element signature="e#14032#14232#0" expanded="true" />
             <element signature="e#14231#14232#0" expanded="true" />
-            <element signature="method#GetMachineMAC#0;class#HubDevice#0" expanded="false" />
             <element signature="e#15853#16053#0" expanded="true" />
             <element signature="e#16052#16053#0" expanded="true" />
+            <marker date="1503256809807" expanded="false" signature="11854:12124" ph="{...}" />
+            <marker date="1503256809807" expanded="false" signature="12183:12773" ph="{...}" />
+            <marker date="1503256809807" expanded="false" signature="12842:14711" ph="{...}" />
+            <marker date="1503256809807" expanded="false" signature="14781:16466" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -974,7 +960,6 @@
             <element signature="imports" expanded="true" />
             <element signature="e#5414#5607#0" expanded="true" />
             <element signature="e#5606#5607#0" expanded="true" />
-            <element signature="e#5634#5827#0" expanded="true" />
             <element signature="e#5826#5827#0" expanded="true" />
             <element signature="e#5857#6235#0" expanded="true" />
             <element signature="e#6234#6235#0" expanded="true" />
@@ -984,14 +969,14 @@
             <element signature="e#8182#8296#0" expanded="true" />
             <element signature="e#8295#8296#0" expanded="true" />
             <element signature="method#LoadModules#0;class#HubDevice#0" expanded="false" />
-            <element signature="method#GetMachineOS#0;class#HubDevice#0" expanded="false" />
-            <element signature="method#GetMachineName#0;class#HubDevice#0" expanded="false" />
-            <element signature="method#GetMachineIP#0;class#HubDevice#0" expanded="false" />
             <element signature="e#14032#14232#0" expanded="true" />
             <element signature="e#14231#14232#0" expanded="true" />
-            <element signature="method#GetMachineMAC#0;class#HubDevice#0" expanded="false" />
             <element signature="e#15853#16053#0" expanded="true" />
             <element signature="e#16052#16053#0" expanded="true" />
+            <marker date="1503256809807" expanded="false" signature="11854:12124" ph="{...}" />
+            <marker date="1503256809807" expanded="false" signature="12183:12773" ph="{...}" />
+            <marker date="1503256809807" expanded="false" signature="12842:14711" ph="{...}" />
+            <marker date="1503256809807" expanded="false" signature="14781:16466" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -1066,7 +1051,6 @@
             <element signature="imports" expanded="true" />
             <element signature="e#5414#5607#0" expanded="true" />
             <element signature="e#5606#5607#0" expanded="true" />
-            <element signature="e#5634#5827#0" expanded="true" />
             <element signature="e#5826#5827#0" expanded="true" />
             <element signature="e#5857#6235#0" expanded="true" />
             <element signature="e#6234#6235#0" expanded="true" />
@@ -1076,14 +1060,14 @@
             <element signature="e#8182#8296#0" expanded="true" />
             <element signature="e#8295#8296#0" expanded="true" />
             <element signature="method#LoadModules#0;class#HubDevice#0" expanded="false" />
-            <element signature="method#GetMachineOS#0;class#HubDevice#0" expanded="false" />
-            <element signature="method#GetMachineName#0;class#HubDevice#0" expanded="false" />
-            <element signature="method#GetMachineIP#0;class#HubDevice#0" expanded="false" />
             <element signature="e#14032#14232#0" expanded="true" />
             <element signature="e#14231#14232#0" expanded="true" />
-            <element signature="method#GetMachineMAC#0;class#HubDevice#0" expanded="false" />
             <element signature="e#15853#16053#0" expanded="true" />
             <element signature="e#16052#16053#0" expanded="true" />
+            <marker date="1503256809807" expanded="false" signature="11854:12124" ph="{...}" />
+            <marker date="1503256809807" expanded="false" signature="12183:12773" ph="{...}" />
+            <marker date="1503256809807" expanded="false" signature="12842:14711" ph="{...}" />
+            <marker date="1503256809807" expanded="false" signature="14781:16466" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -1144,7 +1128,6 @@
             <element signature="imports" expanded="true" />
             <element signature="e#5414#5607#0" expanded="true" />
             <element signature="e#5606#5607#0" expanded="true" />
-            <element signature="e#5634#5827#0" expanded="true" />
             <element signature="e#5826#5827#0" expanded="true" />
             <element signature="e#5857#6235#0" expanded="true" />
             <element signature="e#6234#6235#0" expanded="true" />
@@ -1154,14 +1137,14 @@
             <element signature="e#8182#8296#0" expanded="true" />
             <element signature="e#8295#8296#0" expanded="true" />
             <element signature="method#LoadModules#0;class#HubDevice#0" expanded="false" />
-            <element signature="method#GetMachineOS#0;class#HubDevice#0" expanded="false" />
-            <element signature="method#GetMachineName#0;class#HubDevice#0" expanded="false" />
-            <element signature="method#GetMachineIP#0;class#HubDevice#0" expanded="false" />
             <element signature="e#14032#14232#0" expanded="true" />
             <element signature="e#14231#14232#0" expanded="true" />
-            <element signature="method#GetMachineMAC#0;class#HubDevice#0" expanded="false" />
             <element signature="e#15853#16053#0" expanded="true" />
             <element signature="e#16052#16053#0" expanded="true" />
+            <marker date="1503256809807" expanded="false" signature="11854:12124" ph="{...}" />
+            <marker date="1503256809807" expanded="false" signature="12183:12773" ph="{...}" />
+            <marker date="1503256809807" expanded="false" signature="12842:14711" ph="{...}" />
+            <marker date="1503256809807" expanded="false" signature="14781:16466" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -1241,45 +1224,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/HubInfo.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="23" lean-forward="false" selection-start-line="0" selection-start-column="23" selection-end-line="0" selection-end-column="23" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Command.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="561">
-          <caret line="33" column="53" lean-forward="false" selection-start-line="33" selection-start-column="53" selection-end-line="33" selection-end-column="53" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/DeviceManagement.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4692">
-          <caret line="282" column="18" lean-forward="false" selection-start-line="282" selection-start-column="18" selection-end-line="282" selection-end-column="18" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/DeviceControl.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1972">
           <caret line="119" column="30" lean-forward="false" selection-start-line="119" selection-start-column="30" selection-end-line="119" selection-end-column="30" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/HubServer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="663">
-          <caret line="43" column="101" lean-forward="false" selection-start-line="43" selection-start-column="101" selection-end-line="43" selection-end-column="101" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1299,13 +1248,12 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/HubDevice.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-391">
-          <caret line="155" column="36" lean-forward="true" selection-start-line="155" selection-start-column="36" selection-end-line="155" selection-end-column="36" />
+        <state relative-caret-position="238">
+          <caret line="168" column="37" lean-forward="true" selection-start-line="168" selection-start-column="37" selection-end-line="168" selection-end-column="37" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#5414#5607#0" expanded="true" />
             <element signature="e#5606#5607#0" expanded="true" />
-            <element signature="e#5634#5827#0" expanded="true" />
             <element signature="e#5826#5827#0" expanded="true" />
             <element signature="e#5857#6235#0" expanded="true" />
             <element signature="e#6234#6235#0" expanded="true" />
@@ -1315,15 +1263,49 @@
             <element signature="e#8182#8296#0" expanded="true" />
             <element signature="e#8295#8296#0" expanded="true" />
             <element signature="method#LoadModules#0;class#HubDevice#0" expanded="false" />
-            <element signature="method#GetMachineOS#0;class#HubDevice#0" expanded="false" />
-            <element signature="method#GetMachineName#0;class#HubDevice#0" expanded="false" />
-            <element signature="method#GetMachineIP#0;class#HubDevice#0" expanded="false" />
             <element signature="e#14032#14232#0" expanded="true" />
             <element signature="e#14231#14232#0" expanded="true" />
-            <element signature="method#GetMachineMAC#0;class#HubDevice#0" expanded="false" />
             <element signature="e#15853#16053#0" expanded="true" />
             <element signature="e#16052#16053#0" expanded="true" />
+            <marker date="1503256809807" expanded="false" signature="11854:12124" ph="{...}" />
+            <marker date="1503256809807" expanded="false" signature="12183:12773" ph="{...}" />
+            <marker date="1503256809807" expanded="false" signature="12842:14711" ph="{...}" />
+            <marker date="1503256809807" expanded="false" signature="14781:16466" ph="{...}" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/HubServer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="595">
+          <caret line="35" column="71" lean-forward="true" selection-start-line="35" selection-start-column="71" selection-end-line="35" selection-end-column="71" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/HubInfo.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="23" lean-forward="false" selection-start-line="0" selection-start-column="23" selection-end-line="0" selection-end-column="23" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Command.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="561">
+          <caret line="33" column="53" lean-forward="false" selection-start-line="33" selection-start-column="53" selection-end-line="33" selection-end-column="53" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/DeviceManagement.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-49">
+          <caret line="282" column="18" lean-forward="false" selection-start-line="282" selection-start-column="18" selection-end-line="282" selection-end-column="18" />
+          <folding />
         </state>
       </provider>
     </entry>
