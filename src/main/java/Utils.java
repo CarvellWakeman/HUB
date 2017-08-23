@@ -273,6 +273,7 @@ public class Utils {
             String auth = Username + ":" + Password;
 
             JSONArray ja = new JSONArray(Arguments);
+            Unirest.setTimeouts(1000, 1000);
             response = Unirest.post(URL)
                     .header("connection", "close")
                     .header("Authorization", new String(Base64.encodeBase64(auth.getBytes())))

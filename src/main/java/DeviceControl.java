@@ -71,7 +71,7 @@ public class DeviceControl extends Module {
                         }, 10000);
                         break;
                 }
-                return String.format(Utils.DEVICE_SHUTDOWN, deviceName);
+                return String.format(Utils.DEVICE_RESTART, deviceName);
             }
         };
 

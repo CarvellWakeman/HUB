@@ -129,6 +129,7 @@ window.onload = function() {
 function create_input_line()
 {
 	var cont = document.createElement('div');
+	cont.style.display="flex";
 
 	//Create input server line
 	var sdom = document.createElement('div');
@@ -158,6 +159,7 @@ function create_output_line(text, header = true)
 {
 	//Create output line
 	var output_line = document.createElement('div');
+	output_line.style.display="flex";
 
 		if (header) {
 			output_line.appendChild(create_input_line());
@@ -267,7 +269,7 @@ function send_input(cmd, args, callback = null) {
 			headers: {
 				'Authorization': encode(username, password)
 			},
-			timeout: 10000,
+			timeout: 60000,
 			dataType: 'text',
 			data: {
 				'cmd': cmd,

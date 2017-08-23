@@ -5,21 +5,18 @@
 -Low
 
 *[CHANGE] hub_client start minimized
-*[CHANGE] Different method for auth
 
-*[ADD] Authentication changed to per-session authentication with login landing page
-*[ADD] Hud clients connect to global IP, allows hub to work outside of LAN
 *[ADD] command delay argument
-*[ADD] webpage authentication blanked out ****
 *[ADD] hub_server logs command to show log text (argument for how many?)
 *[ADD] hub_server saves devices over reboot
-*[ADD] hub_client reads HUB_IP, PORT, and AUTH_KEY from local file or parameter
 *[ADD] hub_server reads auth keys from file
-*[ADD] Push files between server and client (to update hub_client.py?)
+*[ADD] Push files between server and client
 *[ADD] Cancel shutdown/restart/logoff/hibernate
 
 
 UNRELEASED
+*[ADD] hub_client reads HUB_IP, PORT, and AUTH_KEY from local file or parameter
+*[ADD] Authentication changed to per-session authentication with login landing page
 *[ADD] IP and PORT are command line arguments
 *[CHANGE] HUB uses JAVA now
 *[BUGFIX] log_msg log writing write permission denied?

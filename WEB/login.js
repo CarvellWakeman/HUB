@@ -139,10 +139,10 @@ function updateConnectionStatus(connected){
 	}
 	else if (connected == true){
 		connection_status.style.color = "#00db28";
-		connection_status.innerHTML = "Connection Active <i class='fa fa-check'></i>";
+		connection_status.innerHTML = "Online <i class='fa fa-check'></i>";
 	} else {
 		connection_status.style.color = "#db0000";
-		connection_status.innerHTML = "No Connection <i class='fa fa-times'></i>";
+		connection_status.innerHTML = "Offline <i class='fa fa-times'></i>";
 	}
 }
 

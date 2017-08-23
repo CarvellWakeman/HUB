@@ -29,10 +29,13 @@ div.output_line {
 
 #terminal_container {
 	position:absolute;
+	
 	top:60px;
 	bottom:20px;
 	right:0;
 	left:0;
+	padding-left:10px;
+
 	overflow-y: auto;
 }
 #terminal_container::-webkit-scrollbar { 
@@ -66,6 +69,7 @@ div.output_line {
 	outline: none;
 	
 	height: 18px;
+	width:100%;
 
 	background: #000000;
 	color: #FFFFFF;
