@@ -1,5 +1,5 @@
 -High
-
+*[BUGFIX] Use crontab on unix instead of init.delay (see https://stackoverflow.com/questions/4880290/how-do-i-create-a-crontab-through-a-script)
 -Medium
 
 -Low
@@ -9,13 +9,13 @@
 *[ADD] command delay argument
 *[ADD] hub_server logs command to show log text (argument for how many?)
 *[ADD] hub_server saves devices over reboot
-*[ADD] hub_server reads auth keys from file
 *[ADD] Push files between server and client
 *[ADD] Cancel shutdown/restart/logoff/hibernate
 
 
 UNRELEASED
-*[ADD] hub_client reads HUB_IP, PORT, and AUTH_KEY from local file or parameter
+*[ADD] hub_server reads auth keys from file
+*[ADD] hub_client reads HUB_IP, PORT, and AUTH_KEY from parameters
 *[ADD] Authentication changed to per-session authentication with login landing page
 *[ADD] IP and PORT are command line arguments
 *[CHANGE] HUB uses JAVA now

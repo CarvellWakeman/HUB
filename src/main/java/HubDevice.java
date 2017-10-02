@@ -1,21 +1,14 @@
 
 import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.Unirest;
-import com.mashape.unirest.http.exceptions.UnirestException;
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 import org.apache.commons.codec.binary.Base64;
-import org.apache.http.auth.AUTH;
 import org.json.JSONArray;
-import org.json.JSONML;
+import org.json.JSONObject;
 import spark.Request;
 import spark.Response;
 import spark.Route;
 import spark.Spark;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
@@ -80,12 +73,40 @@ public class HubDevice
         // Set the local log file
         SetLogFile(LogFile);
 
-        // Load tokens from DB TODO:Implement
+        // Load tokens from auth file
         users = new HashMap<>();
-        users.put("hubdevice", new Auth("hubdevice", "picard", Utils.CLEARANCE.BASIC));
-        users.put("lerewz", new Auth("lerewz", "cchffq32", Utils.CLEARANCE.FULL));
-        users.put("admin", new Auth("admin", "startrekDS9", Utils.CLEARANCE.FULL));
-        users.put("guest", new Auth("guest", "brobeans", Utils.CLEARANCE.FULL));
+
+        try {
+            // Read auth file
+            InputStream is = new FileInputStream("auth.json");
+            BufferedReader buf = new BufferedReader(new InputStreamReader(is));
+
+            String line = buf.readLine();
+            StringBuilder sb = new StringBuilder();
+
+            while (line != null){
+                sb.append(line).append("\n");
+                line = buf.readLine();
+            }
+
+            // Decode JSON
+            JSONObject base = new JSONObject(sb.toString());
+            JSONArray clearanceLevels = base.getJSONArray("auth");
+            for (int i = 0; i < clearanceLevels.length(); i++){
+                JSONObject auth = clearanceLevels.getJSONObject(i);
+                String clearance = auth.get("clearance").toString();
+                JSONArray userList = auth.getJSONArray("users");
+                for (int j = 0; j < userList.length(); j++){
+                    JSONObject user = userList.getJSONObject(j);
+                    users.put(user.get("username").toString(),
+                            new Auth(user.get("username").toString(), user.get("password").toString(), Utils.CLEARANCE.valueOf(clearance)));
+                }
+            }
+
+        }
+        catch (Exception ex){
+            Utils.logMsg(new String[]{Utils.ERROR, "could not retrieve users list: " + ex.getMessage()}, true, GetLogFile());
+        }
 
         // Device info
         try {
@@ -192,7 +213,7 @@ public class HubDevice
                 Utils.logMsg(new String[]{Utils.CONNECTION_LOST, Utils.CONNECTION_RETRY, String.valueOf(retryDelay / 1000), "seconds." }, true, GetLogFile());
             } else {
                 // Connection failed
-                Utils.logMsg(new String[]{"Herp", Utils.CONNECTION_RETRY, String.valueOf(retryDelay / 1000), "seconds." }, true, null);
+                Utils.logMsg(new String[]{ Utils.CONNECTION_RETRY, String.valueOf(retryDelay / 1000), "seconds." }, true, null);
             }
             // Try again
             Utils.ExecuteBackgroundTask(new Runnable() { @Override public void run() { Register(HUBIP, HUBPort, username, password, retryDelay, false); } }, retryDelay);
@@ -247,16 +268,20 @@ public class HubDevice
             }
         }
 
-        // Authentication
-        String authHeader = new String(Base64.decodeBase64(request.headers("Authorization")));
-        //System.out.println("AuthHeader:" + request.headers("Authorization"));
-        if (authHeader.equals("")){
-            response.status(401);
-            return Utils.AUTH_FAIL;
+        // Authorization
+        String username = request.queryParams("user");
+        String password = request.queryParams("pass");
+        if (username.equals("") | password.equals("")) {
+            String authHeader = new String(Base64.decodeBase64(request.headers("Authorization")));
+            //System.out.println("AuthHeader:" + request.headers("Authorization"));
+            if (authHeader.equals("")) {
+                response.status(401);
+                return Utils.AUTH_FAIL;
+            }
+            String[] credentials = authHeader.split(":");
+            username = credentials[0];
+            password = credentials[1];
         }
-        String[] credentials = authHeader.split(":");
-        String username = credentials[0];
-        String password = credentials[1];
         boolean authIsValid = isAuthValid(username, password);
         Utils.CLEARANCE userClearance = getAuthorization(username, password);
 
