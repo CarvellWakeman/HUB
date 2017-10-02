@@ -73,6 +73,25 @@ public class HubDevice
         // Set the local log file
         SetLogFile(LogFile);
 
+
+        // Device info
+        try {
+            SetOS(GetMachineOS());
+            SetName(GetMachineName(GetOS()));
+            SetIP(GetMachineIP());
+            SetMAC(GetMachineMAC());
+        } catch (UnknownHostException ex){
+            System.out.printf("Device IP or MAC address could not be found:%s\n", ex.getMessage());
+        }
+
+
+        // Header
+        Utils.printHeader(HUBType, GetName(), GetIP(), GetMAC());
+
+        // Loading
+        Utils.logMsg(new String[]{Utils.LOADING}, true, GetLogFile());
+
+
         // Load tokens from auth file
         users = new HashMap<>();
 
@@ -103,26 +122,13 @@ public class HubDevice
                 }
             }
 
+            Utils.logMsg(Utils.USER_LOAD_COMPLETE, true, GetLogFile());
+
         }
         catch (Exception ex){
-            Utils.logMsg(new String[]{Utils.ERROR, "could not retrieve users list: " + ex.getMessage()}, true, GetLogFile());
+            Utils.logMsg(new String[]{Utils.ERROR, Utils.USER_LOAD_FAILURE, ex.getMessage()}, true, GetLogFile());
         }
 
-        // Device info
-        try {
-            SetOS(GetMachineOS());
-            SetName(GetMachineName(GetOS()));
-            SetIP(GetMachineIP());
-            SetMAC(GetMachineMAC());
-        } catch (UnknownHostException ex){
-            System.out.printf("Device IP or MAC address could not be found:%s\n", ex.getMessage());
-        }
-
-        // Header
-        Utils.printHeader(HUBType, GetName(), GetIP(), GetMAC());
-
-        // Loading
-        Utils.logMsg(new String[]{Utils.LOADING}, true, GetLogFile());
 
         // Load modules
         LoadModules();
@@ -247,6 +253,7 @@ public class HubDevice
     }
 
     protected String CommandReceive(Request request, Response response){
+
         // Build header
         response.header("Access-Control-Allow-Origin", "*");
         response.header("Access-Control-Allow-Headers", "Authorization");
@@ -258,7 +265,6 @@ public class HubDevice
         String ip = request.ip();
         int port = request.port();
 
-
         // Load arguments
         String jargs = request.queryParams("args");
         if (jargs != null){
@@ -269,10 +275,15 @@ public class HubDevice
         }
 
         // Authorization
-        String username = request.queryParams("user");
-        String password = request.queryParams("pass");
-        if (username.equals("") | password.equals("")) {
-            String authHeader = new String(Base64.decodeBase64(request.headers("Authorization")));
+        String username;
+        String password;
+        String authHeader = new String(Base64.decodeBase64(request.headers("Authorization")));
+
+        if (authHeader.equals("") ) {
+            username = request.queryParams("user");
+            password = request.queryParams("pass");
+            //System.out.println("AuthParam:" + username+":"+password);
+        } else {
             //System.out.println("AuthHeader:" + request.headers("Authorization"));
             if (authHeader.equals("")) {
                 response.status(401);
@@ -282,6 +293,7 @@ public class HubDevice
             username = credentials[0];
             password = credentials[1];
         }
+
         boolean authIsValid = isAuthValid(username, password);
         Utils.CLEARANCE userClearance = getAuthorization(username, password);
 

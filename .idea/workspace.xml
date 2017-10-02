@@ -8,20 +8,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6a891964-be06-468e-8f3e-6ebbc89d9192" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gitignore" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/HubDevice.jar" afterPath="$PROJECT_DIR$/HubDevice.jar" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/HubServer.jar" afterPath="$PROJECT_DIR$/HubServer.jar" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/classes/HubDevice$1.class" afterPath="$PROJECT_DIR$/out/production/classes/HubDevice$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/classes/HubDevice$2.class" afterPath="$PROJECT_DIR$/out/production/classes/HubDevice$2.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/classes/HubDevice$3.class" afterPath="$PROJECT_DIR$/out/production/classes/HubDevice$3.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/classes/HubDevice$4.class" afterPath="$PROJECT_DIR$/out/production/classes/HubDevice$4.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/classes/HubDevice$5.class" afterPath="$PROJECT_DIR$/out/production/classes/HubDevice$5.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/classes/HubDevice$6.class" afterPath="$PROJECT_DIR$/out/production/classes/HubDevice$6.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/classes/HubDevice$7.class" afterPath="$PROJECT_DIR$/out/production/classes/HubDevice$7.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/classes/HubDevice.class" afterPath="$PROJECT_DIR$/out/production/classes/HubDevice.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/classes/Utils$1.class" afterPath="$PROJECT_DIR$/out/production/classes/Utils$1.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/classes/Utils$CLEARANCE.class" afterPath="$PROJECT_DIR$/out/production/classes/Utils$CLEARANCE.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/classes/Utils$OS_TYPE.class" afterPath="$PROJECT_DIR$/out/production/classes/Utils$OS_TYPE.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/classes/Utils.class" afterPath="$PROJECT_DIR$/out/production/classes/Utils.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/TODO.txt" afterPath="$PROJECT_DIR$/TODO.txt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/HubDevice.java" afterPath="$PROJECT_DIR$/src/main/java/HubDevice.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Utils.java" afterPath="$PROJECT_DIR$/src/main/java/Utils.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/.gradle/" />
@@ -83,8 +82,8 @@
       <file leaf-file-name="HubServer.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/HubServer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-272">
-              <caret line="38" column="18" lean-forward="true" selection-start-line="38" selection-start-column="18" selection-end-line="38" selection-end-column="18" />
+            <state relative-caret-position="17">
+              <caret line="38" column="18" lean-forward="false" selection-start-line="38" selection-start-column="18" selection-end-line="38" selection-end-column="18" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -95,11 +94,15 @@
       <file leaf-file-name="HubDevice.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/HubDevice.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="85">
-              <caret line="5" column="21" lean-forward="true" selection-start-line="5" selection-start-column="21" selection-end-line="5" selection-end-column="21" />
+            <state relative-caret-position="378">
+              <caret line="285" column="16" lean-forward="false" selection-start-line="285" selection-start-column="16" selection-end-line="285" selection-end-column="16" />
               <folding>
-                <element signature="e#7881#7996#0" expanded="true" />
-                <element signature="e#7995#7996#0" expanded="true" />
+                <element signature="imports" expanded="true" />
+                <element signature="e#6450#6643#0" expanded="true" />
+                <element signature="e#6642#6643#0" expanded="true" />
+                <element signature="e#6673#7051#0" expanded="true" />
+                <element signature="e#7050#7051#0" expanded="true" />
+                <element signature="method#Register#0;class#HubDevice#0" expanded="false" />
                 <element signature="method#LoadModules#0;class#HubDevice#0" expanded="false" />
                 <element signature="method#GetMachineOS#0;class#HubDevice#0" expanded="false" />
                 <element signature="method#GetMachineName#0;class#HubDevice#0" expanded="false" />
@@ -113,8 +116,8 @@
       <file leaf-file-name="Utils.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/Utils.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="17">
-              <caret line="313" column="37" lean-forward="false" selection-start-line="313" selection-start-column="37" selection-end-line="313" selection-end-column="37" />
+            <state relative-caret-position="557">
+              <caret line="64" column="39" lean-forward="false" selection-start-line="64" selection-start-column="39" selection-end-line="64" selection-end-column="39" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="method#bhash#0;class#Utils#0" expanded="false" />
@@ -148,6 +151,7 @@
       <find>&quot;text&quot;</find>
       <find>restart</find>
       <find>users</find>
+      <find>MODULE_LOAD_COMPLETE</find>
     </findStrings>
     <replaceStrings>
       <replace>'</replace>
@@ -521,14 +525,15 @@
         <option value="$PROJECT_DIR$/src/main/java/Auth.java" />
         <option value="$PROJECT_DIR$/src/main/java/DeviceManagement.java" />
         <option value="$PROJECT_DIR$/src/main/java/HubServer.java" />
-        <option value="$PROJECT_DIR$/src/main/java/Utils.java" />
         <option value="$PROJECT_DIR$/src/main/java/DeviceControl.java" />
-        <option value="$PROJECT_DIR$/src/main/java/HubDevice.java" />
         <option value="$PROJECT_DIR$/TODO.txt" />
+        <option value="$PROJECT_DIR$/src/main/java/Utils.java" />
+        <option value="$PROJECT_DIR$/src/main/java/HubDevice.java" />
+        <option value="$PROJECT_DIR$/.gitignore" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="20" />
     <option name="y" value="-8" />
     <option name="width" value="1874" />
@@ -550,7 +555,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
       <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
@@ -581,6 +585,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
       <pane id="Scope" />
     </panes>
   </component>
@@ -603,7 +608,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.HubDevice">
+  <component name="RunManager" selected="Application.HubServer">
     <configuration name="HubDevice" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <option name="MAIN_CLASS_NAME" value="HubDevice" />
@@ -719,8 +724,8 @@
     </list>
     <recent_temporary>
       <list size="2">
-        <item index="0" class="java.lang.String" itemvalue="Application.HubDevice" />
-        <item index="1" class="java.lang.String" itemvalue="Application.HubServer" />
+        <item index="0" class="java.lang.String" itemvalue="Application.HubServer" />
+        <item index="1" class="java.lang.String" itemvalue="Application.HubDevice" />
       </list>
     </recent_temporary>
   </component>
@@ -738,7 +743,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="54" y="-8" width="1874" height="1096" extended-state="7" />
+    <frame x="54" y="-8" width="1874" height="1096" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -776,14 +781,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/DeviceManagement.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="612">
-          <caret line="36" column="0" lean-forward="true" selection-start-line="36" selection-start-column="0" selection-end-line="36" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/HubInfo.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="204">
@@ -807,8 +804,12 @@
         <state relative-caret-position="1802">
           <caret line="125" column="0" lean-forward="true" selection-start-line="125" selection-start-column="0" selection-end-line="125" selection-end-column="0" />
           <folding>
-            <element signature="e#7881#7996#0" expanded="true" />
-            <element signature="e#7995#7996#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+            <element signature="e#6450#6643#0" expanded="true" />
+            <element signature="e#6642#6643#0" expanded="true" />
+            <element signature="e#6673#7051#0" expanded="true" />
+            <element signature="e#7050#7051#0" expanded="true" />
+            <element signature="method#Register#0;class#HubDevice#0" expanded="false" />
             <element signature="method#LoadModules#0;class#HubDevice#0" expanded="false" />
             <element signature="method#GetMachineOS#0;class#HubDevice#0" expanded="false" />
             <element signature="method#GetMachineName#0;class#HubDevice#0" expanded="false" />
@@ -893,8 +894,12 @@
         <state relative-caret-position="697">
           <caret line="57" column="14" lean-forward="true" selection-start-line="57" selection-start-column="14" selection-end-line="57" selection-end-column="14" />
           <folding>
-            <element signature="e#7881#7996#0" expanded="true" />
-            <element signature="e#7995#7996#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+            <element signature="e#6450#6643#0" expanded="true" />
+            <element signature="e#6642#6643#0" expanded="true" />
+            <element signature="e#6673#7051#0" expanded="true" />
+            <element signature="e#7050#7051#0" expanded="true" />
+            <element signature="method#Register#0;class#HubDevice#0" expanded="false" />
             <element signature="method#LoadModules#0;class#HubDevice#0" expanded="false" />
             <element signature="method#GetMachineOS#0;class#HubDevice#0" expanded="false" />
             <element signature="method#GetMachineName#0;class#HubDevice#0" expanded="false" />
@@ -971,8 +976,12 @@
         <state relative-caret-position="782">
           <caret line="62" column="37" lean-forward="false" selection-start-line="62" selection-start-column="37" selection-end-line="62" selection-end-column="37" />
           <folding>
-            <element signature="e#7881#7996#0" expanded="true" />
-            <element signature="e#7995#7996#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+            <element signature="e#6450#6643#0" expanded="true" />
+            <element signature="e#6642#6643#0" expanded="true" />
+            <element signature="e#6673#7051#0" expanded="true" />
+            <element signature="e#7050#7051#0" expanded="true" />
+            <element signature="method#Register#0;class#HubDevice#0" expanded="false" />
             <element signature="method#LoadModules#0;class#HubDevice#0" expanded="false" />
             <element signature="method#GetMachineOS#0;class#HubDevice#0" expanded="false" />
             <element signature="method#GetMachineName#0;class#HubDevice#0" expanded="false" />
@@ -1035,8 +1044,12 @@
         <state relative-caret-position="782">
           <caret line="62" column="37" lean-forward="true" selection-start-line="62" selection-start-column="37" selection-end-line="62" selection-end-column="37" />
           <folding>
-            <element signature="e#7881#7996#0" expanded="true" />
-            <element signature="e#7995#7996#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+            <element signature="e#6450#6643#0" expanded="true" />
+            <element signature="e#6642#6643#0" expanded="true" />
+            <element signature="e#6673#7051#0" expanded="true" />
+            <element signature="e#7050#7051#0" expanded="true" />
+            <element signature="method#Register#0;class#HubDevice#0" expanded="false" />
             <element signature="method#LoadModules#0;class#HubDevice#0" expanded="false" />
             <element signature="method#GetMachineOS#0;class#HubDevice#0" expanded="false" />
             <element signature="method#GetMachineName#0;class#HubDevice#0" expanded="false" />
@@ -1153,10 +1166,48 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Utils.java">
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_77/jre/lib/ext/nashorn.jar!/jdk/nashorn/internal/objects/Global.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="57" column="19" lean-forward="false" selection-start-line="57" selection-start-column="19" selection-end-line="57" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_77/jre/lib/ext/nashorn.jar!/jdk/nashorn/internal/parser/JSONParser.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="216">
+          <caret line="40" column="40" lean-forward="true" selection-start-line="40" selection-start-column="40" selection-end-line="40" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_77/jre/lib/rt.jar!/sun/nio/ch/ServerSocketAdaptor.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="216">
+          <caret line="47" column="0" lean-forward="false" selection-start-line="47" selection-start-column="0" selection-end-line="47" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TODO.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="16" column="43" lean-forward="true" selection-start-line="16" selection-start-column="43" selection-end-line="16" selection-end-column="43" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/HubServer.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="17">
-          <caret line="313" column="37" lean-forward="false" selection-start-line="313" selection-start-column="37" selection-end-line="313" selection-end-column="37" />
+          <caret line="38" column="18" lean-forward="false" selection-start-line="38" selection-start-column="18" selection-end-line="38" selection-end-column="18" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Utils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="557">
+          <caret line="64" column="39" lean-forward="false" selection-start-line="64" selection-start-column="39" selection-end-line="64" selection-end-column="39" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="method#bhash#0;class#Utils#0" expanded="false" />
@@ -1167,55 +1218,25 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_77/jre/lib/ext/nashorn.jar!/jdk/nashorn/internal/objects/Global.class">
+    <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="57" column="19" lean-forward="false" selection-start-line="57" selection-start-column="19" selection-end-line="57" selection-end-column="19" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_77/jre/lib/ext/nashorn.jar!/jdk/nashorn/internal/parser/JSONParser.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="40" column="40" lean-forward="true" selection-start-line="40" selection-start-column="40" selection-end-line="40" selection-end-column="40" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_77/jre/lib/rt.jar!/sun/nio/ch/ServerSocketAdaptor.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="47" column="0" lean-forward="false" selection-start-line="47" selection-start-column="0" selection-end-line="47" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/HubServer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-272">
-          <caret line="38" column="18" lean-forward="true" selection-start-line="38" selection-start-column="18" selection-end-line="38" selection-end-column="18" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/TODO.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="16" column="43" lean-forward="true" selection-start-line="16" selection-start-column="43" selection-end-line="16" selection-end-column="43" />
+        <state relative-caret-position="51">
+          <caret line="3" column="7" lean-forward="true" selection-start-line="3" selection-start-column="7" selection-end-line="3" selection-end-column="7" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/HubDevice.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" column="21" lean-forward="true" selection-start-line="5" selection-start-column="21" selection-end-line="5" selection-end-column="21" />
+        <state relative-caret-position="378">
+          <caret line="285" column="16" lean-forward="false" selection-start-line="285" selection-start-column="16" selection-end-line="285" selection-end-column="16" />
           <folding>
-            <element signature="e#7881#7996#0" expanded="true" />
-            <element signature="e#7995#7996#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+            <element signature="e#6450#6643#0" expanded="true" />
+            <element signature="e#6642#6643#0" expanded="true" />
+            <element signature="e#6673#7051#0" expanded="true" />
+            <element signature="e#7050#7051#0" expanded="true" />
+            <element signature="method#Register#0;class#HubDevice#0" expanded="false" />
             <element signature="method#LoadModules#0;class#HubDevice#0" expanded="false" />
             <element signature="method#GetMachineOS#0;class#HubDevice#0" expanded="false" />
             <element signature="method#GetMachineName#0;class#HubDevice#0" expanded="false" />

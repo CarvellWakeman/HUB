@@ -61,6 +61,8 @@ public class Utils {
 
     static String AUTH_PASS = "Authentication valid";
     static String AUTH_FAIL = "Authentication invalid";
+    static String USER_LOAD_COMPLETE = "USERS LOADED";
+    static String USER_LOAD_FAILURE = "USERS COULD NOT BE LOADED";
     static String CONTACTING_HUB = "Contacting HUB to register";
     static String CONNECTION_RETRY = "Retrying connection in";
     static String CONNECTION_LOST = "Connection to HUB lost.";
