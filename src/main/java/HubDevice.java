@@ -253,77 +253,99 @@ public class HubDevice
     }
 
     protected String CommandReceive(Request request, Response response){
+        try {
+            // Build header
+            response.header("Access-Control-Allow-Origin", "*");
+            response.header("Access-Control-Allow-Headers", "Authorization");
+            response.type("text/xml");
 
-        // Build header
-        response.header("Access-Control-Allow-Origin", "*");
-        response.header("Access-Control-Allow-Headers", "Authorization");
-        response.type("text/xml");
 
-        // Get request variables
-        String command = request.queryParams("cmd");
-        ArrayList<String> arguments = new ArrayList<>();
-        String ip = request.ip();
-        int port = request.port();
+            // Authorization
+            String username;
+            String password;
+            String authHeader = request.headers("Authorization");
 
-        // Load arguments
-        String jargs = request.queryParams("args");
-        if (jargs != null){
-            JSONArray ja = new JSONArray(request.queryParams("args"));
-            for (int i = 0; i < ja.length(); i++){
-                if (ja.getString(i).length() > 0){ arguments.add(ja.getString(i)); }
+            if (authHeader == null || authHeader.equals("")) {
+                username = request.queryParams("user");
+                password = request.queryParams("pass");
+                //System.out.println("AuthParam:" + username + ":" + password);
+            } else {
+                authHeader = new String(Base64.decodeBase64(authHeader));
+                //System.out.println("AuthHeader:" + request.headers("Authorization"));
+
+                String[] credentials = authHeader.split(":");
+                username = credentials[0];
+                password = credentials[1];
             }
-        }
 
-        // Authorization
-        String username;
-        String password;
-        String authHeader = new String(Base64.decodeBase64(request.headers("Authorization")));
-
-        if (authHeader.equals("") ) {
-            username = request.queryParams("user");
-            password = request.queryParams("pass");
-            //System.out.println("AuthParam:" + username+":"+password);
-        } else {
-            //System.out.println("AuthHeader:" + request.headers("Authorization"));
-            if (authHeader.equals("")) {
+            if (username==null || password==null) {
                 response.status(401);
                 return Utils.AUTH_FAIL;
             }
-            String[] credentials = authHeader.split(":");
-            username = credentials[0];
-            password = credentials[1];
-        }
 
-        boolean authIsValid = isAuthValid(username, password);
-        Utils.CLEARANCE userClearance = getAuthorization(username, password);
+            username = username.toLowerCase();
 
-        String handle;
-        if (authIsValid){
-            response.status(200);
-            handle = CommandHandle(command, arguments, userClearance);
-        } else {
-            response.status(401);
-            handle = Utils.AUTH_FAIL;
-        }
+            boolean authIsValid = isAuthValid(username, password);
+            Utils.CLEARANCE userClearance = getAuthorization(username, password);
 
-        // Log command received (only if it's not hidden)
-        Command cmdClr = null;
-        for (Module m : mModules){
-            for (Command c : m.mCommands){
-                if (c.GetName().equals(command)){ cmdClr = c; }
+
+            // Get request variables
+            String command = request.queryParams("cmd");
+            ArrayList<String> arguments = new ArrayList<>();
+            String ip = request.ip();
+            int port = request.port();
+
+            // Load arguments
+            String jargs = request.queryParams("args");
+            if (jargs != null) {
+                JSONArray ja = new JSONArray(request.queryParams("args"));
+                for (int i = 0; i < ja.length(); i++) {
+                    if (ja.getString(i).length() > 0) {
+                        arguments.add(ja.getString(i));
+                    }
+                }
             }
-        }
-        if (cmdClr == null || cmdClr.GetClearance() != Utils.CLEARANCE.HIDDEN) {
-            Utils.logMsg(new String[]{
-                    Utils.CMD_RECV, "'" + command + ":" + arguments.toString() + "'",
-                    "from " + (authIsValid ? "valid" : "invalid") + " user '" + username + ":" + password + "'",
-                    "(" + ip + ":" + String.valueOf(port) + ")",
-                    "Responding '" + handle + "';",
-            },
-            true, GetLogFile());
-        }
 
-        return handle;
+            String handle;
+            if (authIsValid) {
+                // No command given
+                if (command==null || command.equals("")){
+                    response.status(400);
+                    handle = Utils.CMD_NOTGIVEN;
+                } else {
+                    response.status(200);
+                    handle = CommandHandle(command, arguments, userClearance);
+                }
+            } else {
+                response.status(401);
+                handle = Utils.AUTH_FAIL;
+            }
+
+            // Log command received (only if it's not hidden)
+            Command cmdClr = null;
+            for (Module m : mModules) {
+                for (Command c : m.mCommands) {
+                    if (c.GetName().equals(command)) {
+                        cmdClr = c;
+                    }
+                }
+            }
+            if (cmdClr == null || cmdClr.GetClearance() != Utils.CLEARANCE.HIDDEN) {
+                Utils.logMsg(new String[]{
+                                Utils.CMD_RECV, "'" + command + ":" + arguments.toString() + "'",
+                                "from " + (authIsValid ? "valid" : "invalid") + " user '" + username + ":" + password + "'",
+                                "(" + ip + ":" + String.valueOf(port) + ")",
+                                "Responding '" + handle + "';",
+                        },
+                        true, GetLogFile());
+            }
+
+            return handle;
+        }
+        catch (Exception ex){
+            response.status(500);
+            return "Exception:" + ex.getMessage();
+        }
     }
 
     // Command handling

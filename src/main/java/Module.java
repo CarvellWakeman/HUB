@@ -29,6 +29,7 @@ public class Module {
     public void AddCommand(Command command){ mCommands.add(command); }
     public void RemoveCommand(Command command) { mCommands.remove(command); }
     public Command GetCommand(String name){
+        if (name==null) { return null; }
         for (Command c : mCommands){
             if (c.GetName().toLowerCase().equals(name.toLowerCase())){ return c; }
         }

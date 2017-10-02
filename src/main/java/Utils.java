@@ -31,6 +31,7 @@ public class Utils {
     static String CMD = "Command";
     static String CMD_NOTAUTH = "Not authorized to run the command";
     static String CMD_RECV = "Command received";
+    static String CMD_NOTGIVEN = "No Command given";
     static String CMD_RUN = "Running";
     static String CMD_NOTFOUND = "not Found";
     static String CMD_INVALID = "Command Invalid";
