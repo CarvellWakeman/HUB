@@ -268,7 +268,7 @@ public class Utils {
             try {
                 PWD = cl.getProtectionDomain().getCodeSource().getLocation().getPath();
                 PWD = URLDecoder.decode(PWD, "utf-8");
-                PWD = "/" + PWD.substring(1, PWD.lastIndexOf("/"));
+                PWD = PWD.substring(0, PWD.lastIndexOf("/"));
             } catch (Exception ex){
                 // Fallback
                 PWD = System.getProperty("user.dir");
