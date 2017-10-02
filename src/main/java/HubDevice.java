@@ -41,7 +41,7 @@ public class HubDevice
         String USERNAME = args[3];
         String PASSWORD = args[4];
 
-        new HubDevice(Utils.CLIENT_LOG, SERVER_IP, SERVER_PORT, CLIENT_PORT, USERNAME, PASSWORD);
+        new HubDevice(Utils.GetPWD(Utils.class, GetMachineOS()) + "/" + Utils.CLIENT_LOG, SERVER_IP, SERVER_PORT, CLIENT_PORT, USERNAME, PASSWORD);
     }
 
 
@@ -94,7 +94,7 @@ public class HubDevice
 
         try {
             // Read auth file
-            InputStream is = new FileInputStream(Utils.GetPWD(HubDevice.class) + "/auth.json");
+            InputStream is = new FileInputStream(Utils.GetPWD(HubDevice.class, GetOS()) + "/auth.json");
             BufferedReader buf = new BufferedReader(new InputStreamReader(is));
 
             String line = buf.readLine();

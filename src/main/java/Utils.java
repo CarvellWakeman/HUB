@@ -144,7 +144,7 @@ public class Utils {
     }
 
     public static void logMsg(String message, boolean display, String fileName){ logMsg(new String[]{message}, display, fileName); }
-    public static void logMsg(String[] messages, boolean display, String fileName){
+    public static void logMsg(String[] messages, boolean display, String filePath){
         // Assemble message
         StringBuilder sb = new StringBuilder();
         for (String msg : messages){
@@ -163,11 +163,11 @@ public class Utils {
         }
 
         // Try to write
-        if (fileName != null && fileName.length() > 0) {
+        if (filePath != null && filePath.length() > 0) {
             FileWriter fw = null;
             BufferedWriter bw = null;
             try {
-                File logFile = new File(GetPWD(Utils.class) + "/" + fileName);
+                File logFile = new File(filePath);
 
                 // Create file if it DNE
                 if (!logFile.getAbsoluteFile().isFile()) {
@@ -181,7 +181,7 @@ public class Utils {
                 // Write
                 bw.write(msg + "\n");
             } catch (IOException ex) {
-                System.out.println(String.format("Error: Could not write to logfile '%s':%s", fileName, ex.getMessage()));
+                System.out.println(String.format("Error: Could not write to logfile '%s':%s", filePath, ex.getMessage()));
             } finally {
                 try {
                     if (bw != null) bw.close();
@@ -263,12 +263,12 @@ public class Utils {
 */
     }
 
-    static String GetPWD(Class cl){
+    static String GetPWD(Class cl, OS_TYPE os){ // On windows the first character is a \, which must be removed
         if (PWD==null){
             try {
                 PWD = cl.getProtectionDomain().getCodeSource().getLocation().getPath();
                 PWD = URLDecoder.decode(PWD, "utf-8");
-                PWD = PWD.substring(0, PWD.lastIndexOf("/"));
+                PWD = PWD.substring((os==OS_TYPE.UNIX?0:1), PWD.lastIndexOf("/"));
             } catch (Exception ex){
                 // Fallback
                 PWD = System.getProperty("user.dir");
@@ -335,7 +335,7 @@ public class Utils {
         String startupDirectory;
 
         // PWD
-        String PWD = GetPWD(Utils.class);
+        String PWD = GetPWD(Utils.class, OS);
         String UserHome = System.getProperty("user.home");
 
         // Startup script file
