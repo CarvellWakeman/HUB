@@ -9,10 +9,7 @@ import spark.Route;
 import spark.Spark;
 
 import java.io.*;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.net.UnknownHostException;
+import java.net.*;
 import java.util.*;
 
 
@@ -97,7 +94,7 @@ public class HubDevice
 
         try {
             // Read auth file
-            InputStream is = new FileInputStream("auth.json");
+            InputStream is = new FileInputStream(Utils.GetPWD(HubDevice.class) + "/auth.json");
             BufferedReader buf = new BufferedReader(new InputStreamReader(is));
 
             String line = buf.readLine();

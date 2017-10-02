@@ -9,10 +9,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.net.UnknownHostException;
+import java.net.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -99,6 +96,9 @@ public class Utils {
     static String ERR_CMD_WOL = "Could not send wake on lan packet";
 
 
+    // Directory
+    static String PWD;
+
 
     // Supported operating systems
     enum OS_TYPE {
@@ -162,18 +162,15 @@ public class Utils {
             printMsg(msg);
         }
 
-        // Get home directory
-        String UserHome = System.getProperty("user.home");
-
         // Try to write
         if (fileName != null && fileName.length() > 0) {
             FileWriter fw = null;
             BufferedWriter bw = null;
             try {
-                File logFile = new File(UserHome + "\\" + fileName);
+                File logFile = new File(GetPWD(Utils.class) + "/" + fileName);
 
                 // Create file if it DNE
-                if (!logFile.exists()) {
+                if (!logFile.getAbsoluteFile().isFile()) {
                     logFile.createNewFile();
                 }
 
@@ -266,6 +263,21 @@ public class Utils {
 */
     }
 
+    static String GetPWD(Class cl){
+        if (PWD==null){
+            try {
+                PWD = cl.getProtectionDomain().getCodeSource().getLocation().getPath();
+                PWD = URLDecoder.decode(PWD, "utf-8");
+                PWD = "/" + PWD.substring(1, PWD.lastIndexOf("/"));
+            } catch (Exception ex){
+                // Fallback
+                PWD = System.getProperty("user.dir");
+            }
+        }
+
+        return PWD;
+    }
+
 
     // NETWORK //
     public static HttpResponse<String> SendCommand(String Command, String[] Arguments, String IP, int Port, String Username, String Password) {
@@ -323,7 +335,7 @@ public class Utils {
         String startupDirectory;
 
         // PWD
-        String PWD = System.getProperty("user.dir");
+        String PWD = GetPWD(Utils.class);
         String UserHome = System.getProperty("user.home");
 
         // Startup script file
