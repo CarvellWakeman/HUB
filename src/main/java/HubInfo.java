@@ -7,7 +7,7 @@ public class HubInfo extends Module {
 
         // Ping command
         Command ping = new Command("ping", Utils.CLEARANCE.HIDDEN){
-            @Override public String Run(ArrayList<String> arguments){
+            @Override public String Run(String username, String password, ArrayList<String> arguments){
                 return Utils.DEVICE_ONLINE;
             }
         };
@@ -15,7 +15,7 @@ public class HubInfo extends Module {
         // Check Auth command
         Command checkauth = new Command("checkauth", Utils.CLEARANCE.BASIC){
             @Override
-            public String Run(ArrayList<String> arguments){
+            public String Run(String username, String password, ArrayList<String> arguments){
                 // If we made it this far, the authentication is valid
                 return Utils.AUTH_PASS;
             }
@@ -26,7 +26,7 @@ public class HubInfo extends Module {
         // Check Auth command
         Command help = new Command("help", Utils.CLEARANCE.NONE){
             @Override
-            public String Run(ArrayList<String> arguments){
+            public String Run(String username, String password, ArrayList<String> arguments){
                 StringBuilder sb = new StringBuilder();
                 String cmd = GetValidArgument(arguments, 0);
 

@@ -65,7 +65,7 @@ public class Command {
 
 
     // Command
-    public String Run(ArrayList<String> arguments){
+    public String Run(String username, String password, ArrayList<String> arguments){
         return "Not Implemented";
     }
 

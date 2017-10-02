@@ -19,7 +19,7 @@ public class DeviceManagement extends Module {
         // Is Registered command
         Command isregistered = new Command("isregistered", Utils.CLEARANCE.HIDDEN){
             @Override
-            public String Run(ArrayList<String> arguments){
+            public String Run(String username, String password, ArrayList<String> arguments){
                 String validArgs = ValidateArguments(arguments);
                 if (validArgs != null){ return validArgs; }
 
@@ -38,7 +38,7 @@ public class DeviceManagement extends Module {
         // Register command
         Command register = new Command("register", Utils.CLEARANCE.BASIC){
             @Override
-            public String Run(ArrayList<String> arguments){
+            public String Run(String username, String password, ArrayList<String> arguments){
                 String validArgs = ValidateArguments(arguments);
                 if (validArgs != null){ return validArgs; }
 
@@ -46,7 +46,7 @@ public class DeviceManagement extends Module {
                 Device d = GetDevice(deviceName);
 
                 // Register (or update) new device
-                RegisterDevice(deviceName, GetValidArgument(arguments, 1), Integer.valueOf(GetValidArgument(arguments, 2)), GetValidArgument(arguments, 3), GetValidArgument(arguments, 4), GetValidArgument(arguments, 5));
+                RegisterDevice(deviceName, GetValidArgument(arguments, 1), Integer.valueOf(GetValidArgument(arguments, 2)), GetValidArgument(arguments, 3));
 
                 if (d == null){
                     return String.format(Utils.DEVICE_REGISTERED, deviceName);
@@ -59,15 +59,13 @@ public class DeviceManagement extends Module {
         register.AddArg("ip", false);
         register.AddArg("port", false);
         register.AddArg("mac", false);
-        register.AddArg("username", false);
-        register.AddArg("password", false);
         register.SetDesc("Register device as a client to the HUB");
 
 
         // UnRegister command
         Command unregister = new Command("unregister", Utils.CLEARANCE.BASIC){
             @Override
-            public String Run(ArrayList<String> arguments){
+            public String Run(String username, String password, ArrayList<String> arguments){
                 String validArgs = ValidateArguments(arguments);
                 if (validArgs != null){ return validArgs; }
 
@@ -89,7 +87,7 @@ public class DeviceManagement extends Module {
         // Status command
         Command status = new Command("status", Utils.CLEARANCE.FULL){
             @Override
-            public String Run(ArrayList<String> arguments){
+            public String Run(String username, String password, ArrayList<String> arguments){
                 String validArgs = ValidateArguments(arguments);
                 if (validArgs != null){ return validArgs; }
 
@@ -98,7 +96,7 @@ public class DeviceManagement extends Module {
 
                 if (d != null){
                     // Online or offline
-                    String deviceResp = SendDeviceCommand(GetName(), d);
+                    String deviceResp = SendDeviceCommand(GetName(), d, username, password);
                     if (!deviceResp.equals(Utils.DEVICE_ONLINE)){
                         return Utils.DEVICE_OFFLINE;
                     }
@@ -114,7 +112,7 @@ public class DeviceManagement extends Module {
         // Devices command
         Command devices = new Command("devices", Utils.CLEARANCE.FULL){
             @Override
-            public String Run(ArrayList<String> arguments){
+            public String Run(String username, String password, ArrayList<String> arguments){
                 StringBuilder sb = new StringBuilder();
                 sb.append("NAME       IP              MAC                 STATUS\n");
                 for (Device d : mDevices){
@@ -125,7 +123,7 @@ public class DeviceManagement extends Module {
                         s = Utils.DEVICE_ONLINE;
                     } else {
                         if (GetCommand("status") != null) {
-                            s = GetCommand("status").Run(new ArrayList<>(Arrays.asList(d.NAME)));
+                            s = GetCommand("status").Run(username, password, new ArrayList<>(Arrays.asList(d.NAME)));
                         }
                     }
 
@@ -151,7 +149,7 @@ public class DeviceManagement extends Module {
         // Shutdown command
         Command shutdown = new Command("shutdown", Utils.CLEARANCE.FULL){
             @Override
-            public String Run(ArrayList<String> arguments){
+            public String Run(String username, String password, ArrayList<String> arguments){
                 String validArgs = ValidateArguments(arguments);
                 if (validArgs != null){ return validArgs; }
 
@@ -159,7 +157,7 @@ public class DeviceManagement extends Module {
                 Device d = GetDevice(deviceName);
 
                 if (d != null){
-                    return SendDeviceCommand(GetName(), d);
+                    return SendDeviceCommand(GetName(), d, username, password);
                 } else {
                     return String.format(Utils.DEVICE_NOTFOUND, deviceName);
                 }
@@ -171,7 +169,7 @@ public class DeviceManagement extends Module {
         // Restart command
         Command restart = new Command("restart", Utils.CLEARANCE.FULL){
             @Override
-            public String Run(ArrayList<String> arguments){
+            public String Run(String username, String password, ArrayList<String> arguments){
                 String validArgs = ValidateArguments(arguments);
                 if (validArgs != null){ return validArgs; }
 
@@ -179,7 +177,7 @@ public class DeviceManagement extends Module {
                 Device d = GetDevice(deviceName);
 
                 if (d != null){
-                    return SendDeviceCommand(GetName(), d);
+                    return SendDeviceCommand(GetName(), d, username, password);
                 } else {
                     return String.format(Utils.DEVICE_NOTFOUND, deviceName);
                 }
@@ -191,7 +189,7 @@ public class DeviceManagement extends Module {
         // Hibernate command
         Command hibernate = new Command("hibernate", Utils.CLEARANCE.FULL){
             @Override
-            public String Run(ArrayList<String> arguments){
+            public String Run(String username, String password, ArrayList<String> arguments){
                 String validArgs = ValidateArguments(arguments);
                 if (validArgs != null){ return validArgs; }
 
@@ -199,7 +197,7 @@ public class DeviceManagement extends Module {
                 Device d = GetDevice(deviceName);
 
                 if (d != null){
-                    return SendDeviceCommand(GetName(), d);
+                    return SendDeviceCommand(GetName(), d, username, password);
                 } else {
                     return String.format(Utils.DEVICE_NOTFOUND, deviceName);
                 }
@@ -211,7 +209,7 @@ public class DeviceManagement extends Module {
         // Log Off command
         Command logoff = new Command("logoff", Utils.CLEARANCE.FULL){
             @Override
-            public String Run(ArrayList<String> arguments){
+            public String Run(String username, String password, ArrayList<String> arguments){
                 String validArgs = ValidateArguments(arguments);
                 if (validArgs != null){ return validArgs; }
 
@@ -219,7 +217,7 @@ public class DeviceManagement extends Module {
                 Device d = GetDevice(deviceName);
 
                 if (d != null){
-                    return SendDeviceCommand(GetName(), d);
+                    return SendDeviceCommand(GetName(), d, username, password);
                 } else {
                     return String.format(Utils.DEVICE_NOTFOUND, deviceName);
                 }
@@ -231,7 +229,7 @@ public class DeviceManagement extends Module {
         // Wake command
         Command wake = new Command("wake", Utils.CLEARANCE.FULL){
             @Override
-            public String Run(ArrayList<String> arguments){
+            public String Run(String username, String password, ArrayList<String> arguments){
                 String validArgs = ValidateArguments(arguments);
                 if (validArgs != null){ return validArgs; }
 
@@ -280,18 +278,16 @@ public class DeviceManagement extends Module {
 
 
     // Device registration
-    public Device RegisterDevice(String name, String IP, int PORT, String MAC, String USERNAME, String PASSWORD){
+    public Device RegisterDevice(String name, String IP, int PORT, String MAC){
         Device d = GetDevice(name);
         if (d == null){
-            d = new Device(name, IP, PORT, MAC, USERNAME, PASSWORD);
+            d = new Device(name, IP, PORT, MAC);
             mDevices.add(d);
         }
 
         d.IP = IP;
         d.PORT = PORT;
         d.MAC = MAC;
-        d.USERNAME = USERNAME;
-        d.PASSWORD = PASSWORD;
 
         return d;
     }
@@ -307,7 +303,7 @@ public class DeviceManagement extends Module {
 
 
     // Pass command along to a device
-    public String SendDeviceCommand(String command, Device device) {
+    public String SendDeviceCommand(String command, Device device, String username, String password) {
 
         // No such device was found
         if (device == null){
@@ -315,7 +311,7 @@ public class DeviceManagement extends Module {
         }
 
         // Send Command
-        HttpResponse<String> resp = Utils.SendCommand(command, new String[]{device.NAME}, device.IP, device.PORT, device.USERNAME, device.PASSWORD);
+        HttpResponse<String> resp = Utils.SendCommand(command, new String[]{device.NAME}, device.IP, device.PORT, username, password);
         if (resp == null){
             return String.format(Utils.DEVICE_COULDNOT_CONTACT, device.NAME);
         }
@@ -347,16 +343,12 @@ public class DeviceManagement extends Module {
         protected String IP;
         protected int PORT;
         protected String MAC;
-        protected String USERNAME;
-        protected String PASSWORD;
 
-        public Device(String NAME, String IP, int PORT, String MAC, String USERNAME, String PASSWORD) {
+        public Device(String NAME, String IP, int PORT, String MAC) {
             this.NAME = NAME;
             this.IP = IP;
             this.PORT = PORT;
             this.MAC = MAC;
-            this.USERNAME = USERNAME;
-            this.PASSWORD = PASSWORD;
         }
     }
 }

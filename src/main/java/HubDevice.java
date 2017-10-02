@@ -223,7 +223,7 @@ public class HubDevice
         } else {
             if (isRegistered.getBody().toString().toLowerCase().equals("")){
                 // Try to register
-                HttpResponse registerResp = Utils.SendCommand("register", new String[]{GetName(), GetIP(), String.valueOf(GetPort()), GetMAC(), username, password}, HUBIP, HUBPort, username, password);
+                HttpResponse registerResp = Utils.SendCommand("register", new String[]{GetName(), GetIP(), String.valueOf(GetPort()), GetMAC()}, HUBIP, HUBPort, username, password);
                 if (registerResp == null){
                     Utils.logMsg(new String[]{Utils.CONNECTION_FAILED, Utils.CONNECTION_RETRY, String.valueOf(retryDelay / 1000), "seconds." }, true, null);
                 } else {
@@ -311,7 +311,7 @@ public class HubDevice
                     handle = Utils.CMD_NOTGIVEN;
                 } else {
                     response.status(200);
-                    handle = CommandHandle(command, arguments, userClearance);
+                    handle = CommandHandle(username, password, command, arguments, userClearance);
                 }
             } else {
                 response.status(401);
@@ -346,7 +346,7 @@ public class HubDevice
     }
 
     // Command handling
-    protected String CommandHandle(String command, ArrayList<String> arguments, Utils.CLEARANCE clearance){
+    protected String CommandHandle(String username, String password, String command, ArrayList<String> arguments, Utils.CLEARANCE clearance){
         // Find appropriate command
         for (Module m : mModules){
             Command c = m.GetCommand(command);
@@ -356,7 +356,7 @@ public class HubDevice
 
                 // Check authorization level of command
                 if (clearance.ordinal() >= c.GetClearance().ordinal()){
-                    return c.Run(arguments);
+                    return c.Run(username, password, arguments);
                 } else { // Not authorized
                     String notAuth = Utils.CMD_NOTAUTH + " '" + command + "'";
                     Utils.logMsg(notAuth, true, GetLogFile());

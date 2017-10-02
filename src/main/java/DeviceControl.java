@@ -10,14 +10,14 @@ public class DeviceControl extends Module {
 
         // Status command
         Command status = new Command("status", Utils.CLEARANCE.BASIC){
-            @Override public String Run(ArrayList<String> arguments){
+            @Override public String Run(String username, String password, ArrayList<String> arguments){
                 return Utils.DEVICE_ONLINE;
             }
         };
 
         // Shutdown command
         Command shutdown = new Command("shutdown", Utils.CLEARANCE.FULL){
-            @Override public String Run(ArrayList<String> arguments){
+            @Override public String Run(String username, String password, ArrayList<String> arguments){
                 String validArgs = ValidateArguments(arguments);
                 if (validArgs != null){ return validArgs; }
                 String deviceName = GetValidArgument(arguments, 0);
@@ -47,7 +47,7 @@ public class DeviceControl extends Module {
 
         // Restart command
         Command restart = new Command("restart", Utils.CLEARANCE.FULL){
-            @Override public String Run(ArrayList<String> arguments){
+            @Override public String Run(String username, String password, ArrayList<String> arguments){
                 String validArgs = ValidateArguments(arguments);
                 if (validArgs != null){ return validArgs; }
                 String deviceName = GetValidArgument(arguments, 0);
@@ -77,7 +77,7 @@ public class DeviceControl extends Module {
 
         // Hibernate command
         Command hibernate = new Command("hibernate", Utils.CLEARANCE.FULL){
-            @Override public String Run(ArrayList<String> arguments){
+            @Override public String Run(String username, String password, ArrayList<String> arguments){
                 String validArgs = ValidateArguments(arguments);
                 if (validArgs != null){ return validArgs; }
                 String deviceName = GetValidArgument(arguments, 0);
@@ -103,7 +103,7 @@ public class DeviceControl extends Module {
 
         // Log off command
         Command logoff = new Command("logoff", Utils.CLEARANCE.FULL){
-            @Override public String Run(ArrayList<String> arguments){
+            @Override public String Run(String username, String password, ArrayList<String> arguments){
                 String validArgs = ValidateArguments(arguments);
                 if (validArgs != null){ return validArgs; }
                 String deviceName = GetValidArgument(arguments, 0);

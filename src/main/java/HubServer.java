@@ -41,7 +41,7 @@ public class HubServer extends HubDevice
         super(Utils.SERVER_TITLE, Utils.SERVER_LOG);
 
         // Register HUB to itself
-        deviceManagement.RegisterDevice(Utils.SERVER_NAME, GetIP(), PORT, GetMAC(), Utils.SERVER_NAME, ""); //TODO:Not this (auth)
+        deviceManagement.RegisterDevice(Utils.SERVER_NAME, GetIP(), PORT, GetMAC());
 
         // Listen for commands from Devices
         Listen(PORT);
@@ -65,7 +65,7 @@ public class HubServer extends HubDevice
 
     // Process commands differently
     @Override
-    protected String CommandHandle(String command, ArrayList<String> arguments, Utils.CLEARANCE clearance){
+    protected String CommandHandle(String username, String password, String command, ArrayList<String> arguments, Utils.CLEARANCE clearance){
         Command c = null;
 
         // If arguments contain HUB name, check device control
@@ -75,11 +75,11 @@ public class HubServer extends HubDevice
 
         // Search all modules
         if (c == null) {
-            return super.CommandHandle(command, arguments, clearance);
+            return super.CommandHandle(username, password, command, arguments, clearance);
         } else {
             // Check authorization level of command
             if (clearance.ordinal() >= c.GetClearance().ordinal()){
-                return c.Run(arguments);
+                return c.Run(username, password, arguments);
             } else { // Not authorized
                 String notAuth = Utils.CMD_NOTAUTH + " '" + command + "'";
                 Utils.logMsg(notAuth, true, GetLogFile());
