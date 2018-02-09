@@ -14,7 +14,7 @@ SetKeyDelay, 5, 5
 ControlSend, ,^c, ahk_class KiTTY
 ControlSend, ,{enter}, ahk_class KiTTY
 
-ControlSend, ,java -jar HubServer.jar 5000, ahk_class KiTTY
+ControlSend, ,sudo java -jar HubServer.jar 5000, ahk_class KiTTY
 ControlSend, ,{enter}, ahk_class KiTTY
 sleep, 100
 
