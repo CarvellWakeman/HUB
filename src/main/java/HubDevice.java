@@ -23,7 +23,7 @@ public class HubDevice
             System.out.printf("USAGE: java -jar %s.jar SERVER_IP SERVER_PORT CLIENT_PORT USERNAME PASSWORD\n", HubDevice.class.getName());
             System.exit(1);
         } else {
-            // Startup
+            // Create a startup script
             if (args[args.length-1].equals("startup")) {
                 try {
                     Utils.CreateStartupScript(GetMachineOS(), HubDevice.class.getName(), Arrays.copyOfRange(args, 0, args.length - 1));
@@ -43,8 +43,6 @@ public class HubDevice
 
         new HubDevice(Utils.GetPWD(Utils.class, GetMachineOS()) + "/" + Utils.CLIENT_LOG, SERVER_IP, SERVER_PORT, CLIENT_PORT, USERNAME, PASSWORD);
     }
-
-
 
 
     // Device Info
@@ -75,8 +73,9 @@ public class HubDevice
         try {
             SetOS(GetMachineOS());
             SetName(GetMachineName(GetOS()));
-            SetIP(GetMachineIP());
-            SetMAC(GetMachineMAC());
+            String[] addresses = GetMachineAddresses();
+            SetIP(addresses[0]);
+            SetMAC(addresses[1]);
         } catch (UnknownHostException ex){
             System.out.printf("Device IP or MAC address could not be found:%s\n", ex.getMessage());
         }
@@ -167,10 +166,7 @@ public class HubDevice
     // AUTHORIZATION //
     protected boolean isAuthValid(String username, String password){
         Auth auth = users.get(username);
-        if (auth != null && auth.username.equals(username)){
-            return auth.password.equals(password);
-        }
-        return false;
+        return auth != null && auth.username.equals(username) && auth.password.equals(password);
     }
     protected Utils.CLEARANCE getAuthorization(String username, String password){
         Auth auth = users.get(username);
@@ -395,11 +391,11 @@ public class HubDevice
         }
     }
 
-    public static String GetMachineIP() throws UnknownHostException{
+    public static String[] GetMachineAddresses() throws UnknownHostException{
         try {
 
             // Look through the rest of the interfaces
-            ArrayList<String> addressCandidates = new ArrayList<>();
+            HashMap<String, String[]> addressCandidates = new HashMap<>();
             Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
             while (interfaces.hasMoreElements()){
                 NetworkInterface ni = interfaces.nextElement();
@@ -411,24 +407,30 @@ public class HubDevice
                 Enumeration<InetAddress> addresses = ni.getInetAddresses();
                 while(addresses.hasMoreElements()) {
                     InetAddress ia = addresses.nextElement();
-                    String addr = ia.getHostAddress();
+                    String softAddr = ia.getHostAddress();
+                    byte[] hardAddr = ni.getHardwareAddress();
 
-                    // Validate (###.###.###.###)
-                    if (addr.split("\\.").length == 4 && !addr.equals(Utils.NETWORK_LOCALHOST)) {
-                        addressCandidates.add(ni.getName() + "|" + addr);
+                    if (!isVMMac(hardAddr)) {
+                        // Format address
+                        StringBuilder sb = new StringBuilder();
+                        for (int i = 0; i < hardAddr.length; i++) {
+                            sb.append(String.format("%02X%s", hardAddr[i], (i < hardAddr.length - 1) ? ":" : ""));
+                        }
+
+                        // Validate IP
+                        if (softAddr.split("\\.").length == 4 && !softAddr.equals(Utils.NETWORK_LOCALHOST)) {
+                            // Validate Mac
+                            if (sb.toString().split(":").length == 6) {
+                                addressCandidates.put(ni.getName(), new String[]{ softAddr, sb.toString() });
+                            }
+                        }
                     }
                 }
             }
 
-            // Look through candidates for best match
-            Collections.sort(addressCandidates, new Comparator<String>() {
-                @Override public int compare(String o1, String o2) {
-                    return o1.split("|")[0].compareTo(o2.split("|")[0]);
-                }
-            });
+            // Return addresses (hopefully there's only one)
             if (addressCandidates.size() > 0) {
-                String addr = addressCandidates.get(0);
-                return addr.substring(addr.indexOf("|")+1, addr.length());
+                return addressCandidates.values().iterator().next();
             }
 
             throw new UnknownHostException("Either no suitable adapter was found or there was a network error.");
@@ -437,44 +439,25 @@ public class HubDevice
         }
     }
 
-    public static String GetMachineMAC() throws UnknownHostException{
-        try {
-            ArrayList<String> macCandidates = new ArrayList<>();
-            Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
-            while (interfaces.hasMoreElements()){
-                NetworkInterface ni = interfaces.nextElement();
+    // Taken from https://stackoverflow.com/questions/6164167/get-mac-address-on-local-machine-with-java
+    private static boolean isVMMac(byte[] mac) {
+        if(null == mac) return false;
+        byte invalidMacs[][] = {
+                {0x00, 0x05, 0x69},             //VMWare
+                {0x00, 0x1C, 0x14},             //VMWare
+                {0x00, 0x0C, 0x29},             //VMWare
+                {0x00, 0x50, 0x56},             //VMWare
+                {0x08, 0x00, 0x27},             //Virtualbox
+                {0x0A, 0x00, 0x27},             //Virtualbox
+                {0x00, 0x03, (byte)0xFF},       //Virtual-PC
+                {0x00, 0x15, 0x5D}              //Hyper-V
+        };
 
-                // Ignore loopbacks and check if adapter has any addresses
-                if (ni.isLoopback() || !ni.getInetAddresses().hasMoreElements()) continue;
-
-                // Format address
-                byte[] addr = ni.getHardwareAddress();
-                StringBuilder sb = new StringBuilder();
-                for (int i = 0; i < addr.length; i++) {
-                    sb.append(String.format("%02X%s", addr[i], (i < addr.length - 1) ? ":" : ""));
-                }
-
-                // Validate
-                if (sb.toString().split(":").length == 6) {
-                    macCandidates.add(ni.getName() + "|" + sb.toString());
-                }
-            }
-
-            // Look through candidates for best match
-            Collections.sort(macCandidates, new Comparator<String>() {
-                @Override public int compare(String o1, String o2) {
-                    return o1.split("|")[0].compareTo(o2.split("|")[0]);
-                }
-            });
-            if (macCandidates.size() > 0) {
-                String mac = macCandidates.get(0);
-                return mac.substring(mac.indexOf("|")+1, mac.length());
-            }
-
-            throw new UnknownHostException("MACHINE address could not be determined");
-        } catch (SocketException ex) {
-            throw new UnknownHostException("MACHINE address could not be determined");
+        for (byte[] invalid: invalidMacs){
+            if (invalid[0] == mac[0] && invalid[1] == mac[1] && invalid[2] == mac[2]) return true;
         }
+
+        return false;
     }
 
 }

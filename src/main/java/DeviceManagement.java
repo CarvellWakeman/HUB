@@ -116,29 +116,33 @@ public class DeviceManagement extends Module {
                 StringBuilder sb = new StringBuilder();
                 sb.append("NAME       IP              MAC                 STATUS\n");
                 for (Device d : mDevices){
-                    String s = "";
+                    try {
+                        String s = "";
 
-                    // HUB shortcut
-                    if (d.NAME.equals(Utils.SERVER_NAME)){
-                        s = Utils.DEVICE_ONLINE;
-                    } else {
-                        if (GetCommand("status") != null) {
-                            s = GetCommand("status").Run(username, password, new ArrayList<>(Arrays.asList(d.NAME)));
+                        // HUB shortcut
+                        if (d.NAME.equals(Utils.SERVER_NAME)) {
+                            s = Utils.DEVICE_ONLINE;
+                        } else {
+                            if (GetCommand("status") != null) {
+                                s = GetCommand("status").Run(username, password, new ArrayList<>(Arrays.asList(d.NAME)));
+                            }
                         }
-                    }
 
-                    String nmTrunc = (d.NAME.length()>10?d.NAME.substring(0,10):d.NAME);
-                    int nmOffset = 11-nmTrunc.length();
-                    int ipOffset = 16-d.IP.length();
-                    int macOffset = 3;
-                    sb.append(String.format("%s%s%s%s%s%s%s\n",
-                            nmTrunc,
-                            String.format("%" + String.valueOf(nmOffset) + "s", " "),
-                            d.IP,
-                            String.format("%" + String.valueOf(ipOffset) + "s", " "),
-                            d.MAC,
-                            String.format("%" + String.valueOf(macOffset) + "s", " "),
-                            s));
+                        String nmTrunc = (d.NAME.length() > 10 ? d.NAME.substring(0, 10) : d.NAME);
+                        int nmOffset = 11 - nmTrunc.length();
+                        int ipOffset = 16 - d.IP.length();
+                        int macOffset = 3;
+                        sb.append(String.format("%s%s%s%s%s%s%s\n",
+                                nmTrunc,
+                                String.format("%" + String.valueOf(nmOffset) + "s", " "),
+                                d.IP,
+                                String.format("%" + String.valueOf(ipOffset) + "s", " "),
+                                d.MAC,
+                                String.format("%" + String.valueOf(macOffset) + "s", " "),
+                                s));
+                    } catch (Exception ex){
+                        return Utils.ERROR + ex.toString();
+                    }
                 }
 
                 return sb.toString();
@@ -251,7 +255,7 @@ public class DeviceManagement extends Module {
 
                         return String.format(Utils.DEVICE_WOL, deviceName);
                     } catch (Exception e) {
-                        return Utils.ERR_CMD_WOL;
+                        return Utils.ERR_CMD_WOL + ":" + e.toString();
                     }
                 } else {
                     return String.format(Utils.DEVICE_NOTFOUND, deviceName);
