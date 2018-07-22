@@ -7,20 +7,25 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6a891964-be06-468e-8f3e-6ebbc89d9192" name="Default" comment="Refined client address detection, minor cleanup">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/HubDevice.jar" afterPath="$PROJECT_DIR$/HubDevice.jar" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/HubServer.jar" afterPath="$PROJECT_DIR$/HubServer.jar" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/classes/DeviceManagement$10.class" afterPath="$PROJECT_DIR$/out/production/classes/DeviceManagement$10.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/classes/DeviceManagement$5.class" afterPath="$PROJECT_DIR$/out/production/classes/DeviceManagement$5.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/classes/DeviceManagement$6.class" afterPath="$PROJECT_DIR$/out/production/classes/DeviceManagement$6.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/classes/DeviceManagement$7.class" afterPath="$PROJECT_DIR$/out/production/classes/DeviceManagement$7.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/classes/DeviceManagement$8.class" afterPath="$PROJECT_DIR$/out/production/classes/DeviceManagement$8.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/classes/DeviceManagement$9.class" afterPath="$PROJECT_DIR$/out/production/classes/DeviceManagement$9.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/classes/DeviceManagement$Device.class" afterPath="$PROJECT_DIR$/out/production/classes/DeviceManagement$Device.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/classes/DeviceManagement.class" afterPath="$PROJECT_DIR$/out/production/classes/DeviceManagement.class" />
+    <list default="true" id="6a891964-be06-468e-8f3e-6ebbc89d9192" name="Default" comment="">
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/classes/HubDevice$6.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/classes/HubDevice$7.class" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/classes/DeviceManagement$1.class" afterPath="$PROJECT_DIR$/out/production/classes/DeviceManagement$1.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/classes/DeviceManagement$2.class" afterPath="$PROJECT_DIR$/out/production/classes/DeviceManagement$2.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/classes/DeviceManagement$3.class" afterPath="$PROJECT_DIR$/out/production/classes/DeviceManagement$3.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/classes/DeviceManagement$4.class" afterPath="$PROJECT_DIR$/out/production/classes/DeviceManagement$4.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/classes/HubDevice$1.class" afterPath="$PROJECT_DIR$/out/production/classes/HubDevice$1.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/classes/HubDevice$2.class" afterPath="$PROJECT_DIR$/out/production/classes/HubDevice$2.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/classes/HubDevice$3.class" afterPath="$PROJECT_DIR$/out/production/classes/HubDevice$3.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/classes/HubDevice$4.class" afterPath="$PROJECT_DIR$/out/production/classes/HubDevice$4.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/classes/HubDevice$5.class" afterPath="$PROJECT_DIR$/out/production/classes/HubDevice$5.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/classes/HubDevice.class" afterPath="$PROJECT_DIR$/out/production/classes/HubDevice.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/DeviceManagement.java" afterPath="$PROJECT_DIR$/src/main/java/DeviceManagement.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/HubDevice.java" afterPath="$PROJECT_DIR$/src/main/java/HubDevice.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WEB/login.js" afterPath="$PROJECT_DIR$/WEB/login.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/DeviceControl.java" afterPath="$PROJECT_DIR$/src/main/java/DeviceControl.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/HubServer.java" afterPath="$PROJECT_DIR$/src/main/java/HubServer.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Utils.java" afterPath="$PROJECT_DIR$/src/main/java/Utils.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/.gradle/" />
@@ -39,21 +44,21 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Utils.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Utils.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/Utils.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="92" column="23" lean-forward="false" selection-start-line="92" selection-start-column="18" selection-end-line="92" selection-end-column="23" />
+            <state relative-caret-position="288">
+              <caret line="275" column="62" lean-forward="true" selection-start-line="275" selection-start-column="62" selection-end-line="275" selection-end-column="62" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DeviceManagement.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="DeviceManagement.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/DeviceManagement.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="237">
-              <caret line="326" column="34" lean-forward="true" selection-start-line="326" selection-start-column="34" selection-end-line="326" selection-end-column="34" />
+            <state relative-caret-position="-86">
+              <caret line="323" column="0" lean-forward="true" selection-start-line="323" selection-start-column="0" selection-end-line="323" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -82,8 +87,8 @@
       <file leaf-file-name="HubServer.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/HubServer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="697">
-              <caret line="45" column="36" lean-forward="false" selection-start-line="45" selection-start-column="36" selection-end-line="45" selection-end-column="36" />
+            <state relative-caret-position="475">
+              <caret line="89" column="0" lean-forward="true" selection-start-line="89" selection-start-column="0" selection-end-line="89" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -92,8 +97,18 @@
       <file leaf-file-name="DeviceControl.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/DeviceControl.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1768">
-              <caret line="105" column="74" lean-forward="false" selection-start-line="105" selection-start-column="74" selection-end-line="105" selection-end-column="74" />
+            <state relative-caret-position="356">
+              <caret line="127" column="0" lean-forward="false" selection-start-line="127" selection-start-column="0" selection-end-line="127" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="login.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/WEB/login.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="199" column="7" lean-forward="false" selection-start-line="199" selection-start-column="7" selection-end-line="199" selection-end-column="7" />
               <folding />
             </state>
           </provider>
@@ -112,7 +127,7 @@
       <file leaf-file-name="HubDevice.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/HubDevice.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="184">
+            <state relative-caret-position="2890">
               <caret line="170" column="4" lean-forward="false" selection-start-line="170" selection-start-column="4" selection-end-line="170" selection-end-column="4" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -159,6 +174,7 @@
       <find>Error contacting HUB</find>
       <find>wake</find>
       <find>IP</find>
+      <find>/*</find>
     </findStrings>
     <replaceStrings>
       <replace>'</replace>
@@ -535,12 +551,13 @@
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/src/main/java/Module.java" />
         <option value="$PROJECT_DIR$/src/main/java/Command.java" />
-        <option value="$PROJECT_DIR$/src/main/java/HubServer.java" />
-        <option value="$PROJECT_DIR$/src/main/java/DeviceControl.java" />
         <option value="$PROJECT_DIR$/src/main/java/HubInfo.java" />
-        <option value="$PROJECT_DIR$/src/main/java/Utils.java" />
         <option value="$PROJECT_DIR$/src/main/java/DeviceManagement.java" />
         <option value="$PROJECT_DIR$/src/main/java/HubDevice.java" />
+        <option value="$PROJECT_DIR$/src/main/java/HubServer.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Utils.java" />
+        <option value="$PROJECT_DIR$/src/main/java/DeviceControl.java" />
+        <option value="$PROJECT_DIR$/WEB/login.js" />
       </list>
     </option>
   </component>
@@ -566,8 +583,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="AndroidView" />
       <pane id="PackagesPane" />
-      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -602,12 +619,13 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scratches" />
       <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.15429688" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="settings.editor.selected.configurable" value="vcs.Git" />
@@ -760,6 +778,14 @@
       <option name="presentableId" value="Default" />
       <updated>1502655170223</updated>
     </task>
+    <task id="LOCAL-00001" summary="Refined client address detection, minor cleanup">
+      <created>1530298228135</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1530298228135</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -770,17 +796,22 @@
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32960325" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.31536114" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32960325" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25726587" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25672767" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39979655" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -788,7 +819,6 @@
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="VcsContentAnnotationSettings">
@@ -819,6 +849,56 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/src/main/java/Command.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="663">
+          <caret line="39" column="16" lean-forward="false" selection-start-line="39" selection-start-column="16" selection-end-line="39" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/HubServer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="697">
+          <caret line="45" column="36" lean-forward="false" selection-start-line="45" selection-start-column="36" selection-end-line="45" selection-end-column="36" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/DeviceControl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1768">
+          <caret line="105" column="74" lean-forward="false" selection-start-line="105" selection-start-column="74" selection-end-line="105" selection-end-column="74" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Module.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="510">
+          <caret line="30" column="19" lean-forward="false" selection-start-line="30" selection-start-column="19" selection-end-line="30" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/HubDevice.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2890">
+          <caret line="170" column="4" lean-forward="false" selection-start-line="170" selection-start-column="4" selection-end-line="170" selection-end-column="4" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/DeviceManagement.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="5678">
+          <caret line="334" column="12" lean-forward="true" selection-start-line="334" selection-start-column="12" selection-end-line="334" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/Utils.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1309">
@@ -1093,34 +1173,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/DeviceControl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1768">
-          <caret line="105" column="74" lean-forward="false" selection-start-line="105" selection-start-column="74" selection-end-line="105" selection-end-column="74" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/Module.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="510">
           <caret line="30" column="19" lean-forward="false" selection-start-line="30" selection-start-column="19" selection-end-line="30" selection-end-column="19" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/HubServer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="697">
-          <caret line="45" column="36" lean-forward="false" selection-start-line="45" selection-start-column="36" selection-end-line="45" selection-end-column="36" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Utils.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="92" column="23" lean-forward="false" selection-start-line="92" selection-start-column="18" selection-end-line="92" selection-end-column="23" />
           <folding />
         </state>
       </provider>
@@ -1153,7 +1209,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="290">
           <caret line="251" column="12" lean-forward="false" selection-start-line="251" selection-start-column="12" selection-end-line="251" selection-end-column="12" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1161,13 +1216,12 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="188">
           <caret line="42" column="19" lean-forward="false" selection-start-line="42" selection-start-column="19" selection-end-line="42" selection-end-column="19" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/HubDevice.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="184">
+        <state relative-caret-position="2890">
           <caret line="170" column="4" lean-forward="false" selection-start-line="170" selection-start-column="4" selection-end-line="170" selection-end-column="4" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -1175,10 +1229,42 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/HubServer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="475">
+          <caret line="89" column="0" lean-forward="true" selection-start-line="89" selection-start-column="0" selection-end-line="89" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/DeviceManagement.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="237">
-          <caret line="326" column="34" lean-forward="true" selection-start-line="326" selection-start-column="34" selection-end-line="326" selection-end-column="34" />
+        <state relative-caret-position="-86">
+          <caret line="323" column="0" lean-forward="true" selection-start-line="323" selection-start-column="0" selection-end-line="323" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/DeviceControl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="356">
+          <caret line="127" column="0" lean-forward="false" selection-start-line="127" selection-start-column="0" selection-end-line="127" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/WEB/login.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="199" column="7" lean-forward="false" selection-start-line="199" selection-start-column="7" selection-end-line="199" selection-end-column="7" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Utils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="288">
+          <caret line="275" column="62" lean-forward="true" selection-start-line="275" selection-start-column="62" selection-end-line="275" selection-end-column="62" />
           <folding />
         </state>
       </provider>

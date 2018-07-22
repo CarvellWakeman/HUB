@@ -227,40 +227,12 @@ public class Utils {
 
     // DEVICE EXECUTION //
     public static void ExecuteBackgroundTask(final Runnable runnable, final int delay){
-        //final ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
-        //executor.schedule(runnable, delay, TimeUnit.MILLISECONDS);
-
-
         final ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
         executor.schedule(new Runnable() {
             @Override public void run() {
                 runnable.run();
             }
         }, delay, TimeUnit.MILLISECONDS);
-
-/*
-        Thread thread = new Thread(new Runnable() {
-            @Override public void run() {
-                System.out.println("BG Task");
-                runnable.run();
-            }
-        });
-        thread.start();
-
-
-        Thread thread = new Thread(new Runnable() {
-            @Override public void run() {
-                new Timer().schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        System.out.println("BG Timer Task");
-                        runnable.run();
-                    }
-                }, delay);
-            }
-        });
-        thread.start();
-*/
     }
 
     static String GetPWD(Class cl, OS_TYPE os){ // On windows the first character is a \, which must be removed

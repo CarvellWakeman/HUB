@@ -197,62 +197,7 @@ function tryLogin() {
 			}
 			login_status.style.display = 'block';
 		}
-	}); 
-/*
-	// Send login
-	$.ajax({
-		type: 'GET',
-		headers: {
-			'Authorization': encode(input_username.value, input_password.value)
-		},
-		url: 'http://' + IP + ':' + PORT,
-		timeout: 10000,
-		dataType: 'text',
-		data: {
-			'cmd': 'checkauth',
-		},
-		// Send response
-		success: function (response, textStatus, XHR) {
-			console.log('Response:');
-			console.log(response);
-
-			// Reset password field
-			showInputs();
-			login_status.innerHTML = '';
-			login_status.style.display = 'none';
-
-			// Store username and password for terminal
-			sessionStorage.SessionName = "HUB_LOGIN_VALID";
-			sessionStorage.setItem("username", input_username.value);
-			sessionStorage.setItem("password", input_password.value);
-
-			// Open terminal
-			window.location.replace("http://" + IP + "/terminal.html");
-		},
-		error: function (err) {
-			console.log('ERROR:');
-			console.log(err);
-
-			showInputs();
-			input_password.value = '';
-			if (err.responseText==undefined){
-				login_status.innerHTML = ERR_CONTACT;
-			} else {
-				login_status.innerHTML = err.responseText;
-			}
-			login_status.style.display = 'block';
-		},
-		failure: function (response, textStatus, XHR) {
-			console.log('FAIL:');
-			console.log(response);
-
-			showInputs();
-			input_password.value = '';
-			login_status.innerHTML = response.responseText;
-			login_status.style.display = 'block';
-		},
 	});
-	*/
 }
 
 
