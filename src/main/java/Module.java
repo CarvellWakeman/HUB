@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class Module {
+public abstract class Module {
 
     // Private members
     String mName;
