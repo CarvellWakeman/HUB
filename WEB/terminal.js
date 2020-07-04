@@ -25,7 +25,7 @@ var TERMINAL_BLUE = '#55BFFF';
 
 
 //Network
-IP = window.location.host;
+IP = window.location.hostname;
 PORT = 5000;
 
 //Authentication

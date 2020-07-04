@@ -13,7 +13,7 @@ var connection_status;
 
 
 //Network
-IP = window.location.host;
+IP = window.location.hostname;
 PORT = 5000;
 
 var ERR_CONTACT = 'Error contacting HUB';
@@ -80,7 +80,7 @@ window.onload = function() {
 		if (username != null && password != null && username != '' && password != '' && cmd != '') {
 			send_input(cmd, args, function(result, status) {
 				if (status > 0 && status < 400 && status != null) {
-					window.location.replace("http://" + IP + "/terminal.html");
+					window.location.replace("http://" + window.location.host + "/terminal.html");
 				} else {
 					//No response
 					if (status == 0) {
@@ -186,7 +186,7 @@ function tryLogin() {
 			sessionStorage.setItem("password", password);
 
 			// Open terminal
-			window.location.replace("http://" + IP + "/terminal.html");
+			window.location.replace("http://" + window.location.host + "/terminal.html");
 		} else {
 			showInputs();
 			input_password.value = '';
